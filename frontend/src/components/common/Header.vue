@@ -33,12 +33,21 @@
   color: #fff;
 }
 
+.logo h1{
+  font-size: 50px;
+}
+
 .nav a {
-  margin-top: 15px;
+  font-size: 40px;
   margin-left: 20px;
   color: #fff;
   text-decoration: none;
+
 }
+.nav a:hover {
+  color: #3FF3FF;
+}
+
 </style>
 <script setup lang="ts">
 </script>
