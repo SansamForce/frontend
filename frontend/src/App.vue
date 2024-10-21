@@ -1,15 +1,15 @@
 <script setup>
+import Header from '@/components/common/Header.vue';
   import TestComponent from "@/components/TestComponent.vue";
 </script>
 
 <template>
   <header>
-    <p> Hello </p>
-    <TestComponent />
+    <Header />
   </header>
 
   <main>
-    
+    <TestComponent />
   </main>
 </template>
 
