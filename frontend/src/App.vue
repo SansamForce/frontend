@@ -1,17 +1,16 @@
 <script setup>
 import Header from '@/components/common/Header.vue';
   import TestComponent from "@/components/TestComponent.vue";
+import ProjectBoard from "@/components/ProjectBoard.vue";
 </script>
 
 <template>
-  <header>
+  <div id="app">
     <Header />
-  </header>
-
-  <main>
-    <TestComponent />
-  </main>
+    <ProjectBoard />
+  </div>
 </template>
+
 
 <style scoped>
 
