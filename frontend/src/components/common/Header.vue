@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="logo">
-      <h1>T-BUILDING</h1>
+      <h1><a href="@/App.vue">T-BUILDING</a></h1>
     </div>
     <nav class="nav">
 <!--      <template v-if="member.auth == 'MEMBER' || member.auth == 'MENTOR'">
@@ -33,8 +33,10 @@
   color: #fff;
 }
 
-.logo h1{
+.logo a{
   font-size: 50px;
+  color: #fff;
+  text-decoration: none;
 }
 
 .nav a {
