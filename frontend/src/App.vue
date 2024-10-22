@@ -14,4 +14,7 @@ import Header from '@/components/common/Header.vue';
 .container {
   margin-top: 20px;
 }
+body {
+  font-family: Georgia, "돋움", serif;
+}
 </style>

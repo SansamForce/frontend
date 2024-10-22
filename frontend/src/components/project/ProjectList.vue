@@ -16,12 +16,6 @@ const props = defineProps({
 </template>
 
 <style scoped>
-.project-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2개씩 배치 */
-  gap: 20px; /* 카드 간격 */
-}
-
 .project-card {
   background-color: #fff;
   padding: 20px;

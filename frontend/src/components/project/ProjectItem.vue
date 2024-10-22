@@ -10,8 +10,8 @@ const props = defineProps({
 
 const router = useRouter();
 
-const goToProjectDetail = (id) => {
-  router.push(`/projects/${id}`);
+const goToProjectDetail = (seq) => {
+  router.push(`/projects/${seq}`);
 };
 </script>
 

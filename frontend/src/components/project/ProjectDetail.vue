@@ -9,7 +9,6 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="container mt-4">
     <div class="row">
       <!-- 프로젝트 상세 조회 -->
       <div class="col-md-6">
@@ -22,8 +21,10 @@ const props = defineProps({
               <div class="image-container mb-3">
                 <img :src="project.projectImgUrl" alt="Project Image" class="project-image img-fluid" />
               </div>
-              <h4>{{ project.projectTitle }}</h4>
-              <span class="badge bg-primary">{{ project.projectStatus === "PROGRESS" ? "진행중" : "종료됨" }}</span>
+              <div style="font-weight: bold">
+                {{ project.projectTitle }}
+                <span class="badge bg-primary">{{ project.projectStatus === "PROGRESS" ? "진행중" : "종료됨" }}</span>
+              </div>
               <p class="mt-2">
                 {{ project.projectContent }}
               </p>
@@ -31,16 +32,9 @@ const props = defineProps({
               <p><strong>참여 인원 : </strong> {{ project.projectHeadCount }}</p>
             </div>
           </b-card-body>
-      <div class="project-detail">
-
-        <h1 class="mt-3">프로젝트 제목 : {{ project.projectTitle }} {{ project.projectStatus }}</h1>
-        {{ project.projectContent }}
-
-        <p><strong>모집 일정  :</strong> {{ project.projectStartDate }} ~ {{ project.projectEndDate }}</p>
-        <p><strong>참여 인원 : </strong> {{ project.projectHeadCount }}</p>
+        </b-card>
       </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
