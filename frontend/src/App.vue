@@ -1,18 +1,17 @@
 <script setup>
 import Header from '@/components/common/Header.vue';
-  import TestComponent from "@/components/TestComponent.vue";
 </script>
 
 <template>
-  <header>
-    <Header />
-  </header>
+  <div class="container">
+    <Header/>
+    <RouterView/>
+  </div>
 
-  <main>
-    <TestComponent />
-  </main>
 </template>
 
 <style scoped>
-
+.container {
+  margin-top: 20px;
+}
 </style>
