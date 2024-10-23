@@ -7,11 +7,7 @@
             총 <span class="projectBoard-count">{{ projectBoards.length }}</span>개의
             프로젝트가 등록되어 있습니다.
             <button v-if="isManager" @click="showCreateAlert" class="create-button">모집글 작성</button>
-
           </p>
-
-          <!-- 관리자 권한이 있는 경우 '모집글 작성' 버튼 표시 -->
-
         </div>
 
         <div class="projectBoards-status-for-select">
@@ -27,7 +23,6 @@
             <option value="DEADLINE">마감</option>
           </select>
         </div>
-
       </div>
 
       <div class="projectBoards-grid">
@@ -45,38 +40,47 @@
       </div>
     </main>
 
-    <!-- 모집글 작성 알림창 -->
+    <!-- 모집글 작성 모달창 -->
     <div v-if="isCreateAlertVisible" class="overlay">
-        <div class="create-alert">
-          <h3>프로젝트 모집글 작성</h3>
-          <form @submit.prevent="submitForm">
-            <div class="image-upload">
-              <label>프로젝트 모집글 썸네일 업로드</label>
-              <input type="file" @change="handleImageUpload" />
-            </div>
-            <label for="title">제목</label>
-            <input id="title" v-model="title" required />
+      <div class="create-alert">
+        <h3>프로젝트 모집글 작성</h3>
+        <form @submit.prevent="submitForm">
+          <div class="image-upload">
+            <label>프로젝트 모집글 썸네일 업로드</label>
+            <input type="file" @change="handleImageUpload" required />
+          </div>
 
-            <label for="content">내용</label>
-            <textarea id="content" v-model="content" required></textarea>
+          <label for="title">제목</label>
+          <input id="title" v-model="title" required />
 
-            <label for="headCount">모집 인원</label>
-            <input id="headCount" type="number" v-model="headCount" required />
+          <label for="content">내용</label>
+          <textarea id="content" v-model="content" required></textarea>
 
-            <label for="projectDates">프로젝트 일정</label>
-            <div class="date-inputs">
-              <input type="date" v-model="startDate" />
-              <input type="date" v-model="endDate" />
-            </div>
+          <label for="headCount">모집 인원</label>
+          <input id="headCount" type="number" v-model="headCount" required />
 
-            <div class="button-group">
-              <button type="submit" class="submit-btn">완료</button>
-              <button type="button" @click="closeAlert" class="cancel-btn">취소</button>
-            </div>
-          </form>
-        </div>
+          <!-- 프로젝트 일정 입력 -->
+          <label for="projectDates">프로젝트 일정</label>
+          <div class="date-inputs">
+            <input type="date" v-model="projectStartDate" required />
+            <input type="date" v-model="projectEndDate" required />
+          </div>
+
+          <!-- 모집 일정 입력 -->
+          <label for="boardDates">모집 일정</label>
+          <div class="date-inputs">
+            <input type="date" v-model="boardStartDate" required />
+            <input type="date" v-model="boardEndDate" required />
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="submit-btn">완료</button>
+            <button type="button" @click="closeAlert" class="cancel-btn">취소</button>
+          </div>
+        </form>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -89,25 +93,38 @@ import { useUserStore } from '@/stores/UserStore'; // 사용자 스토어 import
 const userStore = useUserStore();
 const isManager = computed(() => userStore.auth === 'MANAGER'); // 'manager' 권한 확인
 
-
 // 프로젝트 데이터 저장
 const projectBoards = ref([]);
 const selectedStatus = ref('');
 const currentPage = ref(1);
 const perPage = 8;
 
-// 모집글 작성 알림창 상태
+// 모집글 작성 모달창 상태
 const isCreateAlertVisible = ref(false);
-const newProjectBoard = ref({
-  title: '',
-  content: '',
-  headCount: 0,
-  startDate: '',
-  endDate: '',
-});
-// 모집글 작성 알림창 열기
+const title = ref('');
+const content = ref('');
+const headCount = ref(0);
+
+// 프로젝트 일정 및 모집 일정
+const projectStartDate = ref('');
+const projectEndDate = ref('');
+const boardStartDate = ref('');
+const boardEndDate = ref('');
+const imageFile = ref(null);
+
+// 모집글 작성 모달창 열기
 const showCreateAlert = () => {
   isCreateAlertVisible.value = true;
+};
+
+// 모집글 작성 모달창 닫기
+const closeAlert = () => {
+  isCreateAlertVisible.value = false;
+};
+
+// 이미지 파일 핸들링
+const handleImageUpload = (event) => {
+  imageFile.value = event.target.files[0];
 };
 
 // API 호출로 프로젝트 게시물 조회
@@ -115,7 +132,7 @@ const fetchProjectBoards = async () => {
   try {
     const response = await axios.get('http://localhost:8086/api/v1/project/board', {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoia29va29uZzIiLCJhdXRoIjoiTUVNQkVSIiwiaWF0IjoxNzI5NjA3OTY2LCJleHAiOjE3Mjk2OTQzNjZ9.wFKIqsaevEnf8g-6RhwhrWu9oMsaob4SLEI-0PLI00E'
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
     if (response.data.success) {
@@ -126,26 +143,39 @@ const fetchProjectBoards = async () => {
   }
 };
 
-
 // 모집글 생성 API 호출
-const createProjectBoard = async () => {
+const submitForm = async () => {
+  const formData = new FormData();
+
+  // JSON 데이터를 문자열로 변환하여 FormData에 추가
+  formData.append('adminProjectBoardCreateDTO', JSON.stringify({
+    projectBoardTitle: title.value,
+    projectBoardContent: content.value,
+    projectBoardHeadCount: headCount.value,
+    projectStartDate: new Date(projectStartDate.value).toISOString(),
+    projectEndDate: new Date(projectEndDate.value).toISOString(),
+    projectBoardStartDate: new Date(boardStartDate.value).toISOString(),
+    projectBoardEndDate: new Date(boardEndDate.value).toISOString(),
+    boardStatus: 'RECRUITMENT'
+  }));
+
+  // 파일 추가
+  formData.append('projectBoardImage', imageFile.value);
+
   try {
     const response = await axios.post(
-        'http://localhost:8086/api/v1/admin/project/board/',
-        {
-          title: newProjectBoard.value.title,
-          content: newProjectBoard.value.content,
-          headCount: newProjectBoard.value.headCount,
-        },
+        'http://localhost:8086/api/v1/admin/project/board',
+        formData,
         {
           headers: {
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${localStorage.getItem('authToken')}`,
           },
         }
     );
     if (response.data.success) {
       fetchProjectBoards(); // 성공 시 목록 다시 불러오기
-      isCreateAlertVisible.value = false; // 알림창 닫기
+      closeAlert(); // 알림창 닫기
     }
   } catch (error) {
     console.error('Error creating project board:', error);
@@ -192,9 +222,10 @@ const filterProjects = () => {
 };
 </script>
 
-
 <style scoped>
 /* Include the same styles here for the project grid and layout */
+
+
 .nav a {
   font-size: 20px;
   margin-left: 20px;
@@ -205,20 +236,17 @@ const filterProjects = () => {
 .nav a:hover {
   color: #3FF3FF;
 }
-
 .projectBoard-total-info {
   font-size: 15px;
   font-weight: bold;
   text-align: center;
-  display: flex; /* Flexbox 사용 */
-  justify-content: space-between; /* 양쪽 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 15px;
 }
 
-.projectBoard-info {
-  margin-left: 30px;
-}
+
 
 .projectBoards-status-for-select {
   margin-bottom: 10px;
@@ -226,9 +254,8 @@ const filterProjects = () => {
   display: flex; /* Flexbox 사용 */
   align-items: center; /* 수직 중앙 정렬 */
 }
-
 .create-button {
-  margin-left: 20px; /* 버튼과 텍스트 사이에 20px 여백 추가 */
+  margin-left: 20px;
   padding: 8px 15px;
   background-color: #171D8A;
   color: white;
@@ -238,8 +265,9 @@ const filterProjects = () => {
 }
 
 .create-button:hover {
-  background-color: #0e145e; /* Hover 효과 */
+  background-color: #0e145e;
 }
+
 
 .projectBoard-count {
   color: #171D8A;
