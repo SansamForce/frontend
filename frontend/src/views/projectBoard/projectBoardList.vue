@@ -237,6 +237,7 @@ const filterProjects = () => {
   color: #3FF3FF;
 }
 .projectBoard-total-info {
+
   font-size: 15px;
   font-weight: bold;
   text-align: center;
@@ -244,6 +245,7 @@ const filterProjects = () => {
   justify-content: space-between;
   align-items: center;
   margin-top: 15px;
+  margin-left:20px;
 }
 
 
@@ -256,8 +258,8 @@ const filterProjects = () => {
 }
 .create-button {
   margin-left: 20px;
-  padding: 8px 15px;
-  background-color: #171D8A;
+  padding: 5px 10px;
+  background-color: #262627;
   color: white;
   border: none;
   border-radius: 4px;
@@ -265,7 +267,7 @@ const filterProjects = () => {
 }
 
 .create-button:hover {
-  background-color: #0e145e;
+  background-color: #3FF3FF;
 }
 
 
@@ -348,9 +350,15 @@ const filterProjects = () => {
   margin-top: 20px;
 }
 
+.status-select{
+  margin-right: 20px;
+  padding: 8px 15px;
+  font-size: 15px;
+}
+
 .submit-btn {
-  padding: 10px 20px;
-  background-color: #171D8A;
+  padding: 8px 16px;
+  background-color: #262627;
   color: white;
   border: none;
   cursor: pointer;
@@ -359,7 +367,7 @@ const filterProjects = () => {
 }
 
 .cancel-btn {
-  padding: 10px 20px;
+  padding: 8px 16px;
   background-color: #ddd;
   color: #333;
   border: none;
