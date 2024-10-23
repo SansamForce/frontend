@@ -1,6 +1,6 @@
 <script setup>
 import Header from '@/components/common/Header.vue';
-import ProjectBoard from "@/components/projectBoard/ProjectBoard.vue";
+import ProjectBoard from "@/views/projectBoard/ProjectBoardList.vue";
 </script>
 
 <template>
