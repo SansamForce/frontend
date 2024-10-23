@@ -1,11 +1,13 @@
 <template>
-  <div class="projectBoard-card">
-    <img :src="project.projectBoardImgUrl" alt="프로젝트 이미지" class="projectBoard-image" />
-    <p class="projectBoard-title">{{ project.projectBoardTitle }}</p>
-    <div class="projectBoard-status" :class="{'closed': project.projectBoardStatus === 'DEADLINE'}">
-      {{ project.projectBoardStatus === 'RECRUITMENT' ? '모집중' : '마감' }}
+  <router-link :to="`/projectBoards/${project.projectBoardSeq}`" class="projectBoard-card-link">
+    <div class="projectBoard-card">
+      <img :src="project.projectBoardImgUrl" alt="프로젝트 이미지" class="projectBoard-image" />
+      <p class="projectBoard-title">{{ project.projectBoardTitle }}</p>
+      <div class="projectBoard-status" :class="{'closed': project.projectBoardStatus === 'DEADLINE'}">
+        {{ project.projectBoardStatus === 'RECRUITMENT' ? '모집중' : '마감' }}
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script setup lang="ts">
@@ -18,13 +20,17 @@ defineProps({
 </script>
 
 <style scoped>
-/* Reduce the card height */
 .projectBoard-card {
-  height: 240px; /* Shorter card height */
+  height: 240px;
   padding: 10px;
   border: 1px solid #ddd;
-
   border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.projectBoard-card:hover {
+  transform: scale(1.02);
 }
 
 .projectBoard-image {
@@ -46,11 +52,14 @@ defineProps({
   color: #ffffff;
   border-radius: 4px;
   display: inline-block;
-  text-align: left;
 }
 
 .projectBoard-status.closed {
-  background-color: #C4C4C4; /* 마감일 때 배경색 변경 */
+  background-color: #C4C4C4;
 }
 
+.projectBoard-card-link {
+  text-decoration: none;
+  color: inherit;
+}
 </style>
