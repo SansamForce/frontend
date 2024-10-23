@@ -10,18 +10,18 @@
           <label for="status-select" class="status-label"></label>
           <select id="status-select" v-model="selectedStatus" @change="filterProjects" class="status-select">
             <option value="">모집 상태</option>
-            <option value="모집중">모집중</option>
-            <option value="마감">마감</option>
+            <option value="RECRUITMENT">모집중</option>
+            <option value="CLOSED">마감</option>
           </select>
         </div>
       </div>
 
       <div class="projects-grid">
         <div v-for="(project, index) in currentProjects" :key="index" class="project-card">
-          <img :src="project.image" alt="프로젝트 이미지" class="project-image" />
-          <p class="project-title">{{ project.title }}</p>
-          <div class="project-status" :class="{'closed': project.status === '마감'}">
-            {{ project.status }}
+          <img :src="project.projectBoardImgUrl" alt="프로젝트 이미지" class="project-image" />
+          <p class="project-title">{{ project.projectBoardTitle }}</p>
+          <div class="project-status" :class="{'closed': project.projectBoardStatus === 'CLOSED'}">
+            {{ project.projectBoardStatus === 'RECRUITMENT' ? '모집중' : '마감' }}
           </div>
         </div>
       </div>
@@ -36,32 +36,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import hanwhaImage from '@/images/hanwha-project-board.jpg';
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
 
-// 더미 데이터
-const projects = ref([
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '모집중', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '마감', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '모집중', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '마감', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '모집중', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '모집중', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '마감', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '모집중', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '모집중', image: hanwhaImage },
-  { title: '한화시스템 BEYOND SW 캠프 10기', status: '모집중', image: hanwhaImage }
-]);
-
+// 프로젝트 데이터 저장
+const projects = ref([]);
 const selectedStatus = ref('');
 const currentPage = ref(1);
 const perPage = 8;
+
+// API 호출로 프로젝트 게시물 조회
+const fetchProjects = async () => {
+  try {
+    const response = await axios.get('http://localhost:8086/api/v1/project/board', {
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoia29va29uZzIiLCJhdXRoIjoiTUVNQkVSIiwiaWF0IjoxNzI5NjA3OTY2LCJleHAiOjE3Mjk2OTQzNjZ9.wFKIqsaevEnf8g-6RhwhrWu9oMsaob4SLEI-0PLI00E'
+      }
+    });
+    if (response.data.success) {
+      projects.value = response.data.data;
+    }
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+  }
+};
+
+// 페이지 마운트 시 프로젝트 데이터 가져오기
+onMounted(() => {
+  fetchProjects();
+});
 
 // 필터링된 프로젝트
 const filteredProjects = computed(() => {
   let filtered = projects.value;
   if (selectedStatus.value) {
-    filtered = filtered.filter(project => project.status === selectedStatus.value);
+    filtered = filtered.filter(project => project.projectBoardStatus === selectedStatus.value);
   }
   return filtered;
 });
