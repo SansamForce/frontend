@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Main from "@/views/main/Main.vue";
 import Login from '@/components/user/LoginComponent.vue';
-import { useUserStore } from '@/stores/UserStore'; // Pinia 스토어 불러오기
+import Signup from '@/components/user/SignupComponent.vue';
+import { useUserStore } from '@/stores/UserStore'; 
 
 const routes = [
   {
@@ -12,6 +13,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login, // 로그인 페이지
+  },
+  {
+    path: '/signup', // 회원가입 라우트 추가
+    name: 'Signup',
+    component: Signup,
   },
   {
     path: "/projects",
