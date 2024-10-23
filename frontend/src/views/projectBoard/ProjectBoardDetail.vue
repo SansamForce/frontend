@@ -25,8 +25,8 @@
             <p class="project-info-item"><strong>프로젝트 기간:</strong> {{ formatDate(projectBoard.projectStartDate) }} - {{ formatDate(projectBoard.projectEndDate) }}</p>
             <br>
             <p class="project-info-item"><strong>모집 인원:</strong> {{ projectBoard.projectBoardHeadCount }}명</p>
-             </div>
-          <button class="apply-btn">신청하기</button>
+          </div>
+          <button class="apply-btn" @click="openApplyModal">신청하기</button>
         </div>
       </div>
 
@@ -36,6 +36,24 @@
         <div class="project-board-description">
           <p>{{ projectBoard.projectBoardContent }}</p>
         </div>
+      </div>
+    </div>
+
+    <!-- Modal for selecting the development field -->
+    <div v-if="isModalOpen" class="modal-overlay">
+      <div class="modal-content">
+        <h3>프로젝트 지원</h3>
+        <p>어떤 분야로 지원하시겠습니까?</p>
+        <div>
+          <label>
+            <input type="radio" v-model="selectedField" value="FRONTEND" /> FRONTEND
+          </label>
+          <label>
+            <input type="radio" v-model="selectedField" value="BACKEND" /> BACKEND
+          </label>
+        </div>
+        <button @click="applyForProject">확인</button>
+        <button @click="closeApplyModal">취소</button>
       </div>
     </div>
   </div>
@@ -51,6 +69,8 @@ import axios from 'axios';
 
 // 모집글 데이터를 저장하는 ref
 const projectBoard = ref(null);
+const isModalOpen = ref(false);  // Modal open/close state
+const selectedField = ref('');   // Selected field value
 
 // URL에서 projectBoardSeq를 가져오기
 const route = useRoute();
@@ -74,6 +94,48 @@ onMounted(async () => {
     console.error("프로젝트 모집글 정보를 불러오는 중 오류가 발생했습니다:", error);
   }
 });
+
+// Open and close modal
+const openApplyModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeApplyModal = () => {
+  isModalOpen.value = false;
+};
+
+// Apply for the project API call
+const applyForProject = async () => {
+  if (!selectedField.value) {
+    alert("지원 분야를 선택해주세요.");
+    return;
+  }
+
+  try {
+    const projectBoardSeq = route.params.id;
+    const response = await axios.post(
+        `http://localhost:8086/api/v1/project/board/${projectBoardSeq}/apply`,
+        {
+          projectBoardSeq,
+          projectMemberDevelopType: selectedField.value,
+          applyStatus: 'APPLIED'
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          }
+        }
+    );
+
+    if (response.data.success) {
+      alert("프로젝트 모집 신청이 성공적으로 완료되었습니다.");
+      closeApplyModal();
+    }
+  } catch (error) {
+    console.error("프로젝트 모집 신청 중 오류가 발생했습니다:", error);
+  }
+};
 </script>
 
 <style scoped>
@@ -92,11 +154,11 @@ onMounted(async () => {
   border-radius: 5px;
   font-size: 14px;
   display: inline-block;
-  margin-bottom: 20px; /* 위쪽과 간격 추가 */
+  margin-bottom: 20px;
 }
 
 .recruitment-status.closed {
-  background-color: #C4C4C4; /* 마감일 때 색 변경 */
+  background-color: #C4C4C4;
 }
 
 .project-board-content {
@@ -111,7 +173,7 @@ onMounted(async () => {
 }
 
 .project-board-detail-left {
-  width: 40%; /* 이미지 크기 줄이기 */
+  width: 40%;
   padding-right: 20px;
 }
 
@@ -126,7 +188,7 @@ onMounted(async () => {
   width: 55%;
   padding: 20px;
   border-left: 1px solid #ddd;
-  position: relative; /* 버튼을 고정 배치하기 위한 설정 */
+  position: relative;
 }
 
 .project-info-list {
@@ -134,7 +196,7 @@ onMounted(async () => {
 }
 
 .project-info-item {
-  margin-bottom: 15px; /* 각 정보 항목 간 여백 */
+  margin-bottom: 15px;
   font-size: 18px;
 }
 
@@ -149,19 +211,43 @@ onMounted(async () => {
 
 .apply-btn {
   padding: 12px 25px;
-  background-color: #000000; /* 검은색 배경 */
+  background-color: #000000;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  position: absolute; /* 버튼을 오른쪽 하단에 고정 */
+  position: absolute;
   bottom: 20px;
   right: 20px;
 }
 
-.loading {
-  font-size: 18px;
+/* Modal styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
   text-align: center;
-  margin-top: 20px;
+}
+
+.modal-content h3 {
+  margin-bottom: 20px;
+}
+
+.modal-content div {
+  margin-bottom: 20px;
 }
 </style>
