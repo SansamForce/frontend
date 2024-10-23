@@ -1,11 +1,18 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import './styles/tailwind.css';
-import BootstrapVue3 from 'bootstrap-vue-3';
+import './styles/tailwind.css'; // Tailwind CSS
+import BootstrapVue3 from 'bootstrap-vue-3'; // BootstrapVue
+import { createPinia } from 'pinia'; // Pinia
+import router from './router'; // Vue Router
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+import 'bootstrap/dist/css/bootstrap.css'; // Bootstrap CSS
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'; // BootstrapVue CSS
 
 const app = createApp(App);
-app.use(BootstrapVue3);
-app.mount('#app');
+const pinia = createPinia();
+
+app.use(BootstrapVue3); // BootstrapVue 사용
+app.use(pinia); // Pinia 사용
+app.use(router); // Vue Router 사용
+
+app.mount('#app'); // 앱을 마운트
