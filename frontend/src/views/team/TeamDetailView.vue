@@ -43,9 +43,9 @@ onMounted(fetchTeamDetail);
           <div class="scroll-container">
             <b-card-body>
               <h6>{{team.teamName}}</h6>
-              <TeamMember :team-member-list="team.teamMemberList"/>
-              <TeamSchedule :team-schedule-list="team.teamScheduleList"/>
-              <TeamChat :team-chat-response="team.teamChatResponse"/>
+              <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/>
+              <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList"/>
+              <TeamChat v-if="team.teamChatResponse" :team-chat-response="team.teamChatResponse"/>
             </b-card-body>
           </div>
         </div>
