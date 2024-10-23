@@ -22,7 +22,7 @@
             <input
               id="pw"
               type="password"
-              v-model="pwd" 
+              v-model="pwd"
               placeholder="**********"
             />
             <i class="fas fa-lock"></i>
@@ -77,13 +77,15 @@ const handleLogin = async () => {
   text-align: center;
 }
 
-/* 기존 스타일 유지 */
+/* 배경색을 화면 전체에 적용 */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #1a1a1a;
+  min-height: 100vh; /* 화면 전체 높이를 차지 */
+  background-color: #1a1a1a; /* 전체 배경색 적용 */
+  padding-top: 50px; /* 상단에 여백 추가 */
+  
 }
 
 .login-box {
