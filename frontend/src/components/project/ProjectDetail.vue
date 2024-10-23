@@ -9,7 +9,6 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="row">
       <!-- 프로젝트 상세 조회 -->
       <div class="col-md-6">
         <b-card class="h-100">
@@ -28,21 +27,27 @@ const props = defineProps({
               <p class="mt-2">
                 {{ project.projectContent }}
               </p>
-              <p><strong>모집 일정  :</strong> {{ project.projectStartDate }} ~ {{ project.projectEndDate }}</p>
+              <p><strong>프로젝트 기간 :</strong> {{ project.projectStartDate }} ~ {{ project.projectEndDate }}</p>
               <p><strong>참여 인원 : </strong> {{ project.projectHeadCount }}</p>
             </div>
           </b-card-body>
         </b-card>
       </div>
-    </div>
 </template>
 
 <style scoped>
-.project-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.project-card {
+  border: 1px solid #e9ecef;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.image-container {
   text-align: center;
+}
+
+.image-container img {
+  max-width: 100%;
 }
 
 .project-image {

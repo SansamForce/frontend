@@ -3,11 +3,10 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 import ProjectDetail from '@/components/project/ProjectDetail.vue';
-import TeamDetail from "@/components/team/TeamDetail.vue";
+import TeamDetail from "@/views/team/TeamDetail.vue";
 
 // 상태 관리
 const project = ref(null);
-const team = ref(null);
 const route = useRoute();
 const router = useRouter();
 
@@ -23,11 +22,7 @@ const fetchProjectDetail = async () => {
       }
     });
     project.value = projectResponse.data.data;
-    console.log(project);
-    const teamSeq = project.teamSeq;
-    console.log(teamSeq);
-
-
+    console.log(project.value.teamSeq);
   } catch (error) {
     console.error('프로젝트 정보를 불러오는 중 에러가 발생했습니다:', error);
   }
@@ -39,9 +34,9 @@ onMounted(fetchProjectDetail);
 
 <template>
   <div class="container mt-4">
-    <div v-if="project">
+    <div class="row" v-if="project">
       <ProjectDetail :project="project" />
-      <TeamDetail :team="team"/>
+      <TeamDetail :team-seq="project.teamSeq"/>
     </div>
     <div v-else>
       <p>Loading...</p>
