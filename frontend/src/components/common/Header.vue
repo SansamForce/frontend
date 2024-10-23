@@ -28,19 +28,20 @@
 .header {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: 8px 20px;
   background-color: #222;
   color: #fff;
 }
 
 .logo a{
-  font-size: 50px;
+  font-size: 30px;
   color: #fff;
   text-decoration: none;
 }
 
 .nav a {
-  font-size: 40px;
+  margin-top: 10px;
+  font-size: 25px;
   margin-left: 20px;
   color: #fff;
   text-decoration: none;

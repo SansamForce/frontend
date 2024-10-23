@@ -20,7 +20,11 @@ const routes = [
   {
     path: "/projects/:id",
     component : () => import("@/views/project/ProjectDetail.vue")
-  }
+  },
+  {
+    path: "/projectBoards",
+    component: () => import("@/views/projectBoard/ProjectBoardList.vue")
+  },
 ];
 
 const router = createRouter({
