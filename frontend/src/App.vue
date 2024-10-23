@@ -1,5 +1,14 @@
 <script setup>
 import Header from '@/components/common/Header.vue';
+import { useUserStore } from '@/stores/UserStore';
+import { onMounted } from 'vue';
+
+const userStore = useUserStore();
+
+// 컴포넌트가 마운트될 때 상태 복원 처리
+onMounted(() => {
+  userStore.initialize(); // Store에서 초기화 로직 호출
+});
 </script>
 
 <template>

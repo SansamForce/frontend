@@ -49,8 +49,7 @@ const logout = () => {
   color: #fff;
 }
 
-
-.logo a{
+.logo a {
   font-size: 30px;
   color: #fff;
   text-decoration: none;
