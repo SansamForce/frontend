@@ -42,18 +42,21 @@
     <!-- Modal for selecting the development field -->
     <div v-if="isModalOpen" class="modal-overlay">
       <div class="modal-content">
-        <h3>프로젝트 지원</h3>
-        <p>어떤 분야로 지원하시겠습니까?</p>
-        <div>
+        <button class="close-btn" @click="closeApplyModal">×</button>
+        <h3>해당 프로젝트 참여 시 관심 분야를 선택해주세요.</h3>
+        <div class="field-options">
           <label>
             <input type="radio" v-model="selectedField" value="FRONTEND" /> FRONTEND
           </label>
+
           <label>
             <input type="radio" v-model="selectedField" value="BACKEND" /> BACKEND
           </label>
         </div>
-        <button @click="applyForProject">확인</button>
-        <button @click="closeApplyModal">취소</button>
+        <div class="modal-buttons">
+          <button @click="closeApplyModal" class="cancel-btn">취소</button>
+          <button @click="applyForProject" class="confirm-btn">확인</button>
+        </div>
       </div>
     </div>
   </div>
@@ -237,17 +240,68 @@ const applyForProject = async () => {
 
 .modal-content {
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
+  padding: 40px;
+  border-radius: 12px;
+  width: 500px;
   text-align: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .modal-content h3 {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.modal-content div {
-  margin-bottom: 20px;
+.field-options {
+  display: flex;
+  margin-bottom: 30px;
+  gap: 10px;
+  font-size:15px;
+  font-weight:bold;
 }
+
+.field-options label {
+  font-size: 16px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-btn, .cancel-btn {
+  padding: 8px 17px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  background-color: #000;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #ddd;
+  color: #333;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
 </style>
