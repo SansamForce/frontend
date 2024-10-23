@@ -13,5 +13,10 @@ import ProjectBoard from "@/views/projectBoard/ProjectBoardList.vue";
 
 
 <style scoped>
-
+.container {
+  margin-top: 20px;
+}
+body {
+  font-family: Georgia, "돋움", serif;
+}
 </style>
