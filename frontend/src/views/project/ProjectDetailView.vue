@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 import ProjectDetail from '@/components/project/ProjectDetail.vue';
-import TeamDetail from "@/views/team/TeamDetail.vue";
+import TeamDetail from "@/views/team/TeamDetailView.vue";
 
 // 상태 관리
 const project = ref(null);
@@ -22,7 +22,6 @@ const fetchProjectDetail = async () => {
       }
     });
     project.value = projectResponse.data.data;
-    console.log(project.value.teamSeq);
   } catch (error) {
     console.error('프로젝트 정보를 불러오는 중 에러가 발생했습니다:', error);
   }

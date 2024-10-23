@@ -21,7 +21,6 @@ const fetchProjects = async (page = 1) => {
         // productName: state.productName || null
       }
     });
-    console.log(response);
     state.projects = response.data.data;
   } catch (error) {
     console.error('프로젝트 목록을 불러오는 중 에러가 발생했습니다:', error);

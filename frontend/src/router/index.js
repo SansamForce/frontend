@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Main from "@/views/main/Main.vue";
+import Main from "@/views/main/MainView.vue";
 import Login from '@/views/user/LoginView.vue';
 import Signup from '@/views/user/SignupView.vue';
 import { useUserStore } from '@/stores/UserStore'; 
@@ -21,12 +21,12 @@ const routes = [
   },
   {
     path: "/projects",
-    component: () => import("@/views/project/ProjectList.vue"),
+    component: () => import("@/views/project/ProjectListView.vue"),
     meta: { requiresAuth: true } // 로그인 필요
   },
   {
     path: "/projects/:id",
-    component: () => import("@/views/project/ProjectDetail.vue"),
+    component: () => import("@/views/project/ProjectDetailView.vue"),
     meta: { requiresAuth: true } // 로그인 필요
   },
   {
