@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Main from "@/views/main/Main.vue";
-import Login from '@/components/user/LoginComponent.vue';
-import Signup from '@/components/user/SignupComponent.vue';
+import Login from '@/views/user/LoginView.vue';
+import Signup from '@/views/user/SignupView.vue';
 import { useUserStore } from '@/stores/UserStore'; 
 
 const routes = [
@@ -15,7 +15,7 @@ const routes = [
     component: Login, // 로그인 페이지
   },
   {
-    path: '/signup', // 회원가입 라우트 추가
+    path: '/signup', // 회원가입 페이지
     name: 'Signup',
     component: Signup,
   },
