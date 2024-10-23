@@ -1,24 +1,24 @@
 <template>
   <header class="header">
     <div class="logo">
-      <h1><a href="@/App.vue">T-BUILDING</a></h1>
+      <h1><a href="/">T-BUILDING</a></h1>
     </div>
     <nav class="nav">
 <!--      <template v-if="member.auth == 'MEMBER' || member.auth == 'MENTOR'">
-        <a href="#">BOARD</a>
-        <a href="#">PROJECT</a>
-        <a href="#">MYPAGE</a>
-        <a href="#">LOGOUT</a>
+        <router-link to="#">BOARD</router-link>
+        <router-link to="#">PROJECT</router-link>
+        <router-link to="#">MYPAGE</router-link>
+        <router-link to="#">LOGOUT</router-link>
       </template>-->
 <!--      <template v-if="member.auth == 'MANAGER' || member.auth == 'SUB_MANAGER'">
-        <a href="#">BOARD</a>
-        <a href="#">PROJECT</a>
-        <a href="#">MEMBER</a>
-        <a href="#">LOGOUT</a>
+        <router-link to="#">BOARD</router-link>
+        <router-link to="#">PROJECT</router-link>
+        <router-link to="#">MEMBER</router-link>
+        <router-link to="#">LOGOUT</router-link>
       </template>-->
 <!--      <template v-else>-->
-        <a href="#">Login</a>
-        <a href="#">Sign Up</a>
+        <router-link to="/login">Login</router-link>
+        <router-link to="/signup">Sign Up</router-link>
 <!--      </template>-->
     </nav>
   </header>
@@ -44,12 +44,12 @@
   margin-left: 20px;
   color: #fff;
   text-decoration: none;
-
 }
+
 .nav a:hover {
   color: #3FF3FF;
 }
-
 </style>
+
 <script setup lang="ts">
 </script>

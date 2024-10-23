@@ -1,16 +1,12 @@
 <script setup>
 import Header from '@/components/common/Header.vue';
-  import TestComponent from "@/components/TestComponent.vue";
 </script>
 
 <template>
-  <header>
+  <div class="bg-gray-900 text-white">
     <Header />
-  </header>
-
-  <main>
-    <TestComponent />
-  </main>
+    <router-view /> 
+  </div>
 </template>
 
 <style scoped>
