@@ -34,6 +34,10 @@ const routes = [
     component: () => import("@/views/projectBoard/ProjectBoardList.vue"),
     meta: { requiresAuth: true } // 로그인 필요
   },
+  {
+    path: "/projectBoards/:id",
+    component : () => import("@/views/projectBoard/ProjectBoardDetail.vue")
+  },
 
 ];
 
