@@ -1,12 +1,13 @@
 import { createApp } from 'vue';
+
 import App from './App.vue';
 import './styles/tailwind.css'; // Tailwind CSS
 import BootstrapVue3 from 'bootstrap-vue-3'; // BootstrapVue
 import { createPinia } from 'pinia'; // Pinia
 import router from './router'; // Vue Router
 
-import 'bootstrap/dist/css/bootstrap.css'; // Bootstrap CSS
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'; // BootstrapVue CSS
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 
 const app = createApp(App);
 const pinia = createPinia();
