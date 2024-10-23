@@ -38,6 +38,7 @@ export const useUserStore = defineStore('user', {
           this.user = { id: decodedToken.sub };
           this.isAuthenticated = true;
 
+          // JWT 토큰 로컬 스토리지에 저장
           localStorage.setItem('authToken', token);
         } else {
           this.error = 'Token not found';
@@ -53,5 +54,23 @@ export const useUserStore = defineStore('user', {
       this.auth = null;
       localStorage.removeItem('authToken');
     },
-  }
+
+    // 새로고침 시 상태 복원
+    initialize() {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          const decodedToken = parseJwt(token);
+
+          // 토큰에서 사용자 정보 복원
+          this.auth = decodedToken.auth;
+          this.user = { id: decodedToken.sub };
+          this.isAuthenticated = true;
+        } catch (error) {
+          console.error('Token parsing error:', error);
+          this.logout(); // 토큰이 유효하지 않으면 로그아웃 처리
+        }
+      }
+    },
+  },
 });
