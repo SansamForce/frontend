@@ -1,28 +1,44 @@
 <template>
   <header class="header">
     <div class="logo">
-      <h1><a href="/">T-BUILDING</a></h1>
+      <h1><router-link to="/">T-BUILDING</router-link></h1>
     </div>
     <nav class="nav">
-<!--      <template v-if="member.auth == 'MEMBER' || member.auth == 'MENTOR'">
-        <router-link to="#">BOARD</router-link>
-        <router-link to="#">PROJECT</router-link>
-        <router-link to="#">MYPAGE</router-link>
-        <router-link to="#">LOGOUT</router-link>
-      </template>-->
-<!--      <template v-if="member.auth == 'MANAGER' || member.auth == 'SUB_MANAGER'">
-        <router-link to="#">BOARD</router-link>
-        <router-link to="#">PROJECT</router-link>
-        <router-link to="#">MEMBER</router-link>
-        <router-link to="#">LOGOUT</router-link>
-      </template>-->
-<!--      <template v-else>-->
+      <template v-if="userStore.isAuthenticated">
+        <!-- 사용자 권한에 따라 다른 메뉴 표시 -->
+        <template v-if="userStore.auth === 'MEMBER' || userStore.auth === 'MENTOR'">
+          <router-link to="/board">BOARD</router-link>
+          <router-link to="/project">PROJECT</router-link>
+          <router-link to="/mypage">MYPAGE</router-link>
+          <router-link to="/logout" @click.prevent="logout">LOGOUT</router-link>
+        </template>
+        <template v-if="userStore.auth === 'MANAGER' || userStore.auth === 'SUB_MANAGER'">
+          <router-link to="/board">BOARD</router-link>
+          <router-link to="/project">PROJECT</router-link>
+          <router-link to="/member">MEMBER</router-link>
+          <router-link to="/logout" @click.prevent="logout">LOGOUT</router-link>
+        </template>
+      </template>
+      <template v-else>
         <router-link to="/login">Login</router-link>
         <router-link to="/signup">Sign Up</router-link>
-<!--      </template>-->
+      </template>
     </nav>
   </header>
 </template>
+
+<script setup lang="js">
+import { useUserStore } from '@/stores/UserStore';
+import { useRouter } from 'vue-router';
+
+const userStore = useUserStore();
+const router = useRouter();
+
+const logout = () => {
+  userStore.logout();
+  router.push('/login');
+};
+</script>
 
 <style scoped>
 .header {
@@ -32,6 +48,7 @@
   background-color: #222;
   color: #fff;
 }
+
 
 .logo a{
   font-size: 30px;
@@ -51,6 +68,3 @@
   color: #3FF3FF;
 }
 </style>
-
-<script setup lang="ts">
-</script>
