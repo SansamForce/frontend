@@ -1,11 +1,27 @@
 <script setup>
 import ProjectList from "@/components/project/ProjectList.vue";
-import { reactive, onMounted } from "vue";
+import Pagination from "@/components/project/Pagination.vue";
+import {reactive, onMounted, computed} from "vue";
 import axios from "axios";
 // 상태 관리를 위한 반응형 객체 생성
 const state = reactive({
   projects: [],
-  projectName: ''
+  projectName: '',
+  currentPage: 1,
+  pageSize: 8
+});
+
+// 전체 프로젝트 수
+const totalProjects = computed(() => state.projects.length);
+
+// 페이지 수 계산
+const totalPages = computed(() => Math.ceil(totalProjects.value / state.pageSize));
+
+// 현재 페이지에 보여줄 프로젝트
+const paginatedProjects = computed(() => {
+  const start = (state.currentPage - 1) * state.pageSize;
+  const end = start + state.pageSize;
+  return state.projects.slice(start, end);
 });
 
 // API 호출 함수
@@ -28,6 +44,11 @@ const fetchProjects = async (page = 1) => {
   }
 };
 
+// 페이지 변경 함수
+const changePage = (page) => {
+  state.currentPage = page;
+};
+
 onMounted(() => fetchProjects());
 </script>
 
@@ -47,13 +68,13 @@ onMounted(() => fetchProjects());
       </b-col>
     </b-row>
 
-    <ProjectList :projects="state.projects"/>
-</div>
+    <ProjectList :projects="paginatedProjects"/>
+
+    <Pagination :totalPages="totalPages" :currentPage="state.currentPage" @changePage="changePage" />
+
+
+  </div>
 </template>
-
-<script>
-
-</script>
 
 <style scoped>
 .project-page {
@@ -64,4 +85,25 @@ onMounted(() => fetchProjects());
 h2 {
   font-size: 24px;
 }
+
+<style scoped>
+ .project-page {
+   max-width: 1280px;
+   margin: 0 auto;
+ }
+
+h5 {
+  font-size: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+button {
+  margin: 0 5px;
+}
+
 </style>
