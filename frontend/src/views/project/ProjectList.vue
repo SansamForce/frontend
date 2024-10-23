@@ -54,20 +54,17 @@ onMounted(() => fetchProjects());
 
 <template>
   <div class="container project-page mt-4">
-    <b-row class="mb-4">
-      <b-col cols="12" class="d-flex justify-content-between align-items-center">
-        <h5>내 프로젝트 조회</h5>
-        <b-input-group style="width: 30%">
-          <b-form-input placeholder="프로젝트 이름으로 검색" v-model="state.projectName"/>
-          <b-dropdown text="구분" variant="outline-secondary">
+<!--    <b-row class="mb-4">
+      <b-col cols="12" class="d-flex justify-content-between align-items-center" style="margin-left: 88%">
+          <b-dropdown text="모집 상태" variant="outline-secondary">
             <b-dropdown-item @click="changeProjectStatus('ALL')">전체</b-dropdown-item>
             <b-dropdown-item @click="changeProjectStatus('PROGRESS')">진행중</b-dropdown-item>
             <b-dropdown-item @click="changeProjectStatus('END')">종료됨</b-dropdown-item>
           </b-dropdown>
-        </b-input-group>
       </b-col>
-    </b-row>
+    </b-row>-->
 
+    <span class="total-project"> 총 {{ totalProjects }} 개의 프로젝트가 등록되어 있습니다.</span>
     <ProjectList :projects="paginatedProjects"/>
 
     <Pagination :totalPages="totalPages" :currentPage="state.currentPage" @changePage="changePage" />
@@ -77,33 +74,30 @@ onMounted(() => fetchProjects());
 </template>
 
 <style scoped>
-.project-page {
-  max-width: 2580px;
-  margin: 0 auto;
-}
 
-h2 {
-  font-size: 24px;
-}
-
-<style scoped>
  .project-page {
    max-width: 1280px;
    margin: 0 auto;
  }
 
 h5 {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 button {
   margin: 0 5px;
+}
+
+.total-project {
+  color: #222222;
+
 }
 
 </style>
