@@ -113,13 +113,14 @@ const filterProjects = () => {
 }
 
 .projectBoard-total-info {
-  font-size: 20px;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
   display: flex; /* Flexbox 사용 */
   justify-content: space-between; /* 양쪽 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
-  margin: 20px 30px; /* 상하 여백 및 왼쪽/오른쪽 여백 추가 */
+  margin-top: 15px;
 }
-
 
 
 .projectBoard-info {
@@ -127,7 +128,7 @@ const filterProjects = () => {
 }
 
 .projectBoards-status-for-select {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: right;
   display: flex; /* Flexbox 사용 */
   align-items: center; /* 수직 중앙 정렬 */
@@ -137,12 +138,6 @@ const filterProjects = () => {
   font-size: 20px; /* 라벨 크기 조정 */
 }
 
-.projectBoard-total-info {
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-}
-
 .projectBoard-count {
   color: #171D8A;
   font-weight: bold;
@@ -150,9 +145,10 @@ const filterProjects = () => {
 
 .projectBoards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4,1fr);
+  grid-template-rows: repeat(2, auto); /* 2 rows */
   gap: 20px;
-  padding: 0 20px;
+  padding: 0 10px;
 }
 
 .pagination {
@@ -168,12 +164,13 @@ const filterProjects = () => {
 
 /* Select Box 스타일 추가 */
 .status-select {
-  font-size: 18px; /* 글자 크기 조정 */
+  font-size: 11px; /* 글자 크기 조정 */
   padding: 10px; /* 패딩 추가 */
-  width: 180px; /* 너비 조정 */
-  height: 50px; /* 높이 조정 */
+  width: 110px; /* 너비 조정 */
+  height: 35px; /* 높이 조정 */
   border: 1px solid #ddd; /* 테두리 */
   border-radius: 4px; /* 모서리 둥글게 */
-  cursor: pointer; /* 커서 변경 */
+  cursor: pointer; /* 커서  변경 */
+  margin-right: 20px;
 }
 </style>

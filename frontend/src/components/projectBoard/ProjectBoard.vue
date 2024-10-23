@@ -2,7 +2,7 @@
   <div class="projectBoard-card">
     <img :src="project.projectBoardImgUrl" alt="프로젝트 이미지" class="projectBoard-image" />
     <p class="projectBoard-title">{{ project.projectBoardTitle }}</p>
-    <div class="projectBoard-status" :class="{'closed': project.projectBoardStatus === 'CLOSED'}">
+    <div class="projectBoard-status" :class="{'closed': project.projectBoardStatus === 'DEADLINE'}">
       {{ project.projectBoardStatus === 'RECRUITMENT' ? '모집중' : '마감' }}
     </div>
   </div>
@@ -18,36 +18,39 @@ defineProps({
 </script>
 
 <style scoped>
+/* Reduce the card height */
 .projectBoard-card {
-  padding: 20px;
+  height: 240px; /* Shorter card height */
+  padding: 10px;
   border: 1px solid #ddd;
+
   border-radius: 8px;
-  text-align: left; /* 왼쪽 정렬 추가 */
 }
 
 .projectBoard-image {
   width: 100%;
-  height: 200px;
+  height: 140px;
   object-fit: cover;
 }
 
-.closed {
-  background-color: grey;
-}
-
 .projectBoard-title {
+  color: #262627;
   font-size: 20px;
-  margin-top: 10px; /* 이미지와 제목 사이 여백 추가 */
+  margin-top: 5px;
 }
 
 .projectBoard-status {
-  margin-top: 5px; /* 이미지와 간격 추가 */
-  padding: 5px 10px; /* 패딩 추가 */
-  background-color: #171D8A; /* 배경 색상 */
+  padding: 4px 10px;
+  background-color: #171D8A;
+  font-size: 10px;
   color: #ffffff;
-  border-radius: 4px; /* 모서리 둥글게 */
-  display: inline-block; /* 텍스트에 맞춰 크기 조정 */
-  text-align: left; /* 왼쪽 정렬 */
+  border-radius: 4px;
+  display: inline-block;
+  text-align: left;
+}
+
+.projectBoard-status.closed {
+  background-color: #C4C4C4; /* 마감일 때 배경색 변경 */
 }
 
 </style>

@@ -1,14 +1,12 @@
 <script setup>
 import Header from '@/components/common/Header.vue';
-import ProjectBoard from "@/views/projectBoard/ProjectBoardList.vue";
 </script>
 
 <template>
-  <div class="bg-gray-900 text-white">
+  <div>
     <Header />
     <router-view />
   </div>
-  <ProjectBoard />
 </template>
 
 
