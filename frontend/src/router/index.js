@@ -22,7 +22,13 @@ const routes = [
     path: "/projects/:id",
     component: () => import("@/views/project/ProjectDetail.vue"),
     meta: { requiresAuth: true } // 로그인 필요
-  }
+  },
+  {
+    path: "/projectBoards",
+    component: () => import("@/views/projectBoard/ProjectBoardList.vue"),
+    meta: { requiresAuth: true } // 로그인 필요
+  },
+
 ];
 
 const router = createRouter({
