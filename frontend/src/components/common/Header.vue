@@ -7,14 +7,14 @@
       <template v-if="userStore.isAuthenticated">
         <!-- 사용자 권한에 따라 다른 메뉴 표시 -->
         <template v-if="userStore.auth === 'MEMBER' || userStore.auth === 'MENTOR'">
-          <router-link to="/board">BOARD</router-link>
-          <router-link to="/project">PROJECT</router-link>
+          <router-link to="/projectBoards">BOARD</router-link>
+          <router-link to="/projects">PROJECT</router-link>
           <router-link to="/mypage">MYPAGE</router-link>
           <router-link to="/logout" @click.prevent="logout">LOGOUT</router-link>
         </template>
         <template v-if="userStore.auth === 'MANAGER' || userStore.auth === 'SUB_MANAGER'">
-          <router-link to="/board">BOARD</router-link>
-          <router-link to="/project">PROJECT</router-link>
+          <router-link to="/projectBoards">BOARD</router-link>
+          <router-link to="/projects">PROJECT</router-link>
           <router-link to="/member">MEMBER</router-link>
           <router-link to="/logout" @click.prevent="logout">LOGOUT</router-link>
         </template>
