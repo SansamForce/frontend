@@ -13,7 +13,7 @@ const props = defineProps({
       <div class="col-md-6">
         <b-card class="h-100">
           <b-card-header class="text-start">
-            <h5>내 프로젝트 상세 조회</h5>
+            <h5 style="font-weight: bold">내 프로젝트 상세 조회</h5>
           </b-card-header>
           <b-card-body>
             <div class="project-card">
@@ -22,10 +22,10 @@ const props = defineProps({
               </div>
               <div style="font-weight: bold">
                 {{ project.projectTitle }}
-                <span class="badge bg-primary">{{ project.projectStatus === "PROGRESS" ? "진행중" : "종료됨" }}</span>
               </div>
-              <p class="mt-2">
+              <p class="mt-2 project-title">
                 {{ project.projectContent }}
+                <span class="badge">{{ project.projectStatus === "PROGRESS" ? "진행중" : "종료됨" }}</span>
               </p>
               <p><strong>프로젝트 기간 :</strong> {{ project.projectStartDate }} ~ {{ project.projectEndDate }}</p>
               <p><strong>참여 인원 : </strong> {{ project.projectHeadCount }}</p>
@@ -55,6 +55,15 @@ const props = defineProps({
   height: auto;
   object-fit: cover;
   margin-bottom: 20px;
+}
+
+.project-title {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.badge {
+  background-color: #171D8A;
 }
 
 h1 {

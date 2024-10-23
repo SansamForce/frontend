@@ -64,7 +64,7 @@ onMounted(() => fetchProjects());
       </b-col>
     </b-row>-->
 
-    <span class="total-project"> 총 {{ totalProjects }} 개의 프로젝트가 등록되어 있습니다.</span>
+    <span class="total-project"> 총  <span class="total-project-count">{{ totalProjects }}</span> 개의 프로젝트가 등록되어 있습니다.</span>
     <ProjectList :projects="paginatedProjects"/>
 
     <Pagination :totalPages="totalPages" :currentPage="state.currentPage" @changePage="changePage" />
@@ -97,7 +97,11 @@ button {
 
 .total-project {
   color: #222222;
+}
 
+.total-project-count {
+  color: #171D8A;
+  font-weight: bold;
 }
 
 </style>
