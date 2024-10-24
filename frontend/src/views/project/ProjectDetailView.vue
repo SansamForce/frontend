@@ -32,9 +32,9 @@ onMounted(fetchProjectDetail);
 </script>
 
 <template>
-    <div class="row" v-if="project">
-      <ProjectDetail :project="project" />
-      <TeamDetail :team-seq="project.teamSeq"/>
+    <div class="row card-container" v-if="project">
+      <ProjectDetail :project="project" class="card" />
+      <TeamDetail :team-seq="project.teamSeq" class="card" />
     </div>
     <div v-else>
       <p>Loading...</p>
@@ -42,5 +42,17 @@ onMounted(fetchProjectDetail);
 </template>
 
 <style scoped>
+.card-container {
+  display: flex;          /* 카드들을 수평으로 배치 */
+  justify-content: space-between; /* 카드 간의 간격을 조절 */
+}
+
+.card {
+  border-color : white;
+  flex: 1;                /* 각 카드는 동일한 너비를 차지 */
+  margin: 0 10px;         /* 카드 간의 여백 */
+  display: flex;
+  flex-direction: column; /* 카드 안의 요소들을 수직으로 배치 */
+}
 
 </style>
