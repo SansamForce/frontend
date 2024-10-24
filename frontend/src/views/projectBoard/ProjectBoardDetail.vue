@@ -26,7 +26,10 @@
             <br>
             <p class="project-info-item"><strong>모집 인원:</strong> {{ projectBoard.projectBoardHeadCount }}명</p>
           </div>
-          <button class="apply-btn" @click="openApplyModal">신청하기</button>
+          <!-- 신청 / 취소 버튼 -->
+          <button class="apply-btn" @click="hasApplied ? cancelApplication() : openApplyModal()">
+            {{ hasApplied ? '신청 취소' : '신청하기' }}
+          </button>
         </div>
       </div>
 
@@ -74,6 +77,8 @@ import axios from 'axios';
 const projectBoard = ref(null);
 const isModalOpen = ref(false);  // Modal open/close state
 const selectedField = ref('');   // Selected field value
+const hasApplied = ref(false);   // 신청 상태 관리
+const projectApplyMemberSeq = ref(null);  // 신청 ID 저장
 
 // URL에서 projectBoardSeq를 가져오기
 const route = useRoute();
@@ -83,31 +88,42 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 };
 
-// API 호출로 프로젝트 모집글 데이터를 가져오는 로직
+// 신청 목록을 가져오는 로직
 onMounted(async () => {
   try {
     const projectBoardSeq = route.params.id;  // URL 파라미터에서 모집글 ID 추출
+
+    // 프로젝트 모집글 데이터 불러오기
     const response = await axios.get(`http://localhost:8086/api/v1/project/board/${projectBoardSeq}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
     projectBoard.value = response.data.data;
+
+    // 신청한 프로젝트 목록 불러오기
+    const applyResponse = await axios.get(`http://localhost:8086/api/v1/project/board/${projectBoardSeq}/apply`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+
+    // 신청 목록에서 현재 프로젝트에 대한 신청만 필터링
+    const appliedProject = applyResponse.data.data.find(project => project.projectBoardSeq === projectBoardSeq);
+
+    if (appliedProject) {
+      hasApplied.value = true;  // 이미 신청한 상태
+      projectApplyMemberSeq.value = appliedProject.projectApplyMemberSeq;  // 해당 프로젝트에 대한 신청 ID 저장
+      console.log("projectApplyMemberSeq:", projectApplyMemberSeq.value);  // 디버깅용 로그
+    } else {
+      hasApplied.value = false;  // 신청 내역이 없을 경우
+    }
   } catch (error) {
-    console.error("프로젝트 모집글 정보를 불러오는 중 오류가 발생했습니다:", error);
+    console.error("데이터를 불러오는 중 오류가 발생했습니다:", error);
   }
 });
 
-// Open and close modal
-const openApplyModal = () => {
-  isModalOpen.value = true;
-};
-
-const closeApplyModal = () => {
-  isModalOpen.value = false;
-};
-
-// Apply for the project API call
+// 신청 처리
 const applyForProject = async () => {
   if (!selectedField.value) {
     alert("지원 분야를 선택해주세요.");
@@ -133,13 +149,53 @@ const applyForProject = async () => {
 
     if (response.data.success) {
       alert("프로젝트 모집 신청이 성공적으로 완료되었습니다.");
+      // 신청 후 반환된 projectApplyMemberSeq 저장
+      projectApplyMemberSeq.value = response.data.data.projectApplyMemberSeq;
+      hasApplied.value = true;  // 신청 완료 후 상태 변경
       closeApplyModal();
     }
   } catch (error) {
     console.error("프로젝트 모집 신청 중 오류가 발생했습니다:", error);
   }
 };
+
+// 신청 취소 처리
+const cancelApplication = async () => {
+  if (!projectApplyMemberSeq.value) {
+    alert("취소할 신청 정보가 없습니다.");
+    return;
+  }
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:8086/api/v1/project/board/${projectBoard.value.projectBoardSeq}/apply/${projectApplyMemberSeq.value}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      }
+    );
+
+    if (response.data.success) {
+      alert("프로젝트 모집 신청이 취소되었습니다.");
+      hasApplied.value = false;  // 취소 후 상태 변경
+      projectApplyMemberSeq.value = null;  // 취소 후 seq 값 초기화
+    }
+  } catch (error) {
+    console.error("프로젝트 모집 신청 취소 중 오류가 발생했습니다:", error);
+  }
+};
+
+// Open and close modal
+const openApplyModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeApplyModal = () => {
+  isModalOpen.value = false;
+};
 </script>
+
 
 <style scoped>
 .project-board-detail-page {
