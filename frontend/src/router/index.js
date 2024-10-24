@@ -38,7 +38,6 @@ const routes = [
     path: "/projectBoards/:id",
     component : () => import("@/views/projectBoard/ProjectBoardDetail.vue")
   },
-
 ];
 
 const router = createRouter({
@@ -46,15 +45,18 @@ const router = createRouter({
   routes,
 });
 
-// 전역 라우트 가드 설정 (로그인 필요 여부 확인)
+
 router.beforeEach((to, from, next) => {
-  const userStore = useUserStore(); // Pinia 스토어 사용
-  const isAuthenticated = userStore.isAuthenticated; // 로그인 여부 확인
+  const userStore = useUserStore(); 
+  const isAuthenticated = userStore.isAuthenticated;
 
   // 로그인이 필요한 경로에 접근 시 로그인 상태 확인
   if (to.meta.requiresAuth && !isAuthenticated) {
-    // 로그인 상태가 아니면 로그인 페이지로 리다이렉트
+    
     next('/login');
+  } else if (isAuthenticated && (to.path === '/login' || to.path === '/signup')) {
+    // 로그인 상태에서 로그인/회원가입 페이지로 접근 시 마이페이지로 리다이렉트
+    next('/my-page');
   } else {
     next(); // 로그인되어 있거나, 로그인 필요 없는 페이지는 그대로 이동
   }
