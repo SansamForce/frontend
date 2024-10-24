@@ -26,7 +26,10 @@
             <br>
             <p class="project-info-item"><strong>모집 인원:</strong> {{ projectBoard.projectBoardHeadCount }}명</p>
           </div>
-          <button class="apply-btn" @click="openApplyModal">신청하기</button>
+          <!-- 신청 / 취소 버튼 -->
+          <button class="apply-btn" @click="hasApplied ? cancelApplication() : openApplyModal()">
+            {{ hasApplied ? '신청 취소' : '신청하기' }}
+          </button>
         </div>
       </div>
 
@@ -66,48 +69,66 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 
-// 모집글 데이터를 저장하는 ref
 const projectBoard = ref(null);
-const isModalOpen = ref(false);  // Modal open/close state
-const selectedField = ref('');   // Selected field value
+const isLoading = ref(true);  // 로딩 상태 관리
+const isModalOpen = ref(false);
+const selectedField = ref('');
+const hasApplied = ref(false);
+const projectApplyMemberSeq = ref(null);
 
-// URL에서 projectBoardSeq를 가져오기
 const route = useRoute();
 
-// 날짜 형식 변환 함수
-const formatDate = (dateString: string) => {
+const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 };
 
-// API 호출로 프로젝트 모집글 데이터를 가져오는 로직
 onMounted(async () => {
+  await loadProjectBoardData(route.params.id);
+});
+
+const loadProjectBoardData = async (projectBoardSeq) => {
   try {
-    const projectBoardSeq = route.params.id;  // URL 파라미터에서 모집글 ID 추출
+    isLoading.value = true;
+
     const response = await axios.get(`http://localhost:8086/api/v1/project/board/${projectBoardSeq}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
     projectBoard.value = response.data.data;
+
+    const applyResponse = await axios.get(`http://localhost:8086/api/v1/project/board/${projectBoard.value.projectBoardSeq}/apply`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+
+    const appliedProject = applyResponse.data.data.find(project => 
+      Number(project.projectBoardSeq) === Number(projectBoardSeq)
+    );
+
+    if (appliedProject) {
+      hasApplied.value = true;
+      projectApplyMemberSeq.value = appliedProject.projectApplyMemberSeq;
+    } else {
+      hasApplied.value = false;
+    }
+
   } catch (error) {
-    console.error("프로젝트 모집글 정보를 불러오는 중 오류가 발생했습니다:", error);
+    console.error("데이터 로드 중 오류 발생:", error);
+  } finally {
+    isLoading.value = false;
   }
+};
+
+watch(() => route.params.id, async (newProjectBoardSeq) => {
+  await loadProjectBoardData(newProjectBoardSeq);
 });
 
-// Open and close modal
-const openApplyModal = () => {
-  isModalOpen.value = true;
-};
-
-const closeApplyModal = () => {
-  isModalOpen.value = false;
-};
-
-// Apply for the project API call
 const applyForProject = async () => {
   if (!selectedField.value) {
     alert("지원 분야를 선택해주세요.");
@@ -133,13 +154,51 @@ const applyForProject = async () => {
 
     if (response.data.success) {
       alert("프로젝트 모집 신청이 성공적으로 완료되었습니다.");
+      projectApplyMemberSeq.value = response.data.data.projectApplyMemberSeq;
+      hasApplied.value = true;
       closeApplyModal();
     }
   } catch (error) {
     console.error("프로젝트 모집 신청 중 오류가 발생했습니다:", error);
   }
 };
+
+const cancelApplication = async () => {
+  if (!projectApplyMemberSeq.value) {
+    alert("취소할 신청 정보가 없습니다.");
+    return;
+  }
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:8086/api/v1/project/board/${projectBoard.value.projectBoardSeq}/apply/${projectApplyMemberSeq.value}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      }
+    );
+
+    if (response.data.success) {
+      alert("프로젝트 모집 신청이 취소되었습니다.");
+      hasApplied.value = false;
+      projectApplyMemberSeq.value = null;
+    }
+  } catch (error) {
+    console.error("프로젝트 모집 신청 취소 중 오류가 발생했습니다:", error);
+  }
+};
+
+const openApplyModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeApplyModal = () => {
+  isModalOpen.value = false;
+};
 </script>
+
+
 
 <style scoped>
 .project-board-detail-page {
