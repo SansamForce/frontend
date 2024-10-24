@@ -130,6 +130,8 @@ watch(() => route.params.id, async (newProjectBoardSeq) => {
 });
 
 const applyForProject = async () => {
+
+
   // 로그인 여부를 체크
   const authToken = localStorage.getItem('authToken');
   
@@ -202,8 +204,14 @@ const cancelApplication = async () => {
 };
 
 const openApplyModal = () => {
-  isModalOpen.value = true;
+  if (projectBoard.value.projectBoardStatus === 'DEADLINE') {
+    alert('프로젝트가 마감되었습니다. 신청할 수 없습니다.');
+    return;  // 마감된 상태에서는 함수를 종료하고 모달을 열지 않음
+  }
+  isModalOpen.value = true;  // 프로젝트가 마감되지 않았을 때만 모달을 열기
 };
+
+
 
 const closeApplyModal = () => {
   isModalOpen.value = false;
