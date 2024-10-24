@@ -13,7 +13,7 @@ const fetchProjects = async (page = 1) => {
   try {
     const response = await axios.get(`http://localhost:8086/api/v1/project`, {
       headers: {
-        "Authorization" : `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoia29va29uZzIiLCJhdXRoIjoiTUVNQkVSIiwiaWF0IjoxNzI5NjA3OTY2LCJleHAiOjE3Mjk2OTQzNjZ9.wFKIqsaevEnf8g-6RhwhrWu9oMsaob4SLEI-0PLI00E`
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       },
       params: {
         // page,
@@ -21,7 +21,6 @@ const fetchProjects = async (page = 1) => {
         // productName: state.productName || null
       }
     });
-    console.log(response);
     state.projects = response.data.data;
   } catch (error) {
     console.error('프로젝트 목록을 불러오는 중 에러가 발생했습니다:', error);
