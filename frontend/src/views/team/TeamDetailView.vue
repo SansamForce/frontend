@@ -18,7 +18,7 @@ const fetchTeamDetail = async () => {
   try {
     const teamResponse = await axios.get(`http://localhost:8086/api/v1/team/${props.teamSeq}`, {
       headers: {
-        "Authorization" : `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoia29va29uZzIiLCJhdXRoIjoiTUVNQkVSIiwiaWF0IjoxNzI5NjA3OTY2LCJleHAiOjE3Mjk2OTQzNjZ9.wFKIqsaevEnf8g-6RhwhrWu9oMsaob4SLEI-0PLI00E`
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     })
     team.value = teamResponse.data.data;
@@ -49,9 +49,20 @@ onMounted(fetchTeamDetail);
             </b-card-body>
           </div>
         </div>
-        <div class="row" v-else>
-          진행 중인 팀이 존재하지 않습니다.
-          <p>강사님이 팀을 정해주신 이후 내가 속한 팀의 정보를 확인하실 수 있습니다.</p>
+
+        <div class="no-team-container text-center" v-else>
+          <!-- 경고 아이콘 -->
+          <div class="warning-icon">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+
+          <!-- 텍스트 -->
+          <p class="mt-3">
+            진행 중인 팀이 존재하지 않습니다.
+            <br />
+            강사님이 팀을 정해주신 이후 내가 속한 팀의 정보를 확인하실 수 있습니다.
+          </p>
+
         </div>
       </b-card>
 
@@ -60,6 +71,27 @@ onMounted(fetchTeamDetail);
 </template>
 
 <style scoped>
+
+.no-team-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh; /* 화면 중앙에 배치 */
+  text-align: center;
+  max-width: 1200px;
+}
+
+.warning-icon {
+  font-size: 50px;
+  color: #f0ad4e; /* 경고 색상 */
+}
+
+p {
+  font-size: 1em;
+  color: #333;
+}
+
 .scroll-container {
   max-height: 500px;
   overflow-y: auto;

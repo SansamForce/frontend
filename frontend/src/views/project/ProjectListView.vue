@@ -13,7 +13,7 @@ const fetchProjects = async (page = 1) => {
   try {
     const response = await axios.get(`http://localhost:8086/api/v1/project`, {
       headers: {
-        "Authorization" : `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoia29va29uZzIiLCJhdXRoIjoiTUVNQkVSIiwiaWF0IjoxNzI5NjA3OTY2LCJleHAiOjE3Mjk2OTQzNjZ9.wFKIqsaevEnf8g-6RhwhrWu9oMsaob4SLEI-0PLI00E`
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       },
       params: {
         // page,

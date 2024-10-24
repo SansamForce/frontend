@@ -19,7 +19,7 @@ const fetchTeamChatDetail = async () => {
   try {
     const teamChatRoomResponse = await axios.get(`http://localhost:8086/api/v1/team/${props.teamChatResponse.teamSeq}/chat/${props.teamChatResponse.teamChatSeq}`, {
       headers: {
-        "Authorization" : `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoia29va29uZzIiLCJhdXRoIjoiTUVNQkVSIiwiaWF0IjoxNzI5NjA3OTY2LCJleHAiOjE3Mjk2OTQzNjZ9.wFKIqsaevEnf8g-6RhwhrWu9oMsaob4SLEI-0PLI00E`
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     })
     teamChatRoom.value = teamChatRoomResponse.data.data;
