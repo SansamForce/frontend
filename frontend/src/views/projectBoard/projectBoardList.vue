@@ -143,44 +143,49 @@ const fetchProjectBoards = async () => {
   }
 };
 
-// 모집글 생성 API 호출
-const submitForm = async () => {
-  const formData = new FormData();
 
-  // JSON 데이터를 문자열로 변환하여 FormData에 추가
-  formData.append('adminProjectBoardCreateDTO', JSON.stringify({
-    projectBoardTitle: title.value,
-    projectBoardContent: content.value,
-    projectBoardHeadCount: headCount.value,
-    projectStartDate: new Date(projectStartDate.value).toISOString(),
-    projectEndDate: new Date(projectEndDate.value).toISOString(),
-    projectBoardStartDate: new Date(boardStartDate.value).toISOString(),
-    projectBoardEndDate: new Date(boardEndDate.value).toISOString(),
-    projectBoardStatus: 'RECRUITMENT'
-  }));
 
-  // 파일 추가
-  formData.append('projectBoardImage', imageFile.value);
+  // 모집글 생성 API 호출
+  const submitForm = async () => {
+    const formData = new FormData();
 
-  try {
-    const response = await axios.post(
-        'http://localhost:8086/api/v1/admin/project/board',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        }
-    );
-    if (response.data.success) {
-      fetchProjectBoards(); // 성공 시 목록 다시 불러오기
-      closeAlert(); // 알림창 닫기
+    // JSON 데이터를 문자열로 변환하여 FormData에 추가
+    formData.append('adminProjectBoardCreateDTO', JSON.stringify({
+      projectBoardTitle: title.value,
+      projectBoardContent: content.value,
+      projectBoardHeadCount: headCount.value,
+      projectStartDate: new Date(projectStartDate.value).toISOString(),
+      projectEndDate: new Date(projectEndDate.value).toISOString(),
+      projectBoardStartDate: new Date(boardStartDate.value).toISOString(),
+      projectBoardEndDate: new Date(boardEndDate.value).toISOString(),
+      projectBoardStatus: 'RECRUITMENT' // Status is correctly set here
+    }));
+
+    // 파일 추가
+    if (imageFile.value) {
+      formData.append('projectBoardImage', imageFile.value);
     }
-  } catch (error) {
-    console.error('Error creating project board:', error);
-  }
-};
+
+    try {
+      const response = await axios.post(
+          'http://localhost:8086/api/v1/admin/project/board',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+          }
+      );
+      if (response.data.success) {
+        fetchProjectBoards(); // 성공 시 목록 다시 불러오기
+        closeAlert(); // 알림창 닫기
+      }
+    } catch (error) {
+      console.error('Error creating project board:', error);
+    }
+  };
+
 
 
 // 페이지 마운트 시 프로젝트 데이터 가져오기
