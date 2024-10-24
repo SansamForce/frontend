@@ -67,7 +67,7 @@
           </div>
 
           <!-- 모집 일정 입력 -->
-          <label for="boardDates">모집 일정</label>
+          <label for="projectBoardDates">모집 일정</label>
           <div class="date-inputs">
             <input type="date" v-model="boardStartDate" required />
             <input type="date" v-model="boardEndDate" required />
