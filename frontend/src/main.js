@@ -6,6 +6,7 @@ import BootstrapVue3 from 'bootstrap-vue-3'; // BootstrapVue
 import { createPinia } from 'pinia'; // Pinia
 import router from './router'; // Vue Router
 
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 

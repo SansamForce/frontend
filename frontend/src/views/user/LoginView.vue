@@ -4,30 +4,39 @@
       <h1 class="no-cursor">T-BUILDING에</h1>
       <h2 class="no-cursor">오신 것을 환영합니다.</h2>
 
-      <div class="login-form">
-        <label class="no-cursor" for="username">아이디</label>
-        <div class="input-container">
-          <input
-            id="username"
-            type="text"
-            placeholder="Username"
-          />
-          <i class="fas fa-user"></i>
-        </div>
+      <form @submit.prevent="handleLogin">
+        <div class="login-form">
+          <label class="no-cursor" for="id">아이디</label>
+          <div class="input-container">
+            <input
+              id="id"
+              type="text"
+              v-model="id"
+              placeholder="ID"
+            />
+            <i class="fas fa-user"></i>
+          </div>
 
-        <label class="no-cursor" for="password">비밀번호</label>
-        <div class="input-container">
-          <input
-            id="password"
-            type="password"
-            placeholder="**********"
-          />
-          <i class="fas fa-lock"></i>
-        </div>
+          <label class="no-cursor" for="pw">비밀번호</label>
+          <div class="input-container">
+            <input
+              id="pw"
+              type="password"
+              v-model="pwd"
+              placeholder="**********"
+            />
+            <i class="fas fa-lock"></i>
+          </div>
 
-        <button class="login-btn">
-          LOGIN
-        </button>
+          <button type="submit" class="login-btn">
+            LOGIN
+          </button>
+        </div>
+      </form>
+
+      <!-- 로그인 실패 시 오류 메시지 표시 -->
+      <div v-if="userStore.error" class="error-message">
+        {{ userStore.error }}
       </div>
 
       <div class="divider no-cursor">OR</div>
@@ -40,20 +49,43 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Login",
+<script setup>
+import { ref } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router'; // Vue Router 사용
+
+const id = ref(''); // 아이디 입력값
+const pwd = ref(''); // 비밀번호 입력값
+const userStore = useUserStore();
+const router = useRouter(); // useRouter로 라우터 객체 사용
+
+const handleLogin = async () => {
+  await userStore.login(id.value, pwd.value); // Pinia의 로그인 액션 호출
+  if (userStore.isAuthenticated) {
+    // 로그인 성공 시 메인 페이지로 이동
+    router.push('/');
+  } else {
+    console.log('Login failed!');
+  }
 };
 </script>
 
 <style scoped>
-/* 전체 화면 중앙 정렬 */
+.error-message {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* 배경색을 화면 전체에 적용 */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #1a1a1a;
+  min-height: 100vh; /* 화면 전체 높이를 차지 */
+  background-color: #1a1a1a; /* 전체 배경색 적용 */
+  padding-top: 50px; /* 상단에 여백 추가 */
+  
 }
 
 .login-box {
@@ -77,9 +109,8 @@ export default {
   margin-bottom: 40px;
 }
 
-/* 텍스트 선택을 비활성화하는 클래스 */
 .no-cursor {
-  user-select: none; /* 텍스트를 선택할 수 없게 설정 */
+  user-select: none;
 }
 
 .login-form label {
