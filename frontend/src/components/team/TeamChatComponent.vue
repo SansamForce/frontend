@@ -1,63 +1,37 @@
 <script setup>
 
+const props = defineProps({
+  teamChatMessageList: {
+    type: Object,
+    required: true
+  }
+})
+
 </script>
 
 <template>
-  <div>
-    <div class="messages">
-      <div v-for="(message, index) in teamChatMessageList" :key="index">
-        <strong>{{ message.user }}:</strong> {{ message.text }}
-      </div>
+  <!-- 스크롤 가능한 채팅창 -->
+  <div v-for="(message, index) in teamChatMessageList" :key="index" class="chat-message">
+    <b-avatar variant="primary">{{ message.teamChatMessageSeq }}</b-avatar>
+    <div class="message-content">
+      <b>{{ message.teamChatMessageSeq }}</b>
+      <p>{{ message.message }}</p>
+      <small>{{ message.regDate }}</small>
     </div>
-    <input v-model="message" @keyup.enter="sendMessage" placeholder="Type a message..." />
   </div>
 </template>-
 
 <script>
-  export default {
 
-    data() {
-      return {
-        teamChatMessageList : [],
-        teamChatSeq : "",
-        message : "",
-        teamMemberSeq : "1",
-
-      }
-    }, created() {
-      this.connect();
-    }, methods : {
-      connect() {
-        this.socket = new WebSocket("ws://localhost:8086/ws/chat/1");
-
-        this.socket.onmessage = (event) => {
-          console.log("@");
-          const message = JSON.parse(event.data);
-          this.teamChatMessageList.push(message)
-        }
-      }, sendMessage() {
-        if(this.message.trim()) {
-          const chatMessage = {
-            teamChatSeq : this.teamChatSeq,
-            teamMemberSeq : this.teamMemberSeq,
-            message : this.message,
-            messageType : "TALK"
-          }
-
-          this.socket.send(JSON.stringify(chatMessage))
-          this.teamChatMessageList.push(chatMessage.message)
-          this.message = "";
-        }
-      }
-    }
-  }
 </script>
-
 <style scoped>
-.messages {
-  height: 400px;
-  overflow-y: scroll;
-  border: 1px solid #ccc;
+.chat-message {
+  display: flex;
+  align-items: flex-start;
   margin-bottom: 10px;
+}
+
+.message-content {
+  margin-left: 10px;
 }
 </style>
