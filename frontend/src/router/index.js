@@ -32,7 +32,7 @@ const routes = [
   {
     path: "/projectBoards",
     component: () => import("@/views/projectBoard/ProjectBoardList.vue"),
-    meta: { requiresAuth: true } // 로그인 필요
+    // meta: { requiresAuth: true } // 로그인 필요
   },
   {
     path: '/user/:userSeq',
