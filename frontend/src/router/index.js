@@ -38,6 +38,11 @@ const routes = [
     path: "/projectBoards/:id",
     component : () => import("@/views/projectBoard/ProjectBoardDetail.vue")
   },
+  {
+    path: '/member',
+    component: () => import('@/views/admin/UserList.vue'),
+    meta: { requiresAuth: true }
+  },
 ];
 
 const router = createRouter({
