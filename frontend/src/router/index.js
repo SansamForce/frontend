@@ -73,6 +73,11 @@ const routes = [
     name: 'MyPage',
     component: () => import('@/views/mypage/MyPage.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: "/projects/:id/team/:id/schedule",
+    component: () => import("@/views/team/TeamDetailView.vue"),
+    meta: { requiresAuth: true }
   }
 ];
 
