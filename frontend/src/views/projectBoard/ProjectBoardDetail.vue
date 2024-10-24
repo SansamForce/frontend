@@ -130,6 +130,18 @@ watch(() => route.params.id, async (newProjectBoardSeq) => {
 });
 
 const applyForProject = async () => {
+  // 로그인 여부를 체크
+  const authToken = localStorage.getItem('authToken');
+  
+  if (!authToken) {
+    // 로그인되지 않은 경우
+    alert("프로젝트 신청을 하려면 회원가입이 필요합니다. 로그인 페이지로 이동합니다.");
+    // 로그인 페이지로 이동
+    window.location.href = "/login";
+    return;
+  }
+
+  // 로그인된 경우
   if (!selectedField.value) {
     alert("지원 분야를 선택해주세요.");
     return;
@@ -146,7 +158,7 @@ const applyForProject = async () => {
         },
         {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Authorization': `Bearer ${authToken}`,
             'Content-Type': 'application/json'
           }
         }
