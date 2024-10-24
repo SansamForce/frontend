@@ -7,7 +7,7 @@
           개발자 팀 프로젝트의 <br /> 모든 여정을 <br />
           T-BUILDING에서 함께.
         </p>
-        <router-link to="/projects" class="explore-button">
+        <router-link to="/projectBoards" class="explore-button">
           프로젝트 둘러보기 ->
         </router-link>
       </div>
