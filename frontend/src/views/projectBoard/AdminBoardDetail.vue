@@ -284,37 +284,35 @@ onMounted(async () => {
 });
 
 
-// 프로젝트 수정 API 호출
 const updateProject = async () => {
   try {
+    console.log('editStatus:', editStatus.value); // editStatus 값 확인
+
     const projectBoardSeq = route.params.id;
     const formData = new FormData();
 
-    // 날짜 변환: LocalDateTime 형식에 맞게 변환
+    // 날짜 변환
     const formattedRecruitStartDate = new Date(editBoardStartDate.value).toISOString();
     const formattedRecruitEndDate = new Date(editBoardEndDate.value).toISOString();
     const formattedProjectStartDate = new Date(editProjectStartDate.value).toISOString();
     const formattedProjectEndDate = new Date(editProjectEndDate.value).toISOString();
 
-
     formData.append('adminProjectBoardUpdateDTO', JSON.stringify({
       projectBoardTitle: editTitle.value,
       projectBoardContent: editContent.value,
-      projectBoardStatus: editStatus.value,
-      projectBoardStartDate: formattedRecruitStartDate, // 변환된 값 사용
-      projectBoardEndDate: formattedRecruitEndDate, // 변환된 값 사용
-      projectStartDate: formattedProjectStartDate, // 변환된 값 사용
-      projectEndDate: formattedProjectEndDate, // 변환된 값 사용
+      projectBoardStatus: editStatus.value, // 여기서 editStatus가 전달됨
+      projectBoardStartDate: formattedRecruitStartDate,
+      projectBoardEndDate: formattedRecruitEndDate,
+      projectStartDate: formattedProjectStartDate,
+      projectEndDate: formattedProjectEndDate,
     }));
 
     if (newImageFile.value) {
       formData.append('projectBoardImage', newImageFile.value);
     }
 
-    await axios.put(`http://localhost:8086/api/v1/admin/project/board/${projectBoardSeq}`,
-        formData,
-        {
-          headers: {
+    await axios.put(`http://localhost:8086/api/v1/admin/project/board/${projectBoardSeq}`, formData, {
+      headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
         'Content-Type': 'multipart/form-data',
       }
@@ -328,6 +326,7 @@ const updateProject = async () => {
     console.error(error);
   }
 };
+
 
 
 // 프로젝트 삭제

@@ -156,7 +156,7 @@ const submitForm = async () => {
     projectEndDate: new Date(projectEndDate.value).toISOString(),
     projectBoardStartDate: new Date(boardStartDate.value).toISOString(),
     projectBoardEndDate: new Date(boardEndDate.value).toISOString(),
-    boardStatus: 'RECRUITMENT'
+    projectBoardStatus: 'RECRUITMENT'
   }));
 
   // 파일 추가
