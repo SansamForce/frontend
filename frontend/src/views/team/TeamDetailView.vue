@@ -7,7 +7,7 @@ import TeamChat from "@/views/team/TeamChatView.vue";
 
 const props = defineProps({
   teamSeq: {
-    type: BigInt,
+    type: Number,
     required: false
   }
 })

@@ -8,17 +8,22 @@ const props = defineProps({
     default: () => []
   },
   teamChatSeq: {
-    type: BigInt,
+    type: Number,
     required: false
   },
   teamSeq: {
-    type: BigInt,
+    type: Number,
     required: false
   },
   teamChatMember: {
     type: Object,
     required: false
-  }
+  },
+  teamChatMemberList: {
+    type: Array,
+    required: false,
+    default: () => []
+  },
 });
 
 const teamMemberSeq = props.teamChatMember.teamMemberSeq;
@@ -35,7 +40,7 @@ const connectWebSocket = () => {
   socket.onopen = () => {
     console.log("WebSocket 연결 성공");
 
-    const messageJson = createMessageJson("ENTER", `${props.teamChatMember.teamMemberNickname}님이 입장하였습니다.`);
+    const messageJson = createMessageJson("ENTER", `${props.teamChatMember.userNickname}님이 입장하였습니다.`);
     socket.send(JSON.stringify(messageJson));
   };
 
@@ -60,7 +65,6 @@ const connectWebSocket = () => {
 
 // 메시지 전송 함수
 const sendMessage = () => {
-  console.log(`${props.teamChatMember.teamMemberSeq}`);
   if (newMessage.value.trim() && socket && socket.readyState === WebSocket.OPEN) {
 
     const messageJson = createMessageJson("TALK", newMessage.value);
@@ -134,7 +138,6 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="chat-message my-message" v-else-if="message.teamMemberSeq == teamChatMember.teamMemberSeq">
-        <b-avatar variant= "primary">{{ message.teamMemberSeq }}</b-avatar>
         <div class="message-content align-self-end">
           <p>{{ message.message }}</p>
           <small class="message-time text-right">{{ message.regDate }}</small>
@@ -142,7 +145,13 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="chat-message" v-else>
-        <b-avatar variant= "primary">{{ message.teamMemberSeq }}</b-avatar>
+        <b-avatar variant= "primary" style="font-size: 8px; text-align: center;">
+          <template v-for="(member, index) in teamChatMemberList" :key="index">
+            <template v-if="member.teamMemberSeq == message.teamMemberSeq">
+              {{member.teamMemberNickname}}
+            </template>
+          </template>
+        </b-avatar>
         <div class="message-content">
           <p>{{ message.message }}</p>
           <small>{{ message.regDate }}</small>

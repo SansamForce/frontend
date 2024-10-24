@@ -12,6 +12,7 @@ const props = defineProps({
 })
 
 const teamChatMessageList = ref([]);
+const teamChatMemberList = ref([]);
 const teamChatMember = ref({});
 
 const fetchTeamChatDetail = async () => {
@@ -21,7 +22,8 @@ const fetchTeamChatDetail = async () => {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     })
-    teamChatMember.value = teamChatRoomResponse.data.data.teamChatMember;
+    teamChatMember.value = teamChatRoomResponse.data.data;
+    teamChatMemberList.value = teamChatRoomResponse.data.data.teamChatMemberList;
     teamChatMessageList.value = teamChatRoomResponse.data.data.teamChatMessageList;
   } catch (error) {
     console.error('팀 채팅 정보를 불러오는 중 에러가 발생했습니다.');
@@ -39,7 +41,12 @@ onMounted(() => fetchTeamChatDetail());
     <h6>{{teamChatResponse.teamChatComment}}</h6>
     <p><strong>채팅방 생성일 : </strong>{{teamChatResponse.regDate}}</p>
 
-    <TeamChatComponent v-if="teamChatMember != null" :team-chat-message-list="teamChatMessageList" :team-chat-seq="teamChatResponse.teamChatSeq" :team-seq="teamChatResponse.teamSeq" :team-chat-member="teamChatMember"/>
+    <TeamChatComponent v-if="teamChatMember != null"
+                       :team-chat-message-list="teamChatMessageList"
+                       :team-chat-seq="teamChatResponse.teamChatSeq"
+                       :team-seq="teamChatResponse.teamSeq"
+                       :team-chat-member="teamChatMember"
+                       :team-chat-member-list="teamChatMemberList"/>
   </b-card>
   <div v-else>
     Loading...
