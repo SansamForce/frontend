@@ -2,9 +2,10 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
-import ProjectDetail from '@/components/project/ProjectDetail.vue';
+import MemberProjectDetail from '@/components/project/MemberProjectDetail.vue';
 import TeamDetail from "@/views/team/TeamDetailView.vue";
-
+import MentorProjectDetail from "@/components/project/MentorProjectDetail.vue";
+import MentorProjectTeamList from "@/views/project/ProjectTeamListView.vue";
 // 상태 관리
 const project = ref(null);
 const route = useRoute();
@@ -32,10 +33,18 @@ onMounted(fetchProjectDetail);
 </script>
 
 <template>
-    <div class="row card-container" v-if="project">
-      <ProjectDetail :project="project" class="card" />
-      <TeamDetail :team-seq="project.teamSeq" class="card" />
-    </div>
+  <template v-if="project">
+      <div class="row card-container" v-if="project.projectMentorYn=== 'Y'">
+        <div class="col-md-6">
+          <MentorProjectDetail :project="project" class="card"/>
+        </div>
+        <TeamDetail :team-seq="project.teamSeq" class="card" />
+      </div>
+      <div class="row card-container" v-else>
+        <MemberProjectDetail :project="project" class="card" />
+        <TeamDetail :team-seq="project.teamSeq" class="card" />
+      </div>
+    </template>
     <div v-else>
       <p>Loading...</p>
     </div>
@@ -55,4 +64,14 @@ onMounted(fetchProjectDetail);
   flex-direction: column; /* 카드 안의 요소들을 수직으로 배치 */
 }
 
+.main-container {
+  display: flex;
+  padding: 20px;
+}
+
+/* 좌측 프로젝트 정보 */
+.project-info {
+  width: 50%;
+  padding-right: 20px;
+}
 </style>
