@@ -83,7 +83,7 @@ const user = ref({
   githubId: '',
   profileImg: ''
 });
-const defaultImage = '';
+const defaultImage = '/images/사진 없음.png';
 const loading = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
