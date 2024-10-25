@@ -30,7 +30,7 @@
     <!-- 로딩 중 화면 -->
     <div v-if="isBuilding" class="loading-spinner">
       <div class="spinner"></div>
-      <p>팀 빌딩 중입니다. 잠시만 기다려 주세요...</p>
+      <p>팀 빌딩 중입니다. 잠시만 기다려 주세요... 오래걸리는게 정상입니다 새로고침하지 마세요....</p>
     </div>
 
     <!-- 팀 빌딩 결과 화면 -->
