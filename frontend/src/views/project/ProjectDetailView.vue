@@ -92,7 +92,23 @@ onMounted(fetchProjectDetail);
     </div>
     <div class="row card-container" v-else>
       <MemberProjectDetail :project="project" class="card" />
-        <TeamDetail v-if="firstTeamSeq !== 0" :team-seq="firstTeamSeq" class="card" />
+      <div class="col-md-6">
+        <b-card class="h-100">
+          <TeamDetail v-if="firstTeamSeq !== 0" :team-seq="firstTeamSeq" class="card" />
+          <div class="no-team-container2 text-center" v-else>
+            <!-- 경고 아이콘 -->
+            <div class="warning-icon">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <!-- 텍스트 -->
+            <p class="mt-3">
+              진행 중인 팀이 존재하지 않습니다.
+              <br />
+              강사님이 팀을 정해주신 이후 내가 속한 팀의 정보를 확인하실 수 있습니다.
+            </p>
+          </div>
+        </b-card>
+      </div>
     </div>
   </template>
   <div v-else>
@@ -121,6 +137,16 @@ onMounted(fetchProjectDetail);
   justify-content: center;
   height: 50vh; /* 화면 중앙에 배치 */
   text-align: center;
+}
+
+.no-team-container2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 1200px;
+  height: 100%; /* 카드 안에서 전체 높이 차지 */
 }
 
 .warning-icon {
