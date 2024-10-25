@@ -45,7 +45,7 @@ onMounted(fetchTeamDetail);
               <div class="project-card">
               <h4 class="team-name">{{team.teamName}}</h4>
               <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/> <br />
-              <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList"/>
+              <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq" />
               <TeamChat v-if="team.teamChatResponse" :team-chat-response="team.teamChatResponse"/>
               </div>
             </b-card-body>
@@ -116,6 +116,13 @@ p {
   width: 22%;
   border-bottom: 2px solid #000000;
   margin: 13px 0 13px 0;
+}
+
+.fc-event-resizer {
+  width: 10px !important;
+  height: 10px !important;
+  background: #000 !important;
+  cursor: ew-resize !important;
 }
 
 </style>
