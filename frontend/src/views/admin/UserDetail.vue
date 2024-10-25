@@ -1,9 +1,12 @@
 <template>
   <div class="user-detail" v-if="user">
     <button class="icon-button cancel-button" @click="$router.push('/member')">목록으로 돌아가기</button>
-    <div class="user-info">
+
+    <!-- 전체 레이아웃을 나누는 컨테이너 -->
+    <div class="user-info-container">
+      <!-- 좌측 패널 -->
       <div class="left-panel">
-        <h3>회원 정보</h3>
+        <h3 class="section-title">회원 정보</h3>
         <div class="profile-container">
           <img :src="user.userProfileImg || defaultImage" alt="Profile Image" class="profile-img-square" />
         </div>
@@ -23,27 +26,36 @@
         </p>
         <p class="form-group">
           <strong>상태</strong>
-          <!-- 서버에서 허용하는 상태 값으로 수정 -->
           <select v-model="user.userStatus" class="status-input">
             <option value="ACTIVE">활동중</option>
-            <option value="BAN">정지</option> <!-- SUSPENDED 대신 BAN 사용 -->
+            <option value="BAN">정지</option>
             <option value="DELETE">탈퇴</option>
           </select>
         </p>
       </div>
 
+      <!-- 중앙에 공간을 주기 위한 공간 -->
+      <div class="center-space"></div>
+
+      <!-- 우측 패널 -->
       <div class="right-panel">
-        <h3>상세 정보</h3>
-        <div class="form-group"><strong>가입일</strong> <span>{{ user.regDate || '정보 없음' }}</span></div>
-        <div class="form-group"><strong>전화번호</strong><input type="text" v-model="user.userPhone" placeholder="전화번호를 입력하세요" class="phone-input" /></div>
-        <div class="form-group"><strong>생년월일</strong><input type="date" v-model="user.userBirthDate" class="date-input" /></div>
-        <div class="form-group"><strong>성별</strong><select v-model="user.userGender" class="gender-select"><option value="FEMALE">여</option><option value="MALE">남</option></select></div>
-        <div class="form-group"><strong>전공</strong><input type="text" v-model="user.userMajor" placeholder="전공을 입력하세요" class="major-input" /></div>
-        <div class="form-group"><strong>경력 일수</strong><input type="text" v-model="user.userCareerYears" placeholder="경력 일수를 입력하세요" class="experience-input" /></div>
-        <div class="form-group"><strong>깃허브 아이디</strong><input type="text" v-model="user.userGithubId" placeholder="깃허브 아이디를 입력하세요" class="github-input" /></div>
+        <h3 class="section-title">상세 정보</h3>
+        <p class="form-group"><strong>가입일</strong> <span>{{ user.regDate || '정보 없음' }}</span></p>
+        <p class="form-group"><strong>전화번호</strong><input type="text" v-model="user.userPhone" placeholder="전화번호를 입력하세요" class="phone-input" /></p>
+        <p class="form-group"><strong>생년월일</strong><input type="date" v-model="user.userBirthDate" class="date-input" /></p>
+        <p class="form-group"><strong>성별</strong>
+          <select v-model="user.userGender" class="gender-select">
+            <option value="FEMALE">여</option>
+            <option value="MALE">남</option>
+          </select>
+        </p>
+        <p class="form-group"><strong>전공</strong><input type="text" v-model="user.userMajor" placeholder="전공을 입력하세요" class="major-input" /></p>
+        <p class="form-group"><strong>경력 일수</strong><input type="text" v-model="user.userCareerYears" placeholder="경력 일수를 입력하세요" class="experience-input" /></p>
+        <p class="form-group"><strong>깃허브 아이디</strong><input type="text" v-model="user.userGithubId" placeholder="깃허브 아이디를 입력하세요" class="github-input" /></p>
       </div>
     </div>
 
+    <!-- 저장 및 취소 버튼 -->
     <div class="buttons">
       <button class="icon-button save-button" @click="saveUser" :disabled="loading">
         <span v-if="!loading">저장</span>
@@ -76,8 +88,6 @@ const errorMessage = ref('');
 const route = useRoute();
 const userSeq = route.params.userSeq;
 
-console.log('userSeq:', userSeq); // userSeq 값 확인
-
 // 사용자 정보 조회
 const fetchUser = async (userSeq) => {
   try {
@@ -100,7 +110,6 @@ const saveUser = async () => {
     successMessage.value = '';
     errorMessage.value = '';
 
-    // 데이터 전송 전 로그 출력 (디버깅용)
     console.log('보내는 데이터:', JSON.stringify(user.value));
 
     await axios.put(`http://localhost:8086/api/v1/admin/user/${userSeq}`, user.value, {
@@ -110,10 +119,9 @@ const saveUser = async () => {
     });
 
     successMessage.value = '사용자 정보가 성공적으로 저장되었습니다.';
-    router.push('/member'); // 저장 후 목록으로 이동
+    router.push('/member');
   } catch (error) {
     console.error('사용자 정보를 저장하는 도중 에러가 발생했습니다.', error);
-    // 오류 메시지를 명확히 출력
     if (error.response && error.response.data && error.response.data.message) {
       errorMessage.value = `저장 실패: ${error.response.data.message}`;
     } else {
@@ -124,10 +132,9 @@ const saveUser = async () => {
   }
 };
 
-// 컴포넌트 마운트 시 사용자 정보 조회
 onMounted(() => {
   if (userSeq) {
-    fetchUser(userSeq); // userSeq가 있을 때만 호출
+    fetchUser(userSeq);
   } else {
     errorMessage.value = 'userSeq가 존재하지 않습니다.';
   }
@@ -135,82 +142,86 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 스타일 그대로 유지 */
-.user-detail {
-  padding: 20px;
-}
-.user-info {
+.user-info-container {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .left-panel, .right-panel {
-  width: 50%;
+  width: 45%; /* 좌우 패널의 너비 조정 */
 }
-.right-panel .form-group {
-  margin-bottom: 25px;
+
+.center-space {
+  width: 4px; /* 선의 두께를 더 두껍게 설정 */
+  background-color: #ffffff; /* 흰색 선 */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* 약간의 그림자 추가 */
+  height: 100%; /* 전체 높이 적용 */
 }
 
 .profile-container {
-  width: 100%;
-  text-align: left;
+  text-align: center;
   margin-bottom: 20px;
 }
 
 .profile-img-square {
-  width: 300px;
-  height: 300px;
-  border-radius: 5px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
 }
 
 .form-group {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .form-group strong {
-  width: 150px;
+  width: 120px;
+  font-size: 16px;
+  color: #333;
 }
 
-.type-input,
-.status-input,
-.phone-input,
-.major-input,
-.experience-input,
-.github-input,
-.email-input,
-.date-input {
+input, select {
+  width: 100%;
   padding: 10px;
-}
-
-.gender-select {
-  padding: 10px;
-  width: 70px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
 }
 
 .buttons {
-  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  margin-top: 20px;
 }
 
 .icon-button {
-  background-color: #333;
+  background-color: #007bff;
   color: white;
   padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  margin-right: 10px;
+  margin-left: 10px;
+  font-size: 16px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.save-button {
-  background-color: #222222;
+.icon-button:hover {
+  background-color: #0056b3;
 }
 
 .cancel-button {
-  background-color: #dddddd;
+  background-color: #6c757d;
+  color: white;
 }
 
 .success-message {
