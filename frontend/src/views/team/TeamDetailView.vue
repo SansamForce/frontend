@@ -3,6 +3,7 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import TeamMember from "@/components/team/TeamMember.vue";
 import TeamSchedule from "@/components/team/TeamSchedule.vue";
+import TeamMemberSchedule from "@/components/team/TeamMemberSchedule.vue";``
 import TeamChat from "@/views/team/TeamChatView.vue";
 
 const props = defineProps({
@@ -13,10 +14,12 @@ const props = defineProps({
 })
 
 const team = ref(null);
+const teamMemberSchedule = ref(null);
 
 const fetchTeamDetail = async () => {
   try {
-    const teamResponse = await axios.get(`http://localhost:8086/api/v1/team/${props.teamSeq}`, {
+    //TODO 아영 - 1 하드코딩한거 teamSeq 입력하기
+    const teamResponse = await axios.get(`http://localhost:8086/api/v1/team/1`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -27,7 +30,21 @@ const fetchTeamDetail = async () => {
   }
 }
 
-onMounted(fetchTeamDetail);
+const fetchTeamMemberSchedule = async () => {
+  try {
+    //TODO 아영 - 1 하드코딩한거 teamSeq 입력하기
+    const memberSchedule = await axios.get(`http://localhost:8086/api/v1/team/1/memberSchedule`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    })
+    teamMemberSchedule.value = memberSchedule.data.data;
+  } catch (error) {
+    console.error('팀 정보를 불러오는 중 에러가 발생했습니다.');
+  }
+}
+
+onMounted(fetchTeamDetail, fetchTeamMemberSchedule);
 
 </script>
 
@@ -46,6 +63,7 @@ onMounted(fetchTeamDetail);
               <h4 class="team-name">{{team.teamName}}</h4>
               <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/> <br />
               <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq" />
+              <TeamMemberSchedule :team-member-schedule-list="team.teamMemberScheduleList" />
               <TeamChat v-if="team.teamChatResponse" :team-chat-response="team.teamChatResponse"/>
               </div>
             </b-card-body>

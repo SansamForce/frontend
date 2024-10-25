@@ -1,6 +1,6 @@
 <script setup>
 const props = defineProps({
-  teamScheduleList: {
+  teamMemberScheduleList: {
     type: Array,
     required: true
   },
@@ -11,23 +11,23 @@ const props = defineProps({
 })
 </script>
 
-<router-link to="/projects/:id/team/:id/schedule"></router-link>
+<router-link to="/team/:id/memberSchedule"></router-link>
 
 <template>
-  <br />
-  <h5 class="team-schedule-text">팀 일정 조회</h5>
+  <br/><br/>
+  <h5 class="team-schedule-text">팀원 일정 조회</h5>
 
   <div class="calendar-wrapper">
     <FullCalendar :options="calendarOptions" />
   </div>
 
   <!-- 모달 창 -->
-  <Modal v-if="showModal" :show-modal="showModal" :team-schedule-content="teamScheduleContent" :isEditMode="isEditMode" @confirm="handleModalConfirm" @cancel="handleModalCancel"  @delete="handleModalDelete" />
+  <Modal v-if="showModal" :show-modal="showModal" :team-member-schedule-content="teamMemberScheduleContent" :isEditMode="isEditMode" @confirm="handleModalConfirm" @cancel="handleModalCancel"  @delete="handleModalDelete" />
 </template>
 
 <script>
 import axios from "axios";
-import Modal from "@/components/team/TeamScheduleModal.vue";
+import Modal from "@/components/team/TeamMemberScheduleModal.vue";
 import FullCalendar from '@fullcalendar/vue3'; // FullCalendar Vue3 컴포넌트
 import dayGridPlugin from '@fullcalendar/daygrid'; // 기본적인 그리드 형식의 달력 플러그인
 import timeGridPlugin from '@fullcalendar/timegrid'; // 시간 단위 그리드 플러그인
@@ -246,21 +246,6 @@ export default {
 .calendar-wrapper {
   max-width: 900px;
   margin: 0 auto;
-}
-
-.fc-event-resizer {
-  width: 10px;
-  height: 10px;
-  background: #000;
-  cursor: ew-resize; /* 리사이즈할 때 마우스 커서 변경 */
-}
-
-.fc-event-resizer-start {
-  left: -5px;
-}
-
-.fc-event-resizer-end {
-  right: -5px;
 }
 
 </style>
