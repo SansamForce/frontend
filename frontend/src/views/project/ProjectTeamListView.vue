@@ -23,8 +23,9 @@ const teamSeqToParent = (seq) => {
 <template>
   <!-- 팀 목록 경고 -->
   <template v-if="projectTeamList">
-    <h5 class="team-schedule-text">프로젝트 팀 조회</h5>
+    <h5 class="team-schedule-text">프로젝트 팀 목록 조회</h5>
     <div class="team-list-container">
+      <b-button @click="teamSeqToParent(0)" v-if="teamSeq !== 0" variant="dark" style="float: right; height: 35px;">프로젝트 팀 목록 조회하기</b-button>
       <h3>팀 목록</h3>
       <div class="team-list d-flex flex-wrap justify-content-between">
         <!-- 팀 목록 카드 반복 -->

@@ -36,7 +36,7 @@ onMounted(fetchTeamDetail);
 <template>
   <div class="row container fixed-header" v-if="team">
       <b-card-header class="text-start d-flex justify-content-between align-items-center">
-        <span style="font-weight: bold; font-size: 1.2rem;">내 프로젝트 팀 조회</span>
+        <span style="font-weight: bold; font-size: 1.2rem;">프로젝트 팀 조회</span>
         <b-button variant="dark" style="float: right; height: 35px;">팀 이름 변경</b-button>
       </b-card-header>
     <div class="scroll-container">

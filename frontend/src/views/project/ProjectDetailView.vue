@@ -68,7 +68,7 @@ onMounted(fetchProjectDetail);
 
           <div v-if="projectTeamList.length> 0">
             <ProjectTeamListView :project-team-list="projectTeamList"
-                                 @teamSeqToParent="receiveTeamSeqFromChild"/>
+                                 @selectTeam="receiveTeamSeqFromChild"/>
           </div>
           <div class="no-team-container text-center" v-else>
             <!-- 경고 아이콘 -->
@@ -87,7 +87,7 @@ onMounted(fetchProjectDetail);
           </div>
         </b-card>
       </div>
-      <ProjectMemberListView :project-seq="projectSeq"/>
+      <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq"/>
       <TeamDetail v-if="teamSeq !== 0" :team-seq="teamSeq" class="card" />
     </div>
     <div class="row card-container" v-else>
