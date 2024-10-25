@@ -4,7 +4,7 @@
       <h2 class="section-title">내 정보</h2> <!-- 내 정보 제목 추가 -->
       <hr class="section-divider" /> <!-- 구분선 추가 -->
       <div class="profile-image-container">
-        <img :src="user.profileImg || defaultImage" alt="profile" class="profile-img" />
+        <img :src="user.profileImg ? user.profileImg : defaultImage" alt="profile" class="profile-img" />
         <input type="file" @change="onImageUpload" class="image-upload" />
       </div>
       <div class="profile-info">
@@ -102,6 +102,7 @@ const fetchUserData = async () => {
     });
 
     const userData = response.data.data;
+
     if (userData.userGender === 'MALE') {
       userData.userGender = 'male';
     } else if (userData.userGender === 'FEMALE') {
@@ -109,6 +110,10 @@ const fetchUserData = async () => {
     }
 
     user.value = userData;
+
+    // S3에서 받아온 이미지가 있으면 사용
+    console.log("Profile Image URL:", user.value.userProfileImg);
+
     if (user.value.userBirthDate) {
       user.value.userBirthDate = user.value.userBirthDate.split('T')[0];
     }
@@ -117,6 +122,7 @@ const fetchUserData = async () => {
     errorMessage.value = '사용자 정보를 불러오는데 실패했습니다.';
   }
 };
+
 
 const saveChanges = async () => {
   try {
@@ -127,7 +133,7 @@ const saveChanges = async () => {
     }
 
     const formData = new FormData();
-    formData.append('request', new Blob([JSON.stringify(user.value)], { type: 'application/json' })); // JSON 데이터 추가
+    formData.append('request', new Blob([JSON.stringify(user.value)], {type: 'application/json'})); // JSON 데이터 추가
     if (user.value.profileImg) {
       formData.append('userProfileImg', user.value.profileImg); // 파일 추가
     }
@@ -165,18 +171,14 @@ const cancelChanges = () => {
 
 // 깃허브 레포지토리 관리 페이지로 이동
 const navigateToRepoManagement = () => {
-  router.push({ name: 'RepositoryManagement' });
+  router.push({name: 'RepositoryManagement'});
 };
 
+// 이미지 업로드 처리
 const onImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    user.value.profileImg = file; // 파일 객체를 저장
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      user.value.profileImgPreview = e.target.result; // 미리보기를 위해 URL 생성
-    };
-    reader.readAsDataURL(file);
+    user.value.profileImg = URL.createObjectURL(file);
   }
 };
 
