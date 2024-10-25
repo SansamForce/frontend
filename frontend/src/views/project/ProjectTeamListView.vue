@@ -1,5 +1,7 @@
 <script setup>
 
+import {ref} from "vue";
+
 const props = defineProps({
   projectTeamList: {
     type: Array,
@@ -7,18 +9,26 @@ const props = defineProps({
   }
 });
 
+const teamSeq = ref(0);
+const emit = defineEmits(['selectTeam'])
+
+const teamSeqToParent = (seq) => {
+  teamSeq.value = seq;
+
+  emit('selectTeam', teamSeq.value)
+}
+
 </script>
 
 <template>
   <!-- 팀 목록 경고 -->
   <template v-if="projectTeamList">
     <h5 class="team-schedule-text">프로젝트 팀 조회</h5>
-
     <div class="team-list-container">
       <h3>팀 목록</h3>
       <div class="team-list d-flex flex-wrap justify-content-between">
         <!-- 팀 목록 카드 반복 -->
-        <div v-for="team in projectTeamList" :key="team.id" class="team-card">
+        <div v-for="team in projectTeamList" :key="team.teamSeq" class="team-card">
           <b-card class="h-100">
             <div class="d-flex align-items-center">
               <!-- 좌측 팀 이미지 -->
@@ -30,21 +40,17 @@ const props = defineProps({
                 <h5>{{ team.teamName }}</h5>
                 <p><strong>팀 등록 일자</strong></p>
                 <p>{{ team.regDate }}</p>
-                  <b-button variant="dark" class="float-end">조회</b-button>
+                  <b-button @click="teamSeqToParent(team.teamSeq)" variant="dark" class="float-end">조회</b-button>
               </div>
             </div>
           </b-card>
         </div>
       </div>
     </div>
-
   </template>
-
 </template>
 
 <style scoped>
-
-
 
 p {
   font-size: 1em;

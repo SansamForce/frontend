@@ -1,11 +1,11 @@
 <script setup>
-import {ref, onMounted, reactive} from 'vue';
+import {ref, onMounted, reactive, computed} from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 import MemberProjectDetail from '@/components/project/MemberProjectDetail.vue';
 import TeamDetail from "@/views/team/TeamDetailView.vue";
 import MentorProjectDetail from "@/components/project/MentorProjectDetail.vue";
-import MentorProjectTeamList from "@/views/project/ProjectTeamListView.vue";
+import ProjectTeamListView from "@/views/project/ProjectTeamListView.vue";
 import ProjectMemberListView from "@/views/project/ProjectMemberListView.vue";
 // 상태 관리
 const project = ref(null);
@@ -15,8 +15,8 @@ const router = useRouter();
 // 프로젝트 ID 가져오기
 const projectSeq = route.params.id;
 const projectTeamList = ref([]);
-const isProjectListSelectYn = ref("Y");
-
+const isProjectMemberList = ref(true);
+const firstTeamSeq = ref(0);
 // API 호출 함수
 const fetchProjectDetail = async () => {
   try {
@@ -35,6 +35,9 @@ const fetchProjectDetail = async () => {
         }
       })
       projectTeamList.value = projectTeamResponse.data.data;
+      firstTeamSeq.value = projectTeamList.value.length > 0 ? projectTeamList.value[0].teamSeq : 0;
+
+      // 첫 번째 팀 시퀀스 안전하게 가져오는 계산된 속성
       console.log(projectTeamList.value);
     } catch (error) {
       console.error('팀 정보를 불러오는 중 에러가 발생했습니다.', error);
@@ -44,47 +47,57 @@ const fetchProjectDetail = async () => {
   }
 };
 
+
+const teamSeq = ref(0);
+
+// 자식으로부터 값을 받는 함수
+const receiveTeamSeqFromChild = (value) => {
+  teamSeq.value = value; // 자식으로부터 받은 값을 저장
+};
+
 // 페이지가 로드될 때 API 호출
 onMounted(fetchProjectDetail);
 </script>
 
 <template>
   <template v-if="projectTeamList && project">
-      <div class="row card-container" v-if="project.projectMentorYn=== 'Y'">
-        <div class="col-md-6">
-          <b-card class="h-100">
-            <MentorProjectDetail :project="project" class="card"/>
-              <div v-if="projectTeamList.length> 0">
-              <MentorProjectTeamList :project-team-list="projectTeamList"/>
+    <div class="row card-container" v-if="project.projectMentorYn=== 'Y'">
+      <div class="col-md-6">
+        <b-card class="h-100">
+          <MentorProjectDetail :project="project" class="card"/>
+
+          <div v-if="projectTeamList.length> 0">
+            <ProjectTeamListView :project-team-list="projectTeamList"
+                                 @teamSeqToParent="receiveTeamSeqFromChild"/>
+          </div>
+          <div class="no-team-container text-center" v-else>
+            <!-- 경고 아이콘 -->
+            <div class="warning-icon">
+              <i class="bi bi-exclamation-triangle-fill"></i>
             </div>
-            <div class="no-team-container text-center" v-else>
-              <!-- 경고 아이콘 -->
-              <div class="warning-icon">
-                <i class="bi bi-exclamation-triangle-fill"></i>
-              </div>
-              <!-- 텍스트 -->
-              <p class="mt-3">
-                진행 중인 팀이 존재하지 않습니다.
-              </p>
-              <p>
-                T-Building에서 제공하는 자동 팀 빌딩모드로<br />
-                지금 바로 팀을 빌딩해 보세요!
-              </p>
-              <b-button variant="dark" style="float: right; height: 35px;">팀 빌딩하기</b-button>
-            </div>
-          </b-card>
-        </div>
-        <ProjectMemberListView v-if="isProjectListSelectYn == 'Y'" :project-seq="projectSeq"/>
-        <TeamDetail v-if="isProjectListSelectYn == 'N'" :team-seq="project.teamSeq" class="card" />
+            <!-- 텍스트 -->
+            <p class="mt-3">
+              진행 중인 팀이 존재하지 않습니다.
+            </p>
+            <p>
+              T-Building에서 제공하는 자동 팀 빌딩모드로<br />
+              지금 바로 팀을 빌딩해 보세요!
+            </p>
+            <b-button variant="dark" style="float: right; height: 35px;">팀 빌딩하기</b-button>
+          </div>
+        </b-card>
       </div>
-      <div class="row card-container" v-else>
-        <MemberProjectDetail :project="project" class="card" />
-        <TeamDetail v-if="projectTeamList.length === 1" :team-seq="project.teamSeq" class="card" />
-      </div>
-  </template>
-    <div v-else>
-      <p>Loading...</p>
+      <ProjectMemberListView :project-seq="projectSeq"/>
+      <TeamDetail v-if="teamSeq !== 0" :team-seq="teamSeq" class="card" />
     </div>
+    <div class="row card-container" v-else>
+      <MemberProjectDetail :project="project" class="card" />
+        <TeamDetail v-if="firstTeamSeq !== 0" :team-seq="firstTeamSeq" class="card" />
+    </div>
+  </template>
+  <div v-else>
+    <p>Loading...</p>
+  </div>
 </template>
 
 <style scoped>
