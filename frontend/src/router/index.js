@@ -84,7 +84,7 @@ const routes = [
     path: "/projects/:id/team/:id/schedule",
     component: () => import("@/views/team/TeamDetailView.vue"),
     meta: { requiresAuth: true }
-  }
+  },
 ];
 
 const router = createRouter({
