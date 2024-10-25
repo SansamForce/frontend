@@ -1,6 +1,8 @@
 <template>
   <div class="mypage-container" v-if="user">
     <div class="profile-section">
+      <h2 class="section-title">내 정보</h2> <!-- 내 정보 제목 추가 -->
+      <hr class="section-divider"/> <!-- 구분선 추가 -->
       <div class="profile-image-container">
         <img :src="user.profileImg || defaultImage" alt="profile" class="profile-img" />
         <input type="file" @change="onImageUpload" class="image-upload" />
@@ -22,22 +24,22 @@
           <strong class="label">이메일:</strong>
           <input type="email" v-model="user.userEmail" class="input-field" />
         </div>
-        <button @click="deactivateAccount" class="icon-button delete-button">회원 탈퇴</button>
+        <!-- 회원 탈퇴 버튼 삭제 -->
       </div>
     </div>
 
     <div class="details-section">
+      <h2 class="section-title">상세 정보</h2> <!-- 상세 정보 제목 추가 -->
+      <hr class="section-divider"/> <!-- 구분선 추가 -->
       <p>가입일: {{ user.regDate }}</p>
       <div class="form-group">
         <label>전화번호:</label>
         <input type="text" v-model="user.userPhone" class="phone-input" />
       </div>
-
       <div class="form-group">
         <label>생년월일:</label>
         <input type="date" v-model="user.userBirthDate" class="date-input" placeholder="생년월일 입력" />
       </div>
-
       <div class="form-group">
         <label>성별:</label>
         <select v-model="user.userGender" class="gender-select">
@@ -45,20 +47,14 @@
           <option value="female">여</option>
         </select>
       </div>
-
       <div class="form-group">
         <label>학과:</label>
         <input type="text" v-model="user.userMajor" class="major-input" placeholder="학과 입력" />
       </div>
-
       <div class="form-group github-group">
         <label>깃허브 아이디:</label>
         <input type="text" v-model="user.userGithubId" class="github-input" placeholder="깃허브 아이디" />
         <button @click="navigateToRepoManagement" class="icon-button save-button">깃허브 레포지토리 관리</button>
-      </div>
-
-      <div class="form-group">
-        <button @click="navigateToReviewHistory" class="icon-button save-button review-button">리뷰 내역 보기</button>
       </div>
     </div>
 
@@ -68,6 +64,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -190,58 +187,74 @@ onMounted(() => {
 <style scoped>
 .mypage-container {
   display: flex;
-  justify-content: space-between; /* 왼쪽과 오른쪽을 양쪽으로 배치 */
+  justify-content: space-between;
   padding: 20px;
-  width: 100%; /* 전체 페이지 너비 설정 */
+  width: 100%;
 }
 
 .profile-section {
-  width: 40%; /* 왼쪽 컨테이너 너비 설정 */
+  width: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f9f9f9; /* 백그라운드 컬러 추가 */
-  border-radius: 8px; /* 모서리 둥글게 설정 */
+  background-color: #f9f9f9;
+  border-radius: 8px;
 }
 
 .details-section {
-  width: 55%; /* 오른쪽 컨테이너 너비 설정 */
+  width: 55%;
   padding: 20px;
-  background-color: #f9f9f9; /* 백그라운드 컬러 추가 */
-  border-radius: 8px; /* 모서리 둥글게 설정 */
+  background-color: #f9f9f9;
+  border-radius: 8px;
 }
 
-.profile-image-container {
-  display: flex;
-  flex-direction: column; /* 세로 정렬 */
-  align-items: center;
+.section-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #ddd;
   margin-bottom: 20px;
 }
 
 .profile-img {
-  width: 120px; /* 사진 크기를 120px로 줄임 */
-  height: 120px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   margin-bottom: 10px;
   object-fit: cover;
 }
 
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .image-upload {
-  margin-top: 10px; /* 이미지 아래에 파일 선택 버튼이 위치하도록 마진 추가 */
+  margin-top: 10px;
   width: 150px;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
 .info-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
+  gap: 10px;
 }
 
 .label {
@@ -251,7 +264,7 @@ onMounted(() => {
 
 .input-field {
   width: 250px;
-  height: 35px; /* 입력 필드 높이 증가 */
+  height: 35px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -265,7 +278,7 @@ onMounted(() => {
 .form-group {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .form-group label {
@@ -277,7 +290,7 @@ onMounted(() => {
 .form-group input,
 .form-group select {
   padding: 8px;
-  width: 200px; /* 입력 필드 너비 */
+  width: 200px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -285,7 +298,7 @@ onMounted(() => {
 .phone-input,
 .major-input,
 .github-input {
-  width: 300px; /* 입력 필드의 너비를 조금 더 넓힘 */
+  width: 300px;
 }
 
 .date-input {
@@ -310,10 +323,6 @@ onMounted(() => {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.review-button {
-  margin-top: 20px;
 }
 
 .fixed-actions {
@@ -353,14 +362,5 @@ onMounted(() => {
   margin-right: 150px;
 }
 
-.delete-button {
-  background-color: #dddddd;
-  color: white;
-  padding: 5px 10px;
-  font-size: 12px;
-  border-radius: 5px;
-  width: 150px;
-  height: 35px;
-}
 
 </style>
