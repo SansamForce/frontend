@@ -190,36 +190,45 @@ onMounted(() => {
 <style scoped>
 .mypage-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* 왼쪽과 오른쪽을 양쪽으로 배치 */
   padding: 20px;
-  margin-left: 150px;
-  margin-top: 70px;
+  width: 100%; /* 전체 페이지 너비 설정 */
 }
 
 .profile-section {
-  width: 40%;
+  width: 40%; /* 왼쪽 컨테이너 너비 설정 */
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9; /* 백그라운드 컬러 추가 */
+  border-radius: 8px; /* 모서리 둥글게 설정 */
 }
 
-.profile-img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  margin-bottom: 20px;
-  object-fit: cover;
+.details-section {
+  width: 55%; /* 오른쪽 컨테이너 너비 설정 */
+  padding: 20px;
+  background-color: #f9f9f9; /* 백그라운드 컬러 추가 */
+  border-radius: 8px; /* 모서리 둥글게 설정 */
 }
 
 .profile-image-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* 세로 정렬 */
   align-items: center;
   margin-bottom: 20px;
 }
 
+.profile-img {
+  width: 120px; /* 사진 크기를 120px로 줄임 */
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
 .image-upload {
-  margin-top: 20px;
+  margin-top: 10px; /* 이미지 아래에 파일 선택 버튼이 위치하도록 마진 추가 */
   width: 150px;
 }
 
@@ -231,9 +240,8 @@ onMounted(() => {
 
 .info-item {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
 }
 
 .label {
@@ -243,7 +251,7 @@ onMounted(() => {
 
 .input-field {
   width: 250px;
-  height: 35px;
+  height: 35px; /* 입력 필드 높이 증가 */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -354,4 +362,5 @@ onMounted(() => {
   width: 150px;
   height: 35px;
 }
+
 </style>
