@@ -75,9 +75,10 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/github-repo-management',
-    name: 'GithubRepoManagement',
-    component: () => import('@/views/GithubRepoManagement.vue') // 실제 경로와 컴포넌트로 교체
+    path: '/mypage/repository-management',
+    name: 'RepositoryManagement',
+    component: () => import('@/views/mypage/RepositoryManagement.vue'),
+    meta: { requiresAuth: true }
   }
 ];
 
