@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import TeamMember from "@/components/team/TeamMember.vue";
 import TeamSchedule from "@/components/team/TeamSchedule.vue";
 import TeamChat from "@/views/team/TeamChatView.vue";
@@ -9,8 +9,19 @@ const props = defineProps({
   teamSeq: {
     type: Number,
     required: false
+  },
+  isAdmin: {
+    type: Boolean,
+    required: true
   }
 })
+
+// teamSeq가 변경될 때 로직 추가 (필요한 경우)
+watch(() => props.teamSeq, (newSeq) => {
+  console.log(newSeq);
+  fetchTeamDetail();
+  // 필요에 따라 추가 로직
+});
 
 const team = ref(null);
 
@@ -45,7 +56,7 @@ onMounted(fetchTeamDetail);
         <h4 class="team-name">{{team.teamName}}</h4>
         <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/> <br />
         <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq" />
-        <TeamChat v-if="team.teamChatResponse" :team-chat-response="team.teamChatResponse"/>
+        <TeamChat v-if="team.teamChatResponse && !isAdmin" :team-chat-response="team.teamChatResponse"/>
         </div>
       </b-card-body>
     </div>

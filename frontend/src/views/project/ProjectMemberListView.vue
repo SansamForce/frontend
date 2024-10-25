@@ -24,12 +24,11 @@ const fetchProjectMemberList = async () => {
   }
 };
 
-onMounted(fetchProjectMemberList);
+onMounted(() => fetchProjectMemberList());
 </script>
 
 <template>
   <div class="col-md-6">
-
     <b-card class="h-100">
       <div class="row container fixed-header">
         <b-card-header class="text-start d-flex justify-content-between align-items-center">
