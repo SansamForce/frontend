@@ -2,7 +2,7 @@
 
 import {onMounted, ref, reactive, watch} from "vue";
 import axios from "axios";
-import TeamChatComponent from "@/components/team/TeamChat.vue";
+import TeamChatComponent from "@/components/team/TeamChatComponent.vue";
 
 const props = defineProps({
   teamChatResponse: {
