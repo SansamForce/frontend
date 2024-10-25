@@ -44,6 +44,7 @@
           <th>No.</th>
           <th>이름</th>
           <th>닉네임</th>
+          <th>개발 분야</th>
           <th>신청 상태</th>
         </tr>
         </thead>
@@ -53,6 +54,7 @@
           <td>{{ index + 1 }}</td>
           <td>{{ member.userName }}</td>
           <td>{{ member.userNickname }}</td>
+          <td>{{member.projectMemberDevelopType}}</td>
           <td :class="{ approved: member.applyStatus === 'APPROVED', rejected: member.applyStatus === 'REJECTED' }">{{ member.applyStatus }}</td>
         </tr>
         </tbody>
@@ -222,6 +224,7 @@ onMounted(async () => {
       }
     });
     applyMembers.value = applyMemberResponse.data.data;
+    console("response 값 "+applyMembers.value);
     // 수정 폼에 기본 값 세팅
     editTitle.value = projectBoard.value.projectBoardTitle;
     editContent.value = projectBoard.value.projectBoardContent;
@@ -539,13 +542,16 @@ const createProject = async () => {
 
     // 승인된 회원을 해당 프로젝트에 추가
     for (const member of approvedMembers) {
-      console.log('유저번호:', member.userSeq);
-      await axios.post(`http://localhost:8086/api/v1/admin/project/${latestProject.projectSeq}/member?userSeq=${member.userSeq}`, null, {
+      await axios.post(`http://localhost:8086/api/v1/admin/project/${latestProject.projectSeq}/member`, {
+        userSeq: member.userSeq,  // 기존 userSeq
+        projectMemberDevelopType: member.projectMemberDevelopType // 추가된 developType 전송
+      }, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
           'Content-Type': 'application/json',
         }
       });
+      console.log("프로젝트 회원 타입"+member.projectMemberDevelopType)
     }
 
     alert('해당 프로젝트에 승인된 회원이 추가되었습니다.');
