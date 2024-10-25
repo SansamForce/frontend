@@ -85,6 +85,12 @@ const routes = [
     component: () => import("@/views/team/TeamDetailView.vue"),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/mypage/repository',
+    name: 'RepositoryManagement',
+    component: () => import('@/views/mypage/RepositoryManagement.vue'),
+    meta: { requiresAuth: true }
+  }
 ];
 
 const router = createRouter({
