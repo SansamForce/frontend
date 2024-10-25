@@ -1,11 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, reactive} from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 import MemberProjectDetail from '@/components/project/MemberProjectDetail.vue';
 import TeamDetail from "@/views/team/TeamDetailView.vue";
 import MentorProjectDetail from "@/components/project/MentorProjectDetail.vue";
 import MentorProjectTeamList from "@/views/project/ProjectTeamListView.vue";
+import ProjectMemberListView from "@/views/project/ProjectMemberListView.vue";
 // 상태 관리
 const project = ref(null);
 const route = useRoute();
@@ -14,7 +15,7 @@ const router = useRouter();
 // 프로젝트 ID 가져오기
 const projectSeq = route.params.id;
 const projectTeamList = ref([]);
-
+const isProjectListSelectYn = ref("Y");
 // API 호출 함수
 const fetchProjectDetail = async () => {
   try {
@@ -51,9 +52,10 @@ onMounted(fetchProjectDetail);
       <div class="row card-container" v-if="project.projectMentorYn=== 'Y'">
         <div class="col-md-6">
           <b-card class="h-100">
-            <MentorProjectDetail v-if="projectTeamList.length > 0" :project="project" :project-team-list="projectTeamList" class="card"/>
-
-            <MentorProjectTeamList v-if="projectTeamList.length> 0" :project-team-list="projectTeamList"/>
+            <MentorProjectDetail :project="project" class="card"/>
+              <div v-if="projectTeamList.length> 0">
+              <MentorProjectTeamList :project-team-list="projectTeamList"/>
+            </div>
             <div class="no-team-container text-center" v-else>
               <!-- 경고 아이콘 -->
               <div class="warning-icon">
@@ -71,7 +73,8 @@ onMounted(fetchProjectDetail);
             </div>
           </b-card>
         </div>
-<!--        <TeamDetail v-if="projectTeamList.length > 1" :team-seq="project.teamSeq" class="card" />-->
+        <ProjectMemberListView v-if="isProjectListSelectYn == 'Y'" :project-seq="projectSeq"/>
+        <!--        <TeamDetail v-if="projectTeamList.length > 1" :team-seq="project.teamSeq" class="card" />-->
       </div>
       <div class="row card-container" v-else>
         <MemberProjectDetail :project="project" class="card" />
