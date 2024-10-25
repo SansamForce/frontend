@@ -39,40 +39,12 @@ const props = defineProps({
     </div>
 
   </template>
-  <div class="no-team-container text-center" v-else>
-    <!-- 경고 아이콘 -->
-    <div class="warning-icon">
-      <i class="bi bi-exclamation-triangle-fill"></i>
-    </div>
-      <!-- 텍스트 -->
-      <p class="mt-3">
-        진행 중인 팀이 존재하지 않습니다.
-      </p>
-    <p>
-      T-Building에서 제공하는 자동 팀 빌딩모드로<br />
-      지금 바로 팀을 빌딩해 보세요!
-    </p>
-    <b-button variant="dark" style="float: right; height: 35px;">팀 빌딩하기</b-button>
 
-  </div>
 </template>
 
 <style scoped>
 
-.no-team-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 50vh; /* 화면 중앙에 배치 */
-  text-align: center;
-  max-width: 1200px;
-}
 
-.warning-icon {
-  font-size: 50px;
-  color: #f0ad4e; /* 경고 색상 */
-}
 
 p {
   font-size: 1em;
@@ -124,30 +96,8 @@ p {
   flex-grow: 1;
 }
 
-.team-button {
-  margin-left: auto;
-}
-
 h5 {
   font-weight: bold;
   margin-bottom: 10px;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-}
-
-.page-btn {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 8px 12px;
-  margin: 0 5px;
-  cursor: pointer;
-}
-
-.page-btn:hover {
-  background-color: #007bff;
-  color: white;
 }
 </style>
