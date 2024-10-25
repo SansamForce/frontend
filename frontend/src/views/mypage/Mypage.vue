@@ -182,7 +182,6 @@ const onImageUpload = (event) => {
   }
 };
 
-// 컴포넌트 마운트 시 사용자 데이터 가져오기
 onMounted(() => {
   fetchUserData();
 });
@@ -192,16 +191,16 @@ onMounted(() => {
 .mypage-container {
   display: flex;
   justify-content: space-between;
-  padding: 20px 20px 20px 60px; /* 왼쪽 여백을 60px로 설정하여 넓힘 */
+  padding: 20px;
+  margin-left: 150px;
+  margin-top: 70px;
 }
 
 .profile-section {
-  width: 45%;
-}
-
-.details-section {
-  width: 50%;
-  padding-left: 40px;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .profile-img {
@@ -215,25 +214,26 @@ onMounted(() => {
 .profile-image-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 30px; /* 이미지와 입력 필드 사이의 간격을 넓힘 */
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .image-upload {
-  margin-top: 10px;
+  margin-top: 20px;
   width: 150px;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
 }
 
 .info-item {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  gap: 10px;
 }
 
 .label {
@@ -243,17 +243,50 @@ onMounted(() => {
 
 .input-field {
   width: 250px;
-  height: 25px;
-  padding: 5px;
+  height: 35px;
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  text-align: left;
+}
+
+.details-section {
+  width: 55%;
+  padding-left: 40px;
 }
 
 .form-group {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  width: 150px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  padding: 8px;
+  width: 200px; /* 입력 필드 너비 */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.phone-input,
+.major-input,
+.github-input {
+  width: 300px; /* 입력 필드의 너비를 조금 더 넓힘 */
+}
+
+.date-input {
+  width: 180px;
+}
+
+.gender-select {
+  width: 100px;
+  padding: 8px;
 }
 
 .github-group {
@@ -261,46 +294,18 @@ onMounted(() => {
   align-items: center;
 }
 
-.github-input {
-  width: 250px;
-  height: 20px;
-  margin-right: 10px;
-}
-
-.form-group label {
-  width: 150px;
-  margin-right: 5px;
-}
-
-.form-group input,
-.form-group select {
-  padding: 8px;
-  margin-bottom: 15px;
-}
-
-.phone-input,
-.major-input,
-.career-input,
-.date-input {
-  width: 250px;
-  height: 20px;
-}
-
-.gender-select {
-  width: 65px;
-  padding: 8px;
-}
-
-.checkbox-group {
-  margin-left: 20px;
-}
-
 .github-group button {
   margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .review-button {
-  margin-left: 155px; /* 원하는 값으로 설정 */
+  margin-top: 20px;
 }
 
 .fixed-actions {
