@@ -163,31 +163,20 @@ const cancelChanges = () => {
   router.push('/');
 };
 
-const deactivateAccount = async () => {
-  try {
-    const token = getToken();
-    await axios.delete(`http://localhost:8086/api/v1/user/${userSeq}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    router.push('/login');
-  } catch (error) {
-    console.error('Error deactivating account:', error);
-    errorMessage.value = '회원 탈퇴에 실패했습니다.';
-  }
-};
-
 // 깃허브 레포지토리 관리 페이지로 이동
 const navigateToRepoManagement = () => {
   router.push({ name: 'RepositoryManagement' });
 };
 
-// 이미지 업로드 처리
 const onImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    user.value.profileImg = URL.createObjectURL(file);
+    user.value.profileImg = file; // 파일 객체를 저장
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      user.value.profileImgPreview = e.target.result; // 미리보기를 위해 URL 생성
+    };
+    reader.readAsDataURL(file);
   }
 };
 
