@@ -57,6 +57,11 @@ const receiveTeamSeqFromChild = (value) => {
 
 // 페이지가 로드될 때 API 호출
 onMounted(fetchProjectDetail);
+
+// 팀 빌딩 화면으로 이동하는 함수
+const navigateToTeamBuilding = () => {
+  router.push({ name: 'TeamBuilding', params: { id: projectSeq } });
+};
 </script>
 
 <template>
@@ -83,7 +88,10 @@ onMounted(fetchProjectDetail);
               T-Building에서 제공하는 자동 팀 빌딩모드로<br />
               지금 바로 팀을 빌딩해 보세요!
             </p>
-            <b-button variant="dark" style="float: right; height: 35px;">팀 빌딩하기</b-button>
+            <b-button variant="dark" style="float: right; height: 35px;" @click="navigateToTeamBuilding">
+              팀 빌딩하기
+            </b-button>
+
           </div>
         </b-card>
       </div>
