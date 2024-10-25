@@ -153,7 +153,7 @@ const saveChanges = async () => {
   }
 };
 
-// 회원 탈퇴
+
 const deactivateAccount = async () => {
   try {
     const token = getToken();
