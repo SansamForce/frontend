@@ -107,7 +107,7 @@ export default {
           const response = await axios.get(`http://localhost:8086/api/v1/user/${userSeq}/GithubRepository`, { headers });
           console.log(response.data.data); // 데이터 확인
           repositories.value = response.data.data.map(repo => ({
-            userGithubRepositorySeq: repo.userRepositorySeq,
+            userGithubRepositorySeq: repo.userGithubRepositorySeq,
             userRepositoryName: repo.userRepositoryName,
             developType: repo.developType,
             userRepositoryUrl: repo.userRepositoryUrl,
@@ -149,7 +149,7 @@ export default {
         };
 
         if (editMode.value) {
-          console.log("Repo to edit: ", currentRepo.value); // 이 값이 올바른지 확인
+          console.log("Repo to edit: ", currentRepo.value);
           if (currentRepo.value && currentRepo.value.userGithubRepositorySeq) {
             console.log(`${userSeq} ,${currentRepo.value.userGithubRepositorySeq}`)
             await axios.put(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository/${currentRepo.value.userGithubRepositorySeq}`, requestData, { headers });
