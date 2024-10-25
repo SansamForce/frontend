@@ -85,7 +85,7 @@ export default {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  max-width: 400px;
+  max-width: 410px;
   width: 100%;
   z-index: 10000; /* 백드롭보다 위에 표시 */
 }
