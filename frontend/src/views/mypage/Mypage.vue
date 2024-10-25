@@ -1,10 +1,10 @@
 <template>
   <div class="mypage-container" v-if="user">
     <div class="profile-section">
-      <h2 class="section-title">내 정보</h2> <!-- 내 정보 제목 추가 -->
-      <hr class="section-divider"/> <!-- 구분선 추가 -->
+      <h2 class="section-title">내 정보</h2>
+      <hr class="section-divider" />
       <div class="profile-image-container">
-        <img :src="user.profileImg || defaultImage" alt="profile" class="profile-img" />
+        <img :src="user.profileImg ? user.profileImg : defaultImage" alt="profile" class="profile-img" />
         <input type="file" @change="onImageUpload" class="image-upload" />
       </div>
       <div class="profile-info">
@@ -24,13 +24,12 @@
           <strong class="label">이메일:</strong>
           <input type="email" v-model="user.userEmail" class="input-field" />
         </div>
-        <!-- 회원 탈퇴 버튼 삭제 -->
       </div>
     </div>
 
     <div class="details-section">
-      <h2 class="section-title">상세 정보</h2> <!-- 상세 정보 제목 추가 -->
-      <hr class="section-divider"/> <!-- 구분선 추가 -->
+      <h2 class="section-title">상세 정보</h2>
+      <hr class="section-divider" />
       <p>가입일: {{ user.regDate }}</p>
       <div class="form-group">
         <label>전화번호:</label>
@@ -65,7 +64,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -85,15 +83,15 @@ const user = ref({
   githubId: '',
   profileImg: ''
 });
-const defaultImage = '';
+const defaultImage = '/images/사진 없음.png';
 const loading = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
 
-// 인증 토큰 가져오기
+
 const getToken = () => localStorage.getItem('authToken');
 
-// 사용자 데이터 가져오기
+
 const fetchUserData = async () => {
   try {
     const token = getToken();
@@ -104,6 +102,7 @@ const fetchUserData = async () => {
     });
 
     const userData = response.data.data;
+
     if (userData.userGender === 'MALE') {
       userData.userGender = 'male';
     } else if (userData.userGender === 'FEMALE') {
@@ -111,8 +110,12 @@ const fetchUserData = async () => {
     }
 
     user.value = userData;
+
+    // S3에서 받아온 이미지가 있으면 사용
+    console.log("Profile Image URL:", user.value.userProfileImg);
+
     if (user.value.userBirthDate) {
-      user.value.userBirthDate = user.value.userBirthDate.split('T')[0]; // 날짜 형식 변환
+      user.value.userBirthDate = user.value.userBirthDate.split('T')[0];
     }
   } catch (error) {
     console.error('Error fetching user data:', error);
@@ -120,7 +123,7 @@ const fetchUserData = async () => {
   }
 };
 
-// 사용자 정보 저장
+
 const saveChanges = async () => {
   try {
     if (user.value.userGender === 'male') {
@@ -129,18 +132,29 @@ const saveChanges = async () => {
       user.value.userGender = 'FEMALE';
     }
 
+    const formData = new FormData();
+    formData.append('request', new Blob([JSON.stringify(user.value)], {type: 'application/json'})); // JSON 데이터 추가
+    if (user.value.profileImg) {
+      formData.append('userProfileImg', user.value.profileImg); // 파일 추가
+    }
+
     const token = getToken();
     loading.value = true;
     successMessage.value = '';
     errorMessage.value = '';
 
-    await axios.put(`http://localhost:8086/api/v1/user/${userSeq}`, user.value, {
+    await axios.put(`http://localhost:8086/api/v1/user/${userSeq}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
     });
 
     successMessage.value = '사용자 정보가 성공적으로 저장되었습니다.';
+
+
+    alert('저장되었습니다.');
+
     router.push('/');
   } catch (error) {
     console.error('Error saving user data:', error);
@@ -151,31 +165,20 @@ const saveChanges = async () => {
 };
 
 
-const deactivateAccount = async () => {
-  try {
-    const token = getToken();
-    await axios.delete(`http://localhost:8086/api/v1/user/${userSeq}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    router.push('/login'); // 회원 탈퇴 후 로그인 페이지로 이동
-  } catch (error) {
-    console.error('Error deactivating account:', error);
-    errorMessage.value = '회원 탈퇴에 실패했습니다.';
-  }
+const cancelChanges = () => {
+  router.push('/');
 };
 
 // 깃허브 레포지토리 관리 페이지로 이동
 const navigateToRepoManagement = () => {
-  router.push({ name: 'RepositoryManagement' });
+  router.push({name: 'RepositoryManagement'});
 };
 
 // 이미지 업로드 처리
 const onImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    user.value.profileImg = URL.createObjectURL(file); // 업로드된 이미지 미리보기
+    user.value.profileImg = URL.createObjectURL(file);
   }
 };
 
@@ -183,6 +186,7 @@ onMounted(() => {
   fetchUserData();
 });
 </script>
+
 
 <style scoped>
 .mypage-container {
@@ -241,7 +245,7 @@ onMounted(() => {
 
 .image-upload {
   margin-top: 10px;
-  width: 150px;
+  width: 250px;
 }
 
 .profile-info {
