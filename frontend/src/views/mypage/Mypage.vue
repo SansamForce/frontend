@@ -1,8 +1,8 @@
 <template>
   <div class="mypage-container" v-if="user">
     <div class="profile-section">
-      <h2 class="section-title">내 정보</h2> <!-- 내 정보 제목 추가 -->
-      <hr class="section-divider" /> <!-- 구분선 추가 -->
+      <h2 class="section-title">내 정보</h2> 
+      <hr class="section-divider" />
       <div class="profile-image-container">
         <img :src="user.profileImg ? user.profileImg : defaultImage" alt="profile" class="profile-img" />
         <input type="file" @change="onImageUpload" class="image-upload" />
