@@ -19,9 +19,9 @@
       <tbody>
       <tr v-for="(repo, index) in repositories" :key="repo.id">
         <td>{{ index + 1 }}</td>
-        <td>{{ repo.name }}</td>
-        <td>{{ repo.field.join(', ') }}</td>
-        <td><a :href="repo.url" target="_blank">{{ repo.url }}</a></td>
+        <td>{{ repo.userRepositoryName }}</td>
+        <td>{{ repo.developType }}</td>
+        <td><a :href="repo.userRepositoryUrl" target="_blank">{{ repo.userRepositoryUrl }}</a></td>
         <td>
           <button @click="editRepo(repo)" class="edit-button">수정</button>
           <button @click="confirmDelete(repo)" class="delete-button">삭제</button>
@@ -30,27 +30,26 @@
       </tbody>
     </table>
 
-    <!-- 레포지토리 등록/수정 모달 -->
     <div v-if="showForm" class="modal-overlay">
       <div class="modal-content">
         <h2>{{ editMode ? '레포지토리 수정' : '레포지토리 등록' }}</h2>
         <form @submit.prevent="submitRepo">
           <div class="form-group">
             <label>깃허브 레포지토리 이름</label>
-            <input v-model="form.name" class="input-field" required />
+            <input v-model="form.userRepositoryName" class="input-field" required />
           </div>
 
           <div class="form-group">
             <label>해당 레포지토리에서의 개발 분야</label>
             <div class="checkbox-group">
-              <label><input type="checkbox" v-model="form.field" value="FRONTEND" /> FRONTEND</label>
-              <label><input type="checkbox" v-model="form.field" value="BACKEND" /> BACKEND</label>
+              <label><input type="checkbox" :checked="form.developType === 'FRONTEND'" @change="updateDevelopType('FRONTEND')" /> FRONTEND</label>
+              <label><input type="checkbox" :checked="form.developType === 'BACKEND'" @change="updateDevelopType('BACKEND')" /> BACKEND</label>
             </div>
           </div>
 
           <div class="form-group">
             <label>레포지토리 URL</label>
-            <input v-model="form.url" class="input-field" required />
+            <input v-model="form.userRepositoryUrl" class="input-field" required />
           </div>
 
           <div class="modal-buttons">
@@ -61,11 +60,10 @@
       </div>
     </div>
 
-    <!-- 삭제 확인 모달 -->
     <div v-if="showDeleteModal" class="modal-overlay">
       <div class="modal-content">
         <h2>레포지토리 삭제</h2>
-        <p><strong>{{ currentRepo.field.join(', ') }}</strong> 분야의 <strong>{{ currentRepo.name }}</strong> 레포지토리를 삭제하시겠습니까?</p>
+        <p><strong>{{ currentRepo.developType }}</strong> 분야의 <strong>{{ currentRepo.userRepositoryName }}</strong> 레포지토리를 삭제하시겠습니까?</p>
         <div class="button-group">
           <button @click="closeDeleteModal" class="cancel-button">취소</button>
           <button @click="deleteRepo" class="delete-button">삭제</button>
@@ -73,7 +71,6 @@
       </div>
     </div>
 
-    <!-- 성공 메시지 모달 -->
     <div v-if="showSuccess" class="modal-overlay">
       <div class="modal-content success-modal">
         <p>{{ successMessage }}</p>
@@ -96,7 +93,7 @@ export default {
     const showSuccess = ref(false);
     const successMessage = ref('');
     const editMode = ref(false);
-    const form = ref({ name: '', field: [], url: '' });
+    const form = ref({ userRepositoryName: '', developType: '', userRepositoryUrl: '' });
     const currentRepo = ref(null);
 
     const userStore = useUserStore();
@@ -108,11 +105,12 @@ export default {
       try {
         if (userSeq) {
           const response = await axios.get(`http://localhost:8086/api/v1/user/${userSeq}/GithubRepository`, { headers });
+          console.log(response.data.data); // 데이터 확인
           repositories.value = response.data.data.map(repo => ({
-            id: repo.userGithubRepositorySeq,
-            name: repo.userRepositoryName,
-            field: Array.isArray(repo.developType) ? repo.developType : [repo.developType],
-            url: repo.userRepositoryUrl,
+            userGithubRepositorySeq: repo.userRepositorySeq,
+            userRepositoryName: repo.userRepositoryName,
+            developType: repo.developType,
+            userRepositoryUrl: repo.userRepositoryUrl,
           }));
         }
       } catch (error) {
@@ -121,7 +119,7 @@ export default {
     };
 
     const openForm = () => {
-      form.value = { name: '', field: [], url: '' };
+      form.value = { userRepositoryName: '', developType: '', userRepositoryUrl: '' };
       editMode.value = false;
       showForm.value = true;
     };
@@ -130,8 +128,13 @@ export default {
       showForm.value = false;
     };
 
+    const updateDevelopType = (selectedType) => {
+      form.value.developType = selectedType;
+    };
+
     const editRepo = (repo) => {
-      form.value = { ...repo, field: [...repo.field] };
+      console.log('수정할 레포지토리:', repo);  // 레포지토리 정보 확인
+      form.value = { ...repo };
       currentRepo.value = repo;
       editMode.value = true;
       showForm.value = true;
@@ -139,21 +142,26 @@ export default {
 
     const submitRepo = async () => {
       try {
+        const requestData = {
+          userRepositoryName: form.value.userRepositoryName,
+          developType: form.value.developType,
+          userRepositoryUrl: form.value.userRepositoryUrl,
+        };
+
         if (editMode.value) {
-          await axios.post(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository/${currentRepo.value.id}`, {
-            name: form.value.name,
-            field: form.value.field,
-            url: form.value.url,
-          }, { headers });
-          successMessage.value = '레포지토리가 수정되었습니다.';
+          console.log("Repo to edit: ", currentRepo.value); // 이 값이 올바른지 확인
+          if (currentRepo.value && currentRepo.value.userGithubRepositorySeq) {
+            console.log(`${userSeq} ,${currentRepo.value.userGithubRepositorySeq}`)
+            await axios.put(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository/${currentRepo.value.userGithubRepositorySeq}`, requestData, { headers });
+            successMessage.value = '레포지토리가 수정되었습니다.';
+          } else {
+            console.error("userGithubRepositorySeq가 설정되지 않았습니다.");
+          }
         } else {
-          await axios.post(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository`, {
-            name: form.value.name,
-            field: form.value.field,
-            url: form.value.url,
-          }, { headers });
+          await axios.post(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository`, requestData, { headers });
           successMessage.value = '레포지토리가 등록되었습니다.';
         }
+
         showForm.value = false;
         showSuccess.value = true;
         fetchRepositories();
@@ -165,7 +173,7 @@ export default {
     const deleteRepo = async () => {
       try {
         if (currentRepo.value && userSeq) {
-          await axios.delete(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository/${currentRepo.value.id}`, { headers });
+          await axios.delete(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository/${currentRepo.value.userGithubRepositorySeq}`, { headers });
           successMessage.value = '레포지토리가 삭제되었습니다.';
           showDeleteModal.value = false;
           showSuccess.value = true;
@@ -208,10 +216,12 @@ export default {
       deleteRepo,
       closeDeleteModal,
       closeSuccessModal,
+      updateDevelopType,
     };
   },
 };
 </script>
+
 
 <style scoped>
 .repository-management {
