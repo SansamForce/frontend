@@ -211,6 +211,7 @@ export default {
 
     async completeTeamBuilding() {
       try {
+        // 팀 생성 데이터 준비
         const teams = this.teamBuildingResult.map(team => ({
           teamName: team.teamName,
           userSeqs: team.teamMembers.map(member => member.userSeq)
@@ -221,6 +222,7 @@ export default {
           teams: teams
         };
 
+        // 팀 생성 API 호출
         const response = await axios.post(`http://localhost:8086/api/v1/team`, payload, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
@@ -229,9 +231,14 @@ export default {
         });
 
         if (response.data.success) {
+          console.log("팀 생성 성공:", response.data);  // 팀 생성 성공 시 로그 추가
           alert("팀 생성이 완료되었습니다.");
+
+          const createdTeams = response.data.data; // response에서 teamSeq 목록을 받음
+          await this.createTeamChats(createdTeams); // 팀 채팅방 생성 로직 추가
+
           // 프로젝트 상세 페이지로 이동
-          this.router.push(`/projects/${this.projectSeq}`);
+          this.$router.push(`/projects/${this.projectSeq}`);
         } else {
           alert("팀 생성 중 오류가 발생했습니다.");
         }
@@ -239,6 +246,33 @@ export default {
         console.error("팀 생성 중 오류가 발생했습니다:", error);
       }
     },
+
+// 팀 채팅방 생성 메서드
+    async createTeamChats(createdTeams) {
+      try {
+        // 생성된 팀 목록을 순회하며 팀 채팅방 생성 API 호출
+        for (const team of createdTeams) {
+          const chatPayload = {
+            teamChatName: `${team.teamName} 채팅방`,
+            teamChatComment: `${team.teamName} 팀의 채팅방입니다.`,
+            teamChatActive: 'Y'
+          };
+
+          await axios.post(`http://localhost:8086/api/v1/team/${team.teamSeq}/chat`, chatPayload, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+              'Content-Type': 'application/json',
+            }
+          });
+
+          console.log(`팀 ${team.teamName}의 채팅방 생성 완료 (teamSeq: ${team.teamSeq})`);
+        }
+        alert("팀 채팅방이 성공적으로 생성되었습니다.");
+      } catch (error) {
+        console.error("팀 채팅방 생성 중 오류가 발생했습니다:", error);
+      }
+    }
+
   }
 };
 </script>
