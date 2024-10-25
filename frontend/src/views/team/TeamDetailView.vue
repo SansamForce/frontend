@@ -7,7 +7,7 @@ import TeamChat from "@/views/team/TeamChatView.vue";
 
 const props = defineProps({
   teamSeq: {
-    type: BigInt,
+    type: Number,
     required: false
   }
 })
@@ -36,16 +36,18 @@ onMounted(fetchTeamDetail);
 
       <b-card class="h-100">
         <div class="row container fixed-header" v-if="team">
-            <b-card-header class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">내 프로젝트 팀 조회</h5>
-              <b-button variant="dark">팀 이름 변경</b-button>
+            <b-card-header class="text-start d-flex justify-content-between align-items-center">
+              <span style="font-weight: bold; font-size: 1.2rem;">내 프로젝트 팀 조회</span>
+              <b-button variant="dark" style="float: right; height: 35px;">팀 이름 변경</b-button>
             </b-card-header>
           <div class="scroll-container">
             <b-card-body>
-              <h6>{{team.teamName}}</h6>
+              <div class="project-card">
+              <h4 class="team-name">{{team.teamName}}</h4>
               <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/>
               <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList"/>
               <TeamChat v-if="team.teamChatResponse" :team-chat-response="team.teamChatResponse"/>
+              </div>
             </b-card-body>
           </div>
         </div>
@@ -93,7 +95,7 @@ p {
 }
 
 .scroll-container {
-  max-height: 500px;
+  max-height: 820px;
   overflow-y: auto;
   border: 1px solid #dee2e6;
   padding: 10px;
@@ -102,6 +104,18 @@ p {
 .container {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.team-name {
+  font-weight: bold;
+}
+
+.team-name:after {
+  content: "";
+  display: block;
+  width: 22%;
+  border-bottom: 2px solid #000000;
+  margin: 13px 0 13px 0;
 }
 
 </style>

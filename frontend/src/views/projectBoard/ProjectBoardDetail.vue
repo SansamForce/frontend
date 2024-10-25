@@ -130,6 +130,20 @@ watch(() => route.params.id, async (newProjectBoardSeq) => {
 });
 
 const applyForProject = async () => {
+
+
+  // 로그인 여부를 체크
+  const authToken = localStorage.getItem('authToken');
+  
+  if (!authToken) {
+    // 로그인되지 않은 경우
+    alert("프로젝트 신청을 하려면 회원가입이 필요합니다. 로그인 페이지로 이동합니다.");
+    // 로그인 페이지로 이동
+    window.location.href = "/login";
+    return;
+  }
+
+  // 로그인된 경우
   if (!selectedField.value) {
     alert("지원 분야를 선택해주세요.");
     return;
@@ -146,7 +160,7 @@ const applyForProject = async () => {
         },
         {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Authorization': `Bearer ${authToken}`,
             'Content-Type': 'application/json'
           }
         }
@@ -190,8 +204,14 @@ const cancelApplication = async () => {
 };
 
 const openApplyModal = () => {
-  isModalOpen.value = true;
+  if (projectBoard.value.projectBoardStatus === 'DEADLINE') {
+    alert('프로젝트가 마감되었습니다. 신청할 수 없습니다.');
+    return;  // 마감된 상태에서는 함수를 종료하고 모달을 열지 않음
+  }
+  isModalOpen.value = true;  // 프로젝트가 마감되지 않았을 때만 모달을 열기
 };
+
+
 
 const closeApplyModal = () => {
   isModalOpen.value = false;

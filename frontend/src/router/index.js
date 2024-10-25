@@ -32,7 +32,7 @@ const routes = [
   {
     path: "/projectBoards",
     component: () => import("@/views/projectBoard/ProjectBoardList.vue"),
-    meta: { requiresAuth: true } // 로그인 필요
+    // meta: { requiresAuth: true } // 로그인 필요
   },
   {
     path: '/user/:userSeq',
@@ -75,9 +75,8 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/mypage/repository-management',
-    name: 'RepositoryManagement',
-    component: () => import('@/views/mypage/RepositoryManagement.vue'),
+    path: "/projects/:id/team/:id/schedule",
+    component: () => import("@/views/team/TeamDetailView.vue"),
     meta: { requiresAuth: true }
   }
 ];

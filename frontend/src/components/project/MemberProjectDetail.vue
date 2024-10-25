@@ -13,22 +13,23 @@ const props = defineProps({
       <div class="col-md-6">
         <b-card class="h-100">
           <b-card-header class="text-start">
-            <h5>내 프로젝트 상세 조회</h5>
+            <p style="font-weight: bold">내 프로젝트 상세 조회</p>
           </b-card-header>
           <b-card-body>
             <div class="project-card">
               <div class="image-container mb-3">
                 <img :src="project.projectImgUrl" alt="Project Image" class="project-image img-fluid" />
               </div>
-              <div style="font-weight: bold">
+              <div class="project-title">
                 {{ project.projectTitle }}
-                <span class="badge bg-primary">{{ project.projectStatus === "PROGRESS" ? "진행중" : "종료됨" }}</span>
+                <span class="badge">{{ project.projectStatus === "PROGRESS" ? "진행중" : "종료됨" }}</span>
               </div>
               <p class="mt-2">
                 {{ project.projectContent }}
-              </p>
-              <p><strong>프로젝트 기간 :</strong> {{ project.projectStartDate }} ~ {{ project.projectEndDate }}</p>
-              <p><strong>참여 인원 : </strong> {{ project.projectHeadCount }}</p>
+              </p> <br />
+<!--              <p><strong>모집 일정 &nbsp; : &nbsp; </strong> {{ project.projectBoardStartDate }} ~ {{ project.projectBoardEndDate }}</p>-->
+              <p><strong>프로젝트 기간 &nbsp; : &nbsp; </strong> {{ project.projectStartDate }} ~ {{ project.projectEndDate }}</p>
+              <p><strong>참여 인원 &nbsp; : &nbsp;  </strong> {{ project.projectHeadCount }}</p>
             </div>
           </b-card-body>
         </b-card>
@@ -51,10 +52,27 @@ const props = defineProps({
 }
 
 .project-image {
-  width: 300px;
-  height: auto;
+  width: 100%;
+  height: 400px;
   object-fit: cover;
   margin-bottom: 20px;
+}
+
+.project-title {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.project-title:after {
+  content: "";
+  display: block;
+  width: 100%;
+  border-bottom: 2px solid #000000;
+  margin: 20px auto;
+}
+
+.badge {
+  background-color: #171D8A;
 }
 
 h1 {

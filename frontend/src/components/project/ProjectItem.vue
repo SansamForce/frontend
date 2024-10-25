@@ -37,7 +37,7 @@ const goToProjectDetail = (seq) => {
 }
 
 .badge-primary {
-  background-color: #00d8ff;
+  background-color: #171D8A;
 }
 
 .badge-secondary {
