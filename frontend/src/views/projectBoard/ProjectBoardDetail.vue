@@ -101,7 +101,7 @@ const loadProjectBoardData = async (projectBoardSeq) => {
     });
     projectBoard.value = response.data.data;
 
-    const applyResponse = await axios.get(`http://localhost:8086/api/v1/project/board/${projectBoard.value.projectBoardSeq}/apply`, {
+    const applyResponse = await axios.get(`http://localhost:8086/api/v1/project/board/apply`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
