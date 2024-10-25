@@ -44,7 +44,7 @@ onMounted(fetchTeamDetail);
             <b-card-body>
               <div class="project-card">
               <h4 class="team-name">{{team.teamName}}</h4>
-              <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/>
+              <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/> <br />
               <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList"/>
               <TeamChat v-if="team.teamChatResponse" :team-chat-response="team.teamChatResponse"/>
               </div>

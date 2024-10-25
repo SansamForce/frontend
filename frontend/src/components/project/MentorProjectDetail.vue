@@ -1,36 +1,15 @@
 <script setup>
-import MentorProjectTeamList from "@/views/project/ProjectTeamListView.vue";
-import axios from "axios";
-import {onMounted, ref} from "vue";
-
 const props = defineProps({
   project: {
     type: Object,
     required: true
   }
 });
-
-const projectTeamList = ref([]);
-
-const fetchTeamDetail = async () => {
-  try {
-    const projectTeamResponse = await axios.get(`http://localhost:8086/api/v1/team`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      }
-    })
-    projectTeamList.value = projectTeamResponse.data.data;
-  } catch (error) {
-    console.error('팀 정보를 불러오는 중 에러가 발생했습니다.');
-  }
-}
-
-onMounted(() => fetchTeamDetail());
 </script>
 
 <template>
   <!-- 프로젝트 상세 조회 -->
-      <b-card class="h-100">
+
         <b-card-header class="text-start">
           <p style="font-weight: bold">프로젝트 정보</p>
         </b-card-header>
@@ -49,9 +28,8 @@ onMounted(() => fetchTeamDetail());
               <p><strong>참여 인원 &nbsp; : &nbsp; </strong>{{ project.projectHeadCount }}</p>
             </div>
           </div>
-          <MentorProjectTeamList :project-team-list="projectTeamList"/>
         </b-card-body>
-      </b-card>
+
 
 </template>
 
