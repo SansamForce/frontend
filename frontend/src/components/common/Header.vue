@@ -5,9 +5,7 @@
     </div>
     <nav class="nav">
       <template v-if="userStore.isAuthenticated">
-        
         <template v-if="userStore.auth === 'MEMBER' || userStore.auth === 'MENTOR'">
-
           <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
             <router-link to="/projectBoards" class="dropdown-toggle hover-text">BOARD</router-link>
             <div v-if="dropdownVisible" class="dropdown-content">
@@ -31,19 +29,17 @@
             </div>
           </div>
           
-          <router-link to="/logout" @click.prevent="logout" class="hover-text">LOGOUT</router-link>
+          <router-link to="/logout" @click.prevent="logout" class="hover-text auth-link">LOGOUT</router-link>
         </template>
 
-        <!-- 관리자 또는 부관리자일 때 -->
         <template v-if="userStore.auth === 'MANAGER' || userStore.auth === 'SUB_MANAGER'">
           <router-link to="/projectBoards" class="hover-text">BOARD</router-link>
           <router-link to="/projects" class="hover-text">PROJECT</router-link>
           <router-link to="/member" class="hover-text">MEMBER</router-link>
-          <router-link to="/logout" @click.prevent="logout" class="hover-text">LOGOUT</router-link>
+          <router-link to="/logout" @click.prevent="logout" class="hover-text auth-link">LOGOUT</router-link>
         </template>
       </template>
 
-      <!-- 비로그인 상태일 때 -->
       <template v-else>
         <div class="auth-links">
           <router-link to="/login" class="hover-text">Login</router-link>
@@ -97,17 +93,32 @@ const logout = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 50%; /* nav 너비를 50%로 설정 */
+  width: 50%;
 }
 
 .nav a {
   font-size: 1.8vw;
   color: #fff;
   text-decoration: none;
-  margin-right: 30px; /* 링크 간 간격을 30px로 설정 */
+  margin-right: 30px;
 }
 
-.nav a:hover {
+.auth-links,
+.auth-link {
+  margin-left: auto;
+  font-size: 1.8vw;
+  color: #fff;
+  text-decoration: none;
+}
+
+.auth-links a,
+.auth-link {
+  margin-left: 20px;
+}
+
+.nav a:hover,
+.auth-links a:hover,
+.auth-link:hover {
   color: #3FF3FF;
 }
 
@@ -155,23 +166,7 @@ const logout = () => {
   color: #000;
 }
 
-/* 로그인 및 회원가입 버튼을 오른쪽에 배치 */
-.auth-links {
-  display: flex;
-  gap: 30px; /* 로그인 및 회원가입 간격 설정 */
-}
-
-.auth-links a {
-  font-size: 1.8vw;
-  color: #fff;
-  text-decoration: none;
-}
-
-.auth-links a:hover {
-  color: #3FF3FF;
-}
-
-/* 미디어 쿼리: 작은 화면을 위한 반응형 스타일 */
+/* 미디어 쿼리 */
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
@@ -192,7 +187,6 @@ const logout = () => {
   .nav a {
     font-size: 4vw;
     margin-bottom: 10px;
-    margin-left: 0;
   }
 
   .auth-links {
@@ -205,7 +199,6 @@ const logout = () => {
   }
 }
 
-/* 미디어 쿼리: 더 작은 화면 (모바일) */
 @media (max-width: 480px) {
   .header {
     padding: 8px 15px;
@@ -215,10 +208,7 @@ const logout = () => {
     font-size: 6vw;
   }
 
-  .nav a {
-    font-size: 5vw;
-  }
-
+  .nav a,
   .auth-links a {
     font-size: 5vw;
   }
