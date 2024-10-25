@@ -57,6 +57,11 @@ const receiveTeamSeqFromChild = (value) => {
 
 // 페이지가 로드될 때 API 호출
 onMounted(fetchProjectDetail);
+
+// 팀 빌딩 화면으로 이동하는 함수
+const navigateToTeamBuilding = () => {
+  router.push({ name: 'TeamBuilding', params: { id: projectSeq } });
+};
 </script>
 
 <template>
