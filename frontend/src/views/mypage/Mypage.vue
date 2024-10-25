@@ -96,6 +96,7 @@ const errorMessage = ref('');
 // 인증 토큰 가져오기
 const getToken = () => localStorage.getItem('authToken');
 
+// 사용자 데이터 가져오기
 const fetchUserData = async () => {
   try {
     const token = getToken();
@@ -122,18 +123,14 @@ const fetchUserData = async () => {
   }
 };
 
-
-
+// 사용자 정보 저장
 const saveChanges = async () => {
   try {
-    // 성별 값 변환 ("남" -> "MALE", "여" -> "FEMALE")
     if (user.value.userGender === 'male') {
       user.value.userGender = 'MALE';
     } else if (user.value.userGender === 'female') {
       user.value.userGender = 'FEMALE';
     }
-
-    console.log('저장할 데이터:', user.value);
 
     const token = getToken();
     loading.value = true;
@@ -156,8 +153,7 @@ const saveChanges = async () => {
   }
 };
 
-
-// 계정 비활성화(회원 탈퇴)
+// 회원 탈퇴
 const deactivateAccount = async () => {
   try {
     const token = getToken();
@@ -171,6 +167,11 @@ const deactivateAccount = async () => {
     console.error('Error deactivating account:', error);
     errorMessage.value = '회원 탈퇴에 실패했습니다.';
   }
+};
+
+// 깃허브 레포지토리 관리 페이지로 이동
+const navigateToRepoManagement = () => {
+  router.push({ name: 'RepositoryManagement' });
 };
 
 // 이미지 업로드 처리
