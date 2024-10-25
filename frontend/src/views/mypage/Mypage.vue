@@ -254,7 +254,7 @@ onMounted(() => {
 
 .image-upload {
   margin-top: 10px;
-  width: 150px;
+  width: 250px;
 }
 
 .profile-info {
