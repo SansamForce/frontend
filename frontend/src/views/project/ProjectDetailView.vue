@@ -53,7 +53,7 @@ onMounted(fetchProjectDetail);
           <b-card class="h-100">
             <MentorProjectDetail v-if="projectTeamList.length > 0" :project="project" :project-team-list="projectTeamList" class="card"/>
 
-            <MentorProjectTeamList v-if="projectTeamList > 0" :project-team-list="projectTeamList"/>
+            <MentorProjectTeamList v-if="projectTeamList.length> 0" :project-team-list="projectTeamList"/>
             <div class="no-team-container text-center" v-else>
               <!-- 경고 아이콘 -->
               <div class="warning-icon">
