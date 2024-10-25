@@ -16,6 +16,7 @@ const router = useRouter();
 const projectSeq = route.params.id;
 const projectTeamList = ref([]);
 const isProjectListSelectYn = ref("Y");
+
 // API 호출 함수
 const fetchProjectDetail = async () => {
   try {
@@ -28,7 +29,7 @@ const fetchProjectDetail = async () => {
     console.log("project : ", project.value)
 
     try {
-      const projectTeamResponse = await axios.get(`http://localhost:8086/api/v1/team`, {
+      const projectTeamResponse = await axios.get(`http://localhost:8086/api/v1/team/project/${projectSeq}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -74,7 +75,7 @@ onMounted(fetchProjectDetail);
           </b-card>
         </div>
         <ProjectMemberListView v-if="isProjectListSelectYn == 'Y'" :project-seq="projectSeq"/>
-        <!--        <TeamDetail v-if="projectTeamList.length > 1" :team-seq="project.teamSeq" class="card" />-->
+        <TeamDetail v-if="isProjectListSelectYn == 'N'" :team-seq="project.teamSeq" class="card" />
       </div>
       <div class="row card-container" v-else>
         <MemberProjectDetail :project="project" class="card" />
