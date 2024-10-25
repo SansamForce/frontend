@@ -62,6 +62,12 @@ const routes = [
     component: () => import("@/views/projectBoard/AdminBoardDetail.vue"),
     meta: { requiresAuth: true, isManagerOnly: true } // 관리자만 접근 가능
   },
+  {
+    path: '/projectBoards/apply',
+    name: 'AppliedProjects',
+    component: () => import('@/views/projectBoard/AppliedProjectList.vue'),
+    meta: { requiresAuth: true } // 로그인 필요
+  },
 
   {
     path: '/member',
@@ -77,6 +83,12 @@ const routes = [
   {
     path: "/projects/:id/team/:id/schedule",
     component: () => import("@/views/team/TeamDetailView.vue"),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/mypage/repository',
+    name: 'RepositoryManagement',
+    component: () => import('@/views/mypage/RepositoryManagement.vue'),
     meta: { requiresAuth: true }
   }
 ];

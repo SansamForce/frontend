@@ -1,6 +1,6 @@
 <template>
-  <div v-if="projectBoard" class="project-apply-member-page">
-    <!-- 프로젝트 모집글 정보 -->
+  <div class="admin-project-detail-container" v-if="projectBoard">
+    <!-- Left: Project recruitment post details -->
     <div class="project-board-left">
       <h3 class="apply-member-header">프로젝트 모집글 상세</h3>
       <img v-if="projectBoard.projectBoardImgUrl" :src="projectBoard.projectBoardImgUrl" alt="프로젝트 이미지" class="project-board-image" />
@@ -27,11 +27,11 @@
       </div>
     </div>
 
-    <!-- 프로젝트 신청 회원 내역 -->
+    <!-- Right: Project applicant list -->
     <div class="project-board-right">
       <h3 class="apply-member-header">프로젝트 신청 회원 내역</h3>
       <div class="header-section">
-        <p>{{ selectedMembers.length }}명 선택됨</p>
+        <p>총 {{ applyMembers.length }}명 신청</p>
         <div class="button-group">
           <button class="approve-btn" @click="updateMemberStatus('APPROVED')" :disabled="!selectedMembers.length">신청 승인</button>
           <button class="reject-btn" @click="updateMemberStatus('REJECTED')" :disabled="!selectedMembers.length">신청 거부</button>
@@ -44,99 +44,134 @@
           <th>No.</th>
           <th>이름</th>
           <th>닉네임</th>
+          <th>개발 분야</th>
           <th>신청 상태</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(member, index) in applyMembers" :key="member.projectApplyMemberSeq" :class="{ selected: selectedMembers.includes(member) }">
+        <tr v-for="(member, index) in applyMembers" :key="member.projectApplyMemberSeq">
           <td><input type="checkbox" v-model="selectedMembers" :value="member" /></td>
           <td>{{ index + 1 }}</td>
           <td>{{ member.userName }}</td>
           <td>{{ member.userNickname }}</td>
-          <td>{{ member.applyStatus }}</td>
+          <td>{{member.projectMemberDevelopType}}</td>
+          <td :class="{ approved: member.applyStatus === 'APPROVED', rejected: member.applyStatus === 'REJECTED' }">{{ member.applyStatus }}</td>
         </tr>
         </tbody>
       </table>
+
+      <!-- 프로젝트 생성 버튼 -->
+      <button @click="openCreateProjectModal" class="create-project-btn">프로젝트 생성</button>
     </div>
+  </div>
 
-    <!-- 로딩 및 에러 상태 -->
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-if="error" class="error">{{ error }}</div>
+  <!-- Loading or Error Handling -->
+  <div v-else-if="loading" class="loading">로딩 중...</div>
+  <div v-else-if="error" class="error">{{ error }}</div>
 
-    <!-- 모달창 UI -->
-    <div v-if="isEditModalOpen" class="modal-overlay">
-      <div class="modal-content">
-        <button class="close-btn" @click="closeEditModal">×</button>
-        <h6><b>프로젝트 모집글 수정</b></h6>
+  <!-- Edit Project Modal -->
+  <div v-if="isEditModalOpen" class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-btn" @click="closeEditModal">×</button>
+      <h6><b>프로젝트 모집글 수정</b></h6>
 
-        <!-- 이미지 썸네일과 모집 상태 나란히 배치 -->
-        <div class="project-image-status-row">
-          <!-- 이미지 썸네일 -->
-          <div class="project-edit-thumbnail-container">
-            <img :src="projectBoard.projectBoardImgUrl" class="project-edit-thumbnail" />
-          </div>
-
-          <!-- 모집 상태 -->
-          <div class="modal-form-group status-group">
-            <label for="status">모집 상태</label>
-            <select id="status" v-model="editStatus">
-              <option value="RECRUITMENT">모집중</option>
-              <option value="DEADLINE">마감</option>
-            </select>
-          </div>
+      <!-- 이미지 썸네일과 모집 상태 나란히 배치 -->
+      <div class="project-image-status-row">
+        <!-- 이미지 썸네일 -->
+        <div class="project-edit-thumbnail-container">
+          <img :src="projectBoard.projectBoardImgUrl" class="project-edit-thumbnail" />
         </div>
 
-        <!-- 파일 선택 -->
-        <div class="modal-form-group">
-          <label for="file">프로젝트 이미지 변경</label>
-          <input type="file" id="file" @change="handleImageChange" />
+        <!-- 모집 상태 -->
+        <div class="modal-form-group status-group">
+          <label for="status">모집 상태</label>
+          <select id="status" v-model="editStatus">
+            <option value="RECRUITMENT">모집중</option>
+            <option value="DEADLINE">마감</option>
+          </select>
         </div>
+      </div>
 
-        <!-- 제목 -->
-        <div class="modal-form-group">
-          <label for="title">제목*</label>
-          <input id="title" v-model="editTitle" required />
-        </div>
+      <!-- 파일 선택 -->
+      <div class="modal-form-group">
+        <label for="file">프로젝트 이미지 변경</label>
+        <input type="file" id="file" @change="handleImageChange" />
+      </div>
 
-        <!-- 내용 -->
-        <div class="modal-form-group">
-          <label for="content">내용*</label>
-          <textarea id="content" v-model="editContent" required></textarea>
-        </div>
+      <!-- 제목 -->
+      <div class="modal-form-group">
+        <label for="title">제목*</label>
+        <input id="title" v-model="editTitle" required />
+      </div>
 
-        <!-- 모집 일정 -->
-        <div class="date-input">
-          <label for="projectBoardDates">모집 일정</label>
-          <input type="date" v-model="editBoardStartDate" required />
-          <input type="date" v-model="editBoardEndDate" required />
-        </div>
+      <!-- 내용 -->
+      <div class="modal-form-group">
+        <label for="content">내용*</label>
+        <textarea id="content" v-model="editContent" required></textarea>
+      </div>
 
-        <!-- 프로젝트 일정 -->
-        <div class="date-input">
-          <label for="projectDates">프로젝트 일정</label>
-          <input type="date" v-model="editProjectStartDate" required />
-          <input type="date" v-model="editProjectEndDate" required />
-        </div>
+      <!-- 모집 일정 -->
+      <div class="date-input">
+        <label for="projectBoardDates">모집 일정</label>
+        <input type="date" v-model="editBoardStartDate" required />
+        <input type="date" v-model="editBoardEndDate" required />
+      </div>
 
-        <!-- 버튼 그룹 -->
-        <div class="button-group">
-          <button @click="updateProject" class="save-btn">수정</button>
-          <button @click="closeEditModal" class="cancel-btn">취소</button>
-        </div>
+      <!-- 프로젝트 일정 -->
+      <div class="date-input">
+        <label for="projectDates">프로젝트 일정</label>
+        <input type="date" v-model="editProjectStartDate" required />
+        <input type="date" v-model="editProjectEndDate" required />
+      </div>
+
+      <!-- 버튼 그룹 -->
+      <div class="button-group">
+        <button @click="updateProject" class="save-btn">수정</button>
+        <button @click="closeEditModal" class="cancel-btn">취소</button>
       </div>
     </div>
   </div>
 
 
-  <!-- 로딩 중일 때 -->
-  <div v-else class="loading">로딩 중...</div>
+  <!-- Create Project Modal -->
+  <div v-if="isCreateProjectModalOpen" class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-btn" @click="closeCreateProjectModal">×</button>
+      <h6><b>프로젝트 생성</b></h6>
+
+      <div class="modal-form-group">
+        <label for="projectTitle">프로젝트 제목*</label>
+        <input id="projectTitle" v-model="newProjectTitle" required />
+      </div>
+      <div class="modal-form-group">
+        <label for="projectContent">프로젝트 내용*</label>
+        <textarea id="projectContent" v-model="newProjectContent" required></textarea>
+      </div>
+      <div class="date-input">
+        <label for="projectStartDates">프로젝트 일정</label>
+        <input type="date" v-model="newProjectStartDate" required />
+        <input type="date" v-model="newProjectEndDate" required />
+      </div>
+      <div class="modal-form-group">
+        <label for="projectImage">프로젝트 이미지 선택</label>
+        <input type="file" id="projectImage" @change="handleImageChange" />
+      </div>
+
+      <div class="button-group">
+        <button @click="createProject" class="save-btn">생성</button>
+        <button @click="closeCreateProjectModal" class="cancel-btn">취소</button>
+      </div>
+    </div>
+  </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
-
+const router =useRouter();
+const route = useRoute();
 const projectBoard = ref(null);
 const applyMembers = ref([]);
 const selectedMembers = ref([]);
@@ -151,8 +186,17 @@ const editBoardStartDate = ref('');
 const editBoardEndDate = ref('');
 const editProjectStartDate = ref('');
 const editProjectEndDate = ref('');
+const projectHeadCount = ref(0);  // 프로젝트 게시글의 headcount를 저장하는 변수
+const isCreateProjectModalOpen = ref(false);
+
+
+const newProjectTitle = ref('');
+const newProjectContent = ref('');
+const newProjectStartDate = ref('');
+const newProjectEndDate = ref('');
+const newProjectStatus = ref('PROGRESS');
 const newImageFile = ref(null);
-const router = useRouter();
+
 
 // 날짜 형식 변환 함수
 const formatDate = (dateString: string) => {
@@ -160,7 +204,6 @@ const formatDate = (dateString: string) => {
 };
 
 // URL에서 projectBoardSeq를 가져와서 API 호출
-const route = useRoute();
 onMounted(async () => {
   const projectBoardSeq = route.params.id;
   loading.value = true;
@@ -181,7 +224,7 @@ onMounted(async () => {
       }
     });
     applyMembers.value = applyMemberResponse.data.data;
-
+    console("response 값 "+applyMembers.value);
     // 수정 폼에 기본 값 세팅
     editTitle.value = projectBoard.value.projectBoardTitle;
     editContent.value = projectBoard.value.projectBoardContent;
@@ -284,37 +327,35 @@ onMounted(async () => {
 });
 
 
-// 프로젝트 수정 API 호출
 const updateProject = async () => {
   try {
+    console.log('editStatus:', editStatus.value); // editStatus 값 확인
+
     const projectBoardSeq = route.params.id;
     const formData = new FormData();
 
-    // 날짜 변환: LocalDateTime 형식에 맞게 변환
+    // 날짜 변환
     const formattedRecruitStartDate = new Date(editBoardStartDate.value).toISOString();
     const formattedRecruitEndDate = new Date(editBoardEndDate.value).toISOString();
     const formattedProjectStartDate = new Date(editProjectStartDate.value).toISOString();
     const formattedProjectEndDate = new Date(editProjectEndDate.value).toISOString();
 
-
     formData.append('adminProjectBoardUpdateDTO', JSON.stringify({
       projectBoardTitle: editTitle.value,
       projectBoardContent: editContent.value,
-      projectBoardStatus: editStatus.value,
-      projectBoardStartDate: formattedRecruitStartDate, // 변환된 값 사용
-      projectBoardEndDate: formattedRecruitEndDate, // 변환된 값 사용
-      projectStartDate: formattedProjectStartDate, // 변환된 값 사용
-      projectEndDate: formattedProjectEndDate, // 변환된 값 사용
+      projectBoardStatus: editStatus.value, // 여기서 editStatus가 전달됨
+      projectBoardStartDate: formattedRecruitStartDate,
+      projectBoardEndDate: formattedRecruitEndDate,
+      projectStartDate: formattedProjectStartDate,
+      projectEndDate: formattedProjectEndDate,
     }));
 
     if (newImageFile.value) {
       formData.append('projectBoardImage', newImageFile.value);
     }
 
-    await axios.put(`http://localhost:8086/api/v1/admin/project/board/${projectBoardSeq}`,
-        formData,
-        {
-          headers: {
+    await axios.put(`http://localhost:8086/api/v1/admin/project/board/${projectBoardSeq}`, formData, {
+      headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
         'Content-Type': 'multipart/form-data',
       }
@@ -328,6 +369,7 @@ const updateProject = async () => {
     console.error(error);
   }
 };
+
 
 
 // 프로젝트 삭제
@@ -353,13 +395,181 @@ const deleteProject = async () => {
     }
   }
 };
+
+
+// 모달 열기/닫기 함수
+const openCreateProjectModal = () => {
+  isCreateProjectModalOpen.value = true;
+};
+
+const closeCreateProjectModal = () => {
+  isCreateProjectModalOpen.value = false;
+};
+
+onMounted(async () => {
+  const projectBoardSeq = route.params.id;  // 현재 게시글의 ID
+  try {
+    const projectBoardResponse = await axios.get(`http://localhost:8086/api/v1/admin/project/board/${projectBoardSeq}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+    projectBoard.value = projectBoardResponse.data.data;
+
+    // 현재 프로젝트 게시글의 headcount 값을 저장
+    projectHeadCount.value = projectBoard.value.projectBoardHeadCount;
+  } catch (error) {
+    console.error("프로젝트 게시글 데이터를 불러오는 중 오류 발생:", error);
+  }
+});
+
+// URL에서 projectBoardSeq를 가져와서 API 호출
+onMounted(async () => {
+  const projectBoardSeq = route.params.id;
+  loading.value = true;
+
+  try {
+    // 프로젝트 모집글 정보 불러오기
+    const projectBoardResponse = await axios.get(`http://localhost:8086/api/v1/admin/project/board/${projectBoardSeq}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+    projectBoard.value = projectBoardResponse.data.data;
+
+    // 신청 회원 리스트 불러오기
+    const applyMemberResponse = await axios.get(`http://localhost:8086/api/v1/admin/project/board/${projectBoardSeq}/apply-member`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+
+
+  } catch (err) {
+    error.value = '데이터를 불러오는 중 오류가 발생했습니다.';
+  } finally {
+    loading.value = false;
+  }
+});
+
+// 프로젝트 생성 API 호출
+// 프로젝트 생성 API 호출
+const createProject = async () => {
+  try {
+    const formData = new FormData();
+
+    // 현재 로그인된 사용자의 userSeq 가져오기
+    const userSeq = localStorage.getItem('userSeq'); // 상태 관리에서 가져올 수 있음
+
+    // 날짜 형식 변환
+    const formattedProjectStartDate = new Date(newProjectStartDate.value).toISOString();
+    const formattedProjectEndDate = new Date(newProjectEndDate.value).toISOString();
+
+    // DTO와 이미지 파일을 FormData로 추가
+    formData.append('adminProjectCreateDTO', JSON.stringify({
+      projectTitle: newProjectTitle.value,
+      projectContent: newProjectContent.value,
+      projectStatus: newProjectStatus.value,
+      projectHeadCount: projectHeadCount.value,
+      projectStartDate: formattedProjectStartDate,
+      projectEndDate: formattedProjectEndDate,
+      projectImgUrl: '',  // 이미지 URL은 서버에서 처리
+      projectAdminSeq: userSeq,
+    }));
+
+    if (newImageFile.value) {
+      formData.append('projectImage', newImageFile.value);
+    } else {
+      alert("프로젝트 이미지를 선택해주세요.");
+      return;
+    }
+
+    const createResponse = await axios.post('http://localhost:8086/api/v1/admin/project', formData, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    if (!createResponse.data.success) {
+      alert('프로젝트 생성에 실패했습니다.');
+      return;
+    }
+
+    alert('프로젝트가 성공적으로 생성되었습니다.');
+
+    // 최신 프로젝트를 가져오는 함수 (projectSeq 기준으로 가장 큰 값 선택)
+    const getLatestProject = async () => {
+      try {
+        const response = await axios.get('http://localhost:8086/api/v1/admin/project', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          }
+        });
+
+        const projects = response.data.data;
+
+        // projectSeq 기준으로 정렬하여 가장 큰 값을 가진 프로젝트 선택
+        const latestProject = projects.sort((a, b) => b.projectSeq - a.projectSeq)[0];
+
+        console.log('최신 프로젝트:', latestProject);
+        return latestProject;
+      } catch (error) {
+        console.error('프로젝트 목록을 가져오는 중 오류 발생:', error);
+        return null;
+      }
+    };
+
+    // 최신 프로젝트 가져오기
+    const latestProject = await getLatestProject();
+
+    if (!latestProject) {
+      alert('최신 프로젝트를 가져오지 못했습니다.');
+      return;
+    }
+
+    // 승인된 회원 필터링
+    const approvedMembers = applyMembers.value.filter(
+        member => member.applyStatus === 'APPROVED'
+    );
+
+    console.log('승인된 회원 목록:', approvedMembers);
+
+    if (approvedMembers.length === 0) {
+      alert('승인된 회원이 없습니다.');
+      return;
+    }
+
+    // 승인된 회원을 해당 프로젝트에 추가
+    for (const member of approvedMembers) {
+      await axios.post(`http://localhost:8086/api/v1/admin/project/${latestProject.projectSeq}/member`, {
+        userSeq: member.userSeq,  // 기존 userSeq
+        projectMemberDevelopType: member.projectMemberDevelopType // 추가된 developType 전송
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      console.log("프로젝트 회원 타입"+member.projectMemberDevelopType)
+    }
+
+    alert('해당 프로젝트에 승인된 회원이 추가되었습니다.');
+    closeCreateProjectModal();
+    router.go(0);
+
+  } catch (error) {
+    console.error('프로젝트 생성 중 오류 발생:', error);
+    alert('프로젝트 생성 중 오류가 발생했습니다.');
+  }
+};
+
 </script>
 
 
-<style scoped>
 
-/* 전체 페이지 스타일 */
-.project-apply-member-page {
+<style scoped>
+.admin-project-detail-container {
   display: flex;
   gap: 20px;
   padding: 20px;
@@ -367,30 +577,35 @@ const deleteProject = async () => {
   min-height: 100vh;
 }
 
-/* 좌우 영역 스타일 */
+/* Left and right panels */
 .project-board-left, .project-board-right {
   flex: 1;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 프로젝트 이미지 */
+/* Project Image */
 .project-board-image {
-  width: 100%;
-  height: 50%;
-  object-fit: cover;
+  display: block;     /* Ensure the image is treated as a block-level element */
+  margin: 0 auto;     /* Center the image horizontally */
+  width: 700px;   /* Set a maximum width */
+  height: 350px;      /* Fixed height */
+  object-fit: cover;  /* Cover the area without distortion */
+  border-radius: 8px; /* Optional: add a rounded corner effect */
 }
 
-/* 프로젝트 정보 */
+
+/* Project information */
 .project-board-info {
   margin-top: 20px;
 }
 
-/* 프로젝트 제목과 상태 */
+/* Project title and status */
 .project-board-header {
   display: flex;
-  justify-content: space-between; /* 제목과 드롭다운 버튼을 양 끝으로 배치 */
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -399,24 +614,23 @@ const deleteProject = async () => {
   align-items: center;
 }
 
-
 .project-board-title {
   margin-right: 15px;
 }
 
 .project-status {
-  padding: 4px 8px;
-  background-color: #052c65;
+  padding: 5px 10px;
+  background-color: #007bff;
   color: white;
   border-radius: 5px;
   font-size: 14px;
 }
 
 .project-status.closed {
-  background-color: #F44336;
+  background-color: #dc3545;
 }
 
-/* 드롭다운 스타일 */
+/* Dropdown styling */
 .dropdown {
   position: relative;
 }
@@ -444,21 +658,22 @@ const deleteProject = async () => {
   cursor: pointer;
   border: none;
   background: none;
-  width: 100%;
   text-align: left;
+  width: 100%;
 }
 
 .dropdown-item:hover {
   background-color: #f0f0f0;
 }
 
-/* 회원 신청 리스트 헤더 */
+/* Apply member section header */
 .apply-member-header {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
-/* 테이블 상단 버튼 그룹 */
+/* Applicant table and buttons */
 .header-section {
   display: flex;
   justify-content: space-between;
@@ -477,24 +692,24 @@ const deleteProject = async () => {
   border-radius: 5px;
   cursor: pointer;
   color: white;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
 }
 
 .approve-btn {
-  background-color: #4CAF50;
+  background-color: #28a745;
 }
 
 .reject-btn {
-  background-color: #F44336;
+  background-color: #dc3545;
 }
 
 .approve-btn:hover {
-  background-color: #45a049;
+  background-color: #218838;
 }
 
 .reject-btn:hover {
-  background-color: #d32f2f;
+  background-color: #c82333;
 }
 
 .approve-btn:disabled, .reject-btn:disabled {
@@ -502,47 +717,61 @@ const deleteProject = async () => {
   cursor: not-allowed;
 }
 
-/* 테이블 스타일 */
+/* Table styling */
 table {
   width: 100%;
-  border-collapse: collapse; /* 테두리 겹치지 않게 */
+  border-collapse: collapse;
   margin-top: 10px;
-  font-size: 14px; /* 테이블 폰트 크기 */
+  font-size: 14px;
 }
 
 th, td {
-  padding: 8px; /* 셀 내부 여백 조정 */
-  border: 1px solid #ddd; /* 셀 테두리 */
-  text-align: center; /* 텍스트 가운데 정렬 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
 }
 
 th {
-  background-color: #f0f0f0; /* 테이블 헤더 배경색 */
-  font-weight: bold; /* 헤더 텍스트 굵게 */
+  background-color: #f8f9fa;
+  font-weight: bold;
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9; /* 짝수 행 배경색 */
+  background-color: #f8f9fa;
 }
 
 tr:hover {
-  background-color: #f1f1f1; /* 마우스 오버 시 배경색 */
+  background-color: #f1f1f1;
 }
 
 tr.selected {
-  background-color: #A8F9FF; /* 선택된 행의 배경색 */
+  background-color: #A8F9FF;
 }
 
-/* 로딩 및 에러 상태 */
+.approved {
+  color: green;
+}
+
+.rejected {
+  color: red;
+}
+
+/* Loading and error messages */
 .loading {
   color: blue;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
 }
 
 .error {
   color: red;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
 }
 
-/* 모달 스타일 */
+/* Modals */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -559,47 +788,35 @@ tr.selected {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 600px; /* 모달 창 크기를 줄여서 내부 요소들이 잘 맞게 */
-  max-height: 90vh; /* 높이를 최대 높이에 맞게 설정 */
-  overflow-y: auto; /* 넘치는 경우 스크롤을 추가 */
+  width: 600px;
+  max-height: 100vh;
+  overflow-y: auto;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
-.project-edit-thumbnail-container {
-  width: 45%; /* 썸네일 크기를 줄임 */
-  height: 100px; /* 높이 줄이기 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ddd;
-}
-
-.project-edit-thumbnail {
-  max-width: 100%; /* 이미지가 컨테이너 내에서 넘치지 않도록 조정 */
-  max-height: 100%; /* 이미지의 높이를 고정 */
-  object-fit: cover; /* 이미지 비율을 유지하며 구역을 채우도록 설정 */
-}
-
-.status-group {
-  width: 45%; /* 모집 상태 크기 조정 */
-}
-
+/* Close button for modals */
 button.close-btn {
   position: absolute;
   top: 10px;
   right: 15px;
-}
-
-button.save-btn, button.cancel-btn {
-  padding: 5px 11px;
-  border-radius: 5px;
+  font-size: 24px;
+  background: none;
   border: none;
   cursor: pointer;
 }
 
+/* Save/Cancel button styles in modal */
+button.save-btn, button.cancel-btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 button.save-btn {
-  background-color: #262627;
+  background-color: #007bff;
   color: white;
 }
 
@@ -608,8 +825,16 @@ button.cancel-btn {
   color: #333;
 }
 
+button.save-btn:hover {
+  background-color: #0056b3;
+}
+
+button.cancel-btn:hover {
+  background-color: #bbb;
+}
+
 .modal-form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .modal-form-group label {
@@ -628,14 +853,50 @@ button.cancel-btn {
   border-radius: 4px;
 }
 
+/* Date input style */
+.date-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
 
-/* 모집 상태 선택 상자의 크기를 텍스트 크기에 맞게 설정 */
-.modal-form-group select {
-  width: auto;
-  padding: 5px; /* 선택 상자의 내부 여백을 조금 추가 */
-  font-size: 14px; /* 텍스트 크기 조정 */
+/* File input styling */
+input[type="file"] {
+  display: block;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Project creation button */
+.create-project-btn {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.create-project-btn:hover {
+  background-color: #218838;
+}
+
+/* Project edit thumbnail */
+.project-edit-thumbnail-container {
+  width: 45%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #ddd;
-  border-radius: 4px;
+}
+
+.project-edit-thumbnail {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
 }
 
 .project-image-status-row {
@@ -645,17 +906,8 @@ button.cancel-btn {
   margin-bottom: 20px;
 }
 
-.date-input {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+.project-board-description{
 
-input[type="file"] {
-  display: block;
-  font-size: 14px;
-  margin-top: 10px;
 }
-
 
 </style>

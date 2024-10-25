@@ -27,9 +27,8 @@ const props = defineProps({
               <p class="mt-2">
                 {{ project.projectContent }}
               </p> <br />
-              <p><strong>모집 일정 &nbsp; : &nbsp; </strong> {{ project.projectBoardStartDate }} ~ {{ project.projectBoardEndDate }}</p>
+<!--              <p><strong>모집 일정 &nbsp; : &nbsp; </strong> {{ project.projectBoardStartDate }} ~ {{ project.projectBoardEndDate }}</p>-->
               <p><strong>프로젝트 기간 &nbsp; : &nbsp; </strong> {{ project.projectStartDate }} ~ {{ project.projectEndDate }}</p>
-              <p><strong>모집 분야 &nbsp; : &nbsp; </strong> 백엔드 / 서버</p>
               <p><strong>참여 인원 &nbsp; : &nbsp;  </strong> {{ project.projectHeadCount }}</p>
             </div>
           </b-card-body>

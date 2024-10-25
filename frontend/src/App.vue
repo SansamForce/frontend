@@ -27,5 +27,10 @@ onMounted(() => {
 
 body {
   font-family: Georgia, "돋움", serif;
+  user-select: none;
+}
+
+* {
+  user-select: none; /* 모든 요소에 적용 */
 }
 </style>
