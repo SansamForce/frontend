@@ -35,7 +35,8 @@ onMounted(() => fetchTeamChatDetail());
 
 <template>
   <!-- 채팅방 섹션 -->
-  <h6>팀 채팅</h6>
+  <br/><br/>
+  <h5 class="team-chat-text">팀 채팅방</h5>
   <b-card v-if="teamChatResponse">
     <h5>{{teamChatResponse.teamChatName}}</h5>
     <h6>{{teamChatResponse.teamChatComment}}</h6>
@@ -54,5 +55,15 @@ onMounted(() => fetchTeamChatDetail());
 </template>
 
 <style scoped>
+.team-chat-text {
+  font-weight: bold;
+}
 
+.team-chat-text:after {
+  content: "";
+  display: block;
+  width: 11%;
+  border-bottom: 2px solid #000000;
+  margin: 13px 0 13px 0;
+}
 </style>

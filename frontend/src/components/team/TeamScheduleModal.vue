@@ -43,19 +43,21 @@ export default {
     <div class="modal-text">
       <div v-if="isEditMode">
         <!-- 일정 수정 -->
-        <p style="font-weight: bold; font-size: 1.2rem;">팀 일정 수정</p>
-        <input v-model="newEventTitle" type="text" value="teamScheduleContent" /> <br />
+        <p style="font-weight: bold; font-size: 1.2rem;">팀 일정 수정</p> <br />
+        <span>일정 내용</span>&nbsp;&nbsp;
+        <input class="event-text-box" v-model="newEventTitle" type="text" value="teamScheduleContent" /> <br />
       </div>
       <div v-else>
         <!-- 일정 추가 -->
-        <p style="font-weight: bold; font-size: 1.2rem;">팀 일정 추가</p>
-        <input v-model="newEventTitle" type="text" placeholder="이벤트를 입력하세요." /> <br />
+        <p style="font-weight: bold; font-size: 1.2rem;">팀 일정 추가</p><br />
+        <span>일정 내용</span>&nbsp;&nbsp;&nbsp;
+        <input class="event-text-box" v-model="newEventTitle" type="text" placeholder="이벤트를 입력하세요." /> <br />
       </div>
-
-      <div class="modal-buttons" style="margin-top: 20px;">
-        <button @click="cancel">취소</button>
-        <button @click="isEditMode ? confirm('UPDATE') : confirm('CREATE')">확인</button>
-        <button v-if="isEditMode" @click="deleteEvent">삭제</button>
+      <br />
+      <div class="modal-buttons" style="margin-top: 20px; margin-right: 10px; float: right">
+        <b-button variant="dark" @click="cancel">취소</b-button> &nbsp;
+        <b-button variant="dark" @click="isEditMode ? confirm('UPDATE') : confirm('CREATE')">확인</b-button>&nbsp;
+        <b-button variant="dark" v-if="isEditMode" @click="deleteEvent">삭제</b-button>
       </div>
     </div>
   </div>
@@ -83,7 +85,7 @@ export default {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  max-width: 400px;
+  max-width: 410px;
   width: 100%;
   z-index: 1000; /* 백드롭보다 위에 표시 */
 }

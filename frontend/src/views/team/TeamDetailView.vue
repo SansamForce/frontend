@@ -3,6 +3,7 @@ import axios from "axios";
 import {onMounted, ref, watch} from "vue";
 import TeamMember from "@/components/team/TeamMember.vue";
 import TeamSchedule from "@/components/team/TeamSchedule.vue";
+import TeamMemberSchedule from "@/components/team/TeamMemberSchedule.vue";
 import TeamChat from "@/views/team/TeamChatView.vue";
 
 const props = defineProps({
@@ -20,10 +21,12 @@ const props = defineProps({
 watch(() => props.teamSeq, (newSeq) => {
   console.log(newSeq);
   fetchTeamDetail();
+  fetchTeamMemberSchedule();
   // 필요에 따라 추가 로직
 });
 
 const team = ref(null);
+const teamMemberSchedule = ref(null);
 
 const fetchTeamDetail = async () => {
   try {
@@ -40,9 +43,23 @@ const fetchTeamDetail = async () => {
   }
 }
 
+const fetchTeamMemberSchedule = async () => {
+  try {
+    const memberSchedule = await axios.get(`http://localhost:8086/api/v1/team/${props.teamSeq}/memberSchedule`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    })
+    teamMemberSchedule.value = memberSchedule.data.data;
+  } catch (error) {
+    console.error('팀 정보를 불러오는 중 에러가 발생했습니다.');
+  }
+}
+
 onMounted(() => {
   fetchTeamDetail();
-})
+  fetchTeamMemberSchedule();
+});
 
 </script>
 
@@ -58,6 +75,7 @@ onMounted(() => {
         <h4 class="team-name">{{team.teamName}}</h4>
         <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/> <br />
         <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq" />
+        <TeamMemberSchedule v-if="teamMemberSchedule" :team-member-schedule-list="teamMemberSchedule" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq"/>
         <TeamChat v-if="team.teamChatResponse && !isAdmin" :team-chat-response="team.teamChatResponse"/>
         </div>
       </b-card-body>
