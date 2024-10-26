@@ -60,7 +60,7 @@ onMounted(() => {
       <div class="col-md-6">
         <b-card class="h-100">
           <template v-if="firstTeamSeq !== 0">
-            <TeamDetail :isAdmin="false" :team-seq="firstTeamSeq" class="card" />
+            <TeamDetail :isAdmin="false" :team-seq="firstTeamSeq" :projectStatus="project.projectStatus" class="card" />
           </template>
           <template v-else>
             <div class="no-team-container text-center">
