@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted, reactive, computed} from 'vue';
 import axios from 'axios';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import MemberProjectDetail from '@/components/project/MemberProjectDetail.vue';
 import TeamDetail from "@/views/team/TeamDetailView.vue";
 import MentorProjectDetail from "@/components/project/MentorProjectDetail.vue";
@@ -9,7 +9,6 @@ import ProjectTeamListView from "@/views/project/ProjectTeamListView.vue";
 import ProjectMemberListView from "@/views/project/ProjectMemberListView.vue";
 // 상태 관리
 const route = useRoute();
-const router = useRouter();
 
 // 프로젝트 ID 가져오기
 const projectSeq = route.params.id;
