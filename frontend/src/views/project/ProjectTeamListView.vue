@@ -1,11 +1,16 @@
 <script setup>
 
 import {ref} from "vue";
+import router from "@/router/index.js";
 
 const props = defineProps({
   projectTeamList: {
     type: Array,
     required: true
+  },
+  projectSeq: {
+    type: Number,
+    required:true
   }
 });
 
@@ -18,6 +23,10 @@ const teamSeqToParent = (seq) => {
   emit('selectTeam', teamSeq.value)
 }
 
+// 팀 빌딩 화면으로 이동하는 함수
+const navigateToTeamBuilding = () => {
+  router.push({ name: 'TeamBuilding', params: { id: props.projectSeq } });
+};
 </script>
 
 <template>
@@ -63,7 +72,7 @@ const teamSeqToParent = (seq) => {
         T-Building에서 제공하는 자동 팀 빌딩모드로<br />
         지금 바로 팀을 빌딩해 보세요!
       </p>
-      <b-button variant="dark" style="float: right; height: 35px;">팀 빌딩하기</b-button>
+      <b-button variant="dark" style="float: right; height: 35px;" @click="navigateToTeamBuilding">팀 빌딩하기</b-button>
     </div>
   </template>
 </template>

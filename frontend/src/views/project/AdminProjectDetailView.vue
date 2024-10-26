@@ -81,8 +81,8 @@ onMounted(() => {
                              @selectTeam="receiveTeamSeqFromChild"/>
       </b-card>
     </div>
-    <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq" :is-admin="true"/>
-    <TeamDetail v-else :team-seq="teamSeq" :is-admin="isAdmin" class="card" />
+    <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq" :isAdmin="true"/>
+    <TeamDetail v-else :team-seq="teamSeq" :isAdmin="isAdmin" class="card" />
   </div>
   <div v-else>
     <p>Loading...</p>
