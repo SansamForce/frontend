@@ -3,9 +3,10 @@ import {ref, onMounted} from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
 import TeamDetail from "@/views/team/TeamDetailView.vue";
-import MentorProjectDetail from "@/components/project/MentorProjectDetail.vue";
+import AdminProjectDetail from "@/components/project/AdminProjectDetail.vue";
 import AdminProjectTeamListView from "@/views/project/AdminProjectTeamListView.vue";
 import ProjectMemberListView from "@/views/project/ProjectMemberListView.vue";
+import ProjectUpdateModal from "@/components/project/ProjectUpdateModal.vue";
 
 const route = useRoute(); // 라우터 호출 시 ${seq} 값을 가져오기 위함
 const isAdmin = ref(true);
@@ -52,18 +53,30 @@ const receiveTeamSeqFromChild = (value) => {
   teamSeq.value = value; // 자식으로부터 받은 값을 저장
 };
 
+const isEditModalOpen = ref(false);
+const receiveModalOpenFromChild = (value) => {
+  isEditModalOpen.value = value
+}
+
+const receiveModalCloseFromChild = (value) => {
+  console.log(value);
+  isEditModalOpen.value = value
+}
+
 // 페이지가 로드될 때 API 호출
 onMounted(() => {
   fetchProjectDetail()
   fetchProjectTeamList()
 })
+
 </script>
 
 <template>
   <div class="row card-container" v-if="projectTeamList && project">
     <div class="col-md-6">
       <b-card class="h-100">
-        <MentorProjectDetail :project="project" class="card"/>
+        <AdminProjectDetail :project="project" class="card"
+                            @openModal="receiveModalOpenFromChild"/>
         <AdminProjectTeamListView :project-team-list="projectTeamList"
                              @selectTeam="receiveTeamSeqFromChild"/>
       </b-card>
@@ -74,6 +87,10 @@ onMounted(() => {
   <div v-else>
     <p>Loading...</p>
   </div>
+  <ProjectUpdateModal v-if="project"
+                      :is-edit-modal-open="isEditModalOpen"
+                      :project="project"
+                      @closeModal="receiveModalCloseFromChild"/>
 </template>
 
 <style scoped>

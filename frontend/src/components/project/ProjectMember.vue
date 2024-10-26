@@ -12,6 +12,7 @@ const showTooltip = ref(false);
 
 const toggleTooltip = () => {
   showTooltip.value = !showTooltip.value;
+
 }
 </script>
 
@@ -89,6 +90,7 @@ const toggleTooltip = () => {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 200px;
   z-index: 9999; /* 높게 설정하여 다른 요소 위에 표시 */
+  display: none;
 }
 
 .close-button {
