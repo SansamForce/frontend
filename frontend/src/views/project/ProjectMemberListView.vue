@@ -1,11 +1,16 @@
 <script setup>
 import ProjectMember from "@/components/project/ProjectMember.vue";
+import AdminProjectMember from "@/components/project/AdminProjectMember.vue";
 import axios from "axios";
 import {onMounted, ref} from "vue";
 
 const props = defineProps({
   projectSeq: {
     type: Number,
+    required: true
+  },
+  isAdmin: {
+    type: Boolean,
     required: true
   }
 });
@@ -35,7 +40,8 @@ onMounted(() => fetchProjectMemberList());
           <span style="font-weight: bold; font-size: 1.2rem;">내 프로젝트 팀 조회</span>
         </b-card-header>
         <b-card-body>
-          <ProjectMember v-if="projectMemberList" :project-member-list="projectMemberList"/>
+          <AdminProjectMember v-if="isAdmin && projectMemberList" :project-seq="projectSeq" :project-member-list="projectMemberList"/>
+          <ProjectMember v-if="!isAdmin && projectMemberList" :project-member-list="projectMemberList"/>
         </b-card-body>
       </div>
     </b-card>
