@@ -1,3 +1,8 @@
+<script setup>
+import { useUserStore } from '@/stores/UserStore';
+
+const userStore = useUserStore();
+</script>
 <script>
 export default {
   props: {
@@ -77,6 +82,11 @@ export default {
       <div v-if="isEditMode">
         <span>강사 피드백 내용</span>&nbsp;&nbsp;
         <input class="event-text-box" v-model="newEventFeedback" type="text" readonly="readonly" /> <br />
+        <br />
+      </div>
+      <div v-if="userStore.auth === 'MENTOR'">
+        <span>강사 피드백 내용</span>&nbsp;&nbsp;
+        <input class="event-text-box" v-model="newEventFeedback" type="text" /> <br />
         <br />
       </div>
       <div class="modal-buttons" style="margin-top: 20px; margin-right: 10px; float: right">
