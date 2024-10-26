@@ -22,7 +22,6 @@ const goToProjectDetail = (seq) => {
         <b-img :src="project.projectImgUrl" :alt="project.projectTitle" class="mb-2"></b-img>
       </b-row>
       <b-card-text class="left-align">
-        ttes
         <div>{{ project.projectTitle }}</div>
         <span class="badge" :class="{'badge-primary': project.projectStatus === 'PROGRESS', 'badge-secondary': project.projectStatus === 'END'}">
           {{ project.projectStatus === 'PROGRESS' ? "진행중" : "종료됨"}}
