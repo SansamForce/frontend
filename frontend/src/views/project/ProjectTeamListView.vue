@@ -72,7 +72,7 @@ const navigateToTeamBuilding = () => {
         T-Building에서 제공하는 자동 팀 빌딩모드로<br />
         지금 바로 팀을 빌딩해 보세요!
       </p>
-      <b-button variant="dark" style="float: right; height: 35px;" @click="navigateToTeamBuilding">팀 빌딩하기</b-button>
+      <b-button variant="dark" style="height: 35px;" @click="navigateToTeamBuilding">팀 빌딩하기</b-button>
     </div>
   </template>
 </template>

@@ -26,7 +26,7 @@ const routes = [
   },
   {
     path: "/projects/:id",
-    component: () => import("@/views/project/ProjectDetailView.vue"),
+    component: () => import("@/views/project/MemberProjectDetailView.vue"),
     meta: { requiresAuth: true } // 로그인 필요
   },
   {

@@ -23,7 +23,6 @@ const fetchProjectList = async () => {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
-    console.log(projectList)
 
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
