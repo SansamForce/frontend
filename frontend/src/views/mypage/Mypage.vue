@@ -103,16 +103,18 @@ const fetchUserData = async () => {
 
     const userData = response.data.data;
 
+    // 성별 값 매핑
     if (userData.userGender === 'MALE') {
       userData.userGender = 'male';
     } else if (userData.userGender === 'FEMALE') {
       userData.userGender = 'female';
     }
 
+    // 이미지 URL이 있는 경우 설정
     user.value = userData;
-
-    // S3에서 받아온 이미지가 있으면 사용
-    console.log("Profile Image URL:", user.value.userProfileImg);
+    if (user.value.userProfileImg) {
+      user.value.profileImg = user.value.userProfileImg; // 이미지 URL 설정
+    }
 
     if (user.value.userBirthDate) {
       user.value.userBirthDate = user.value.userBirthDate.split('T')[0];
@@ -122,7 +124,6 @@ const fetchUserData = async () => {
     errorMessage.value = '사용자 정보를 불러오는데 실패했습니다.';
   }
 };
-
 
 const saveChanges = async () => {
   try {
@@ -134,7 +135,7 @@ const saveChanges = async () => {
 
     const formData = new FormData();
     formData.append('request', new Blob([JSON.stringify(user.value)], {type: 'application/json'})); // JSON 데이터 추가
-    if (user.value.profileImg) {
+    if (user.value.profileImg instanceof File) { // 파일 여부 확인
       formData.append('userProfileImg', user.value.profileImg); // 파일 추가
     }
 
@@ -152,9 +153,7 @@ const saveChanges = async () => {
 
     successMessage.value = '사용자 정보가 성공적으로 저장되었습니다.';
 
-
     alert('저장되었습니다.');
-
     router.push('/');
   } catch (error) {
     console.error('Error saving user data:', error);
@@ -178,7 +177,7 @@ const navigateToRepoManagement = () => {
 const onImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    user.value.profileImg = URL.createObjectURL(file);
+    user.value.profileImg = file; // 파일 자체를 저장
   }
 };
 
