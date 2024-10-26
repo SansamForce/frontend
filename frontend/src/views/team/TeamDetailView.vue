@@ -3,7 +3,7 @@ import axios from "axios";
 import {onMounted, ref, watch} from "vue";
 import TeamMember from "@/components/team/TeamMember.vue";
 import TeamSchedule from "@/components/team/TeamSchedule.vue";
-import TeamMemberSchedule from "@/components/team/TeamMemberSchedule.vue";``
+import TeamMemberSchedule from "@/components/team/TeamMemberSchedule.vue";
 import TeamChat from "@/views/team/TeamChatView.vue";
 
 const props = defineProps({
@@ -21,6 +21,7 @@ const props = defineProps({
 watch(() => props.teamSeq, (newSeq) => {
   console.log(newSeq);
   fetchTeamDetail();
+  fetchTeamMemberSchedule();
   // 필요에 따라 추가 로직
 });
 
@@ -44,8 +45,7 @@ const fetchTeamDetail = async () => {
 
 const fetchTeamMemberSchedule = async () => {
   try {
-    //TODO 아영 - 1 하드코딩한거 teamSeq 입력하기
-    const memberSchedule = await axios.get(`http://localhost:8086/api/v1/team/1/memberSchedule`, {
+    const memberSchedule = await axios.get(`http://localhost:8086/api/v1/team/${props.teamSeq}/memberSchedule`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -56,7 +56,10 @@ const fetchTeamMemberSchedule = async () => {
   }
 }
 
-onMounted(fetchTeamDetail, fetchTeamMemberSchedule);
+onMounted(() => {
+  fetchTeamDetail();
+  fetchTeamMemberSchedule();
+});
 
 </script>
 
@@ -72,7 +75,7 @@ onMounted(fetchTeamDetail, fetchTeamMemberSchedule);
         <h4 class="team-name">{{team.teamName}}</h4>
         <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/> <br />
         <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq" />
-        <TeamMemberSchedule :team-member-schedule-list="team.teamMemberScheduleList" />
+        <TeamMemberSchedule v-if="teamMemberSchedule" :team-member-schedule-list="teamMemberSchedule" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq"/>
         <TeamChat v-if="team.teamChatResponse && !isAdmin" :team-chat-response="team.teamChatResponse"/>
         </div>
       </b-card-body>

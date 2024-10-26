@@ -3,57 +3,82 @@ export default {
   props: {
     showModal: Boolean,
     isEditMode: Boolean,
-    teamMemberScheduleContent: {
-      type: String,
-      default: '',
+    eventData: {
+      type : Object,
+      required: true
     },
   },
   data() {
     return {
-      newEventTitle: this.teamScheduleContent, // teamScheduleContent를 기본값으로 설정
+      newEventTitle: this.eventData.title || '', // 이벤트 제목
+      newEventPercent: this.eventData.percent || '', // 진행 퍼센트
+      newEventFeedback: this.eventData.feedback || '', // 피드백
+      newEventStart: this.eventData.start || '', // 시작일자
+      newEventEnd: this.eventData.end || '', // 종료일자
     };
-  },
-  watch: {
-    // 모달이 열릴 때마다 newEventTitle을 teamScheduleContent로 업데이트
-    showModal(newVal) {
-      if (newVal && this.isEditMode) {
-        this.newEventTitle = this.teamScheduleContent;
-      }
-    }
   },
   methods: {
     confirm(type) {
-      this.$emit('confirm', type, this.newEventTitle);
-      this.newEventTitle = ''; // 입력 필드 초기화
+      const eventDetails = {
+        title: this.newEventTitle,
+        percent: this.newEventPercent,
+        //feedback: this.newEventFeedback,
+        start: this.newEventStart,
+        end: this.newEventEnd,
+      };
+      this.$emit('confirm', { type, eventDetails });
+      this.resetForm();
     },
     cancel() {
       this.$emit('cancel');
-      this.newEventTitle = ''; // 입력 필드 초기화
+      this.resetForm(); // 취소 시 입력 필드 초기화
     },
     deleteEvent() {
       this.$emit('delete');
-      this.newEventTitle = '';
+      this.resetForm();
     },
+    resetForm() {
+      // 입력 필드 초기화
+      this.newEventTitle = '';
+      this.newEventPercent = '';
+      this.newEventStart = '';
+      this.newEventEnd = '';
+      this.newEventFeedback = '';
+    }
   },
 };
 </script>
 
 <template>
-  <div class="modal-backdrop">
+  <div class="modal-backdrop" v-if="showModal">
     <div class="modal-text">
       <div v-if="isEditMode">
         <!-- 일정 수정 -->
-        <p style="font-weight: bold; font-size: 1.2rem;">팀 일정 수정</p> <br />
+        <p style="font-weight: bold; font-size: 1.2rem;">팀원 진행상황 수정</p> <br />
         <span>일정 내용</span>&nbsp;&nbsp;
-        <input class="event-text-box" v-model="newEventTitle" type="text" value="teamScheduleContent" /> <br />
+        <input class="event-text-box" v-model="newEventTitle" type="text" /> <br />
       </div>
       <div v-else>
         <!-- 일정 추가 -->
-        <p style="font-weight: bold; font-size: 1.2rem;">팀 일정 추가</p><br />
-        <span>일정 내용</span>&nbsp;&nbsp;&nbsp;
+        <p style="font-weight: bold; font-size: 1.2rem;">팀원 진행상황 추가</p><br />
+        <span>일정 내용</span>&nbsp;&nbsp;
         <input class="event-text-box" v-model="newEventTitle" type="text" placeholder="이벤트를 입력하세요." /> <br />
       </div>
       <br />
+      <span>일정 진행율</span>&nbsp;&nbsp;
+      <input class="event-text-box" v-model="newEventPercent" type="text" /> <br />
+      <br />
+      <span>일정 시작일</span>&nbsp;&nbsp;
+      <input class="event-text-box" v-model="newEventStart" type="date" /> <br />
+      <br />
+      <span>일정 종료일</span>&nbsp;&nbsp;
+      <input class="event-text-box" v-model="newEventEnd" type="date" /> <br />
+      <br />
+      <div v-if="isEditMode">
+        <span>강사 피드백 내용</span>&nbsp;&nbsp;
+        <input class="event-text-box" v-model="newEventFeedback" type="text" readonly="readonly" /> <br />
+        <br />
+      </div>
       <div class="modal-buttons" style="margin-top: 20px; margin-right: 10px; float: right">
         <b-button variant="dark" @click="cancel">취소</b-button> &nbsp;
         <b-button variant="dark" @click="isEditMode ? confirm('UPDATE') : confirm('CREATE')">확인</b-button>&nbsp;

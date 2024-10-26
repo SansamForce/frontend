@@ -4,6 +4,10 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  teamScheduleList: {
+    type: Array,
+    required: true
+  },
   teamSeq: {
     type: BigInt,
     required: true
@@ -22,7 +26,7 @@ const props = defineProps({
   </div>
 
   <!-- 모달 창 -->
-  <Modal v-if="showModal" :show-modal="showModal" :team-member-schedule-content="teamMemberScheduleContent" :isEditMode="isEditMode" @confirm="handleModalConfirm" @cancel="handleModalCancel"  @delete="handleModalDelete" />
+  <Modal v-if="showModal" :show-modal="showModal" :event-data="selectedDateInfo" :isEditMode="isEditMode" @confirm="handleModalConfirm" @cancel="handleModalCancel"  @delete="handleModalDelete" />
 </template>
 
 <script>
@@ -40,11 +44,6 @@ export default {
   },
   data() {
     return {
-      fields: [
-        { key: 'teamScheduleContent', label: '일정내용' },
-        { key: 'teamScheduleEndDate', label: '마감일자' },
-        { key: 'teamScheduleStartDate', label: '시작일자' },
-      ],
       calendarOptions: {
         editable: true,
         eventResizableFromStart: true, // 시작 부분에서 리사이징 가능하게 설정
@@ -62,16 +61,19 @@ export default {
         eventClick: this.handleEventClick,
         eventDrop: this.handleEventDrop,
         eventResize: this.handleEventResize, // 리사이즈 핸들러 연결
-        events: this.convertScheduleListToEvents(this.teamScheduleList),
+        events: [],
       },
       showModal: false, // 모달 상태 관리
       selectedDateInfo: null, // 선택한 날짜 정보 저장
       isEditMode: false,
-      teamScheduleContent : '',
     };
   },
   props: {
     teamScheduleList: {
+      type: Array,
+      required: true
+    },
+    teamMemberScheduleList: {
       type: Array,
       required: true
     },
@@ -81,18 +83,21 @@ export default {
     }
   },
   mounted() {
-    if (this.teamScheduleList.length > 0) {
-      this.calendarOptions.eventc = this.convertScheduleListToEvents(this.teamScheduleList);
+    if (this.teamMemberScheduleList.length > 0) {
+      this.calendarOptions.events = this.convertScheduleListToEvents(this.teamMemberScheduleList);
     }
   },
   methods: {
-    // teamScheduleList를 FullCalendar에서 사용할 수 있는 이벤트 형식으로 변환
     convertScheduleListToEvents(scheduleList) {
       return scheduleList.map(schedule => ({
-        id: schedule.teamScheduleSeq,
-        title: schedule.teamScheduleContent,
-        start: schedule.teamScheduleStartDate,
-        end: schedule.teamScheduleEndDate,
+        id: schedule.teamMemberScheduleSeq, // 각 이벤트에 고유한 ID가 있어야 합니다
+        title: schedule.teamScheduleProgressContent || 'Untitled Event', // 이벤트의 제목
+        start: schedule.startDate, // 시작 날짜 (YYYY-MM-DD 형식)
+        end: schedule.endDate, // 종료 날짜 (YYYY-MM-DD 형식)
+        extendedProps: { // 추가 속성
+          percent: schedule.teamScheduleProgressPercent,
+          feedback: schedule.teamScheduleProgressFeedback
+        }
       }));
     },
     handleDateSelect(info) {
@@ -100,16 +105,19 @@ export default {
       this.showModal = true; // 모달 창 열기
       this.isEditMode = false;
     },
-    async handleModalConfirm(type, eventTitle) {
-      if(type == 'CREATE') {
-        if (eventTitle && this.selectedDateInfo) {
+    async handleModalConfirm(type) {
+      if(type.type == 'CREATE') {
+        if (type.eventDetails && this.selectedDateInfo) {
           const newEvent = {
-            scheduleContent: eventTitle,
-            scheduleStartDate: this.selectedDateInfo.startStr,
-            scheduleEndDate: new Date(new Date(this.selectedDateInfo.endStr).getTime() - 86400000).toLocaleDateString('en-CA'),
+            teamScheduleSeq: 1,
+            teamMemberSeq:1,
+            memberScheduleContent: type.eventDetails.title,
+            memberSchedulePercent: type.eventDetails.percent,
+            startDate: type.eventDetails.start,
+            endDate: type.eventDetails.end,
           };
 
-          const response = await axios.post(`http://localhost:8086/api/v1/team/${this.teamSeq}/schedule`, newEvent, {
+          const response = await axios.post(`http://localhost:8086/api/v1/team/${this.teamSeq}/memberSchedule`, newEvent, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             }
@@ -124,15 +132,18 @@ export default {
               });
         }
 
-      } if(type == 'UPDATE') {
+      } if(type.type == 'UPDATE') {
         const updatedEventData = {
-          scheduleContent: eventTitle,
-          scheduleStartDate: this.selectedDateInfo.start,
-          scheduleEndDate: this.selectedDateInfo.end,
+          teamScheduleSeq: 1,
+          teamMemberSeq:1,
+          memberScheduleContent: type.eventDetails.title,
+          memberSchedulePercent: type.eventDetails.percent,
+          startDate: type.eventDetails.start,
+          endDate: type.eventDetails.end,
         };
 
         try {
-          await axios.put(`http://localhost:8086/api/v1/team/${this.teamSeq}/schedule/${this.selectedDateInfo.id}`, updatedEventData, {
+          await axios.put(`http://localhost:8086/api/v1/team/${this.teamSeq}/memberSchedule/${this.selectedDateInfo.id}`, updatedEventData, {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('authToken')}`
             }
@@ -142,9 +153,9 @@ export default {
           // FullCalendar의 이벤트 리스트에서도 수정
           const event = this.calendarOptions.events.find(e => e.id === this.selectedDateInfo.id);
           if (event) {
-            event.title = eventTitle;
-            event.start = this.selectedDateInfo.start;
-            event.end = this.selectedDateInfo.end;
+            event.title = type.eventDetails.title;
+            event.start = type.eventDetails.start;
+            event.end = type.eventDetails.end;
           }
         } catch (error) {
           console.error('이벤트 업데이트 중 오류 발생:', error);
@@ -158,19 +169,22 @@ export default {
       this.showModal = false; // 모달 창 닫기
     },
     handleEventClick(info) {
+      console.log(info.event);
       this.selectedDateInfo = { // 선택한 이벤트 데이터를 저장
-        id: info.event.id,
-        title: info.event.title,
+        id: info.event.id, // 각 이벤트에 고유한 ID가 있어야 합니다
+        title: info.event.title || 'Untitled Event', // 이벤트의 제목
+        percent: info.event.extendedProps.percent,
+        feedback: info.event.extendedProps.feedback,
         start: info.event.start.toLocaleDateString('en-CA'), // "YYYY-MM-DD" 형식으로 변환
         end: info.event.end ? info.event.end.toLocaleDateString('en-CA') : null
       };
-      this.teamScheduleContent = info.event.title;
+      console.log(this.selectedDateInfo);
       this.showModal = true; // 모달 창 열기
       this.isEditMode = true;
     },
     async handleModalDelete() {
       try {
-        await axios.delete(`http://localhost:8086/api/v1/team/${this.teamSeq}/schedule/${this.selectedDateInfo.id}`, {
+        await axios.delete(`http://localhost:8086/api/v1/team/${this.teamSeq}/memberSchedule/${this.selectedDateInfo.id}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`
           }
@@ -187,11 +201,10 @@ export default {
     },
     handleEventDrop(info) {
       const updatedEvent = {
-        scheduleContent: info.event.title,
         scheduleStartDate: info.event.start.toLocaleDateString('en-CA'),
         scheduleEndDate: info.event.end ? info.event.end.toLocaleDateString('en-CA') : null,
       };
-      axios.put(`http://localhost:8086/api/v1/team/${this.teamSeq}/schedule/${info.event.id}`, updatedEvent, {
+      axios.put(`http://localhost:8086/api/v1/team/${this.teamSeq}/memberSchedule/${info.event.id}`, updatedEvent, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         }
@@ -208,11 +221,12 @@ export default {
     },
     handleEventResize(info) {
       const updatedEvent = {
-        scheduleContent: info.event.title,
-        scheduleStartDate: info.event.start.toLocaleDateString('en-CA'),
-        scheduleEndDate: info.event.end ? info.event.end.toLocaleDateString('en-CA') : null,
+        teamScheduleProgressContent: info.event.title,
+        teamScheduleProgressPercent: info.event.percent,
+        startDate: info.event.start.toLocaleDateString('en-CA'),
+        endDate: info.event.end ? info.event.end.toLocaleDateString('en-CA') : null,
       };
-      axios.put(`http://localhost:8086/api/v1/team/${this.teamSeq}/schedule/${info.event.id}`, updatedEvent, {
+      axios.put(`http://localhost:8086/api/v1/team/${this.teamSeq}/memberSchedule/${info.event.id}`, updatedEvent, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         }
