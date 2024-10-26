@@ -329,8 +329,6 @@ onMounted(async () => {
 
 const updateProject = async () => {
   try {
-    console.log('editStatus:', editStatus.value); // editStatus 값 확인
-
     const projectBoardSeq = route.params.id;
     const formData = new FormData();
 
@@ -512,7 +510,6 @@ const createProject = async () => {
         // projectSeq 기준으로 정렬하여 가장 큰 값을 가진 프로젝트 선택
         const latestProject = projects.sort((a, b) => b.projectSeq - a.projectSeq)[0];
 
-        console.log('최신 프로젝트:', latestProject);
         return latestProject;
       } catch (error) {
         console.error('프로젝트 목록을 가져오는 중 오류 발생:', error);
@@ -533,7 +530,6 @@ const createProject = async () => {
         member => member.applyStatus === 'APPROVED'
     );
 
-    console.log('승인된 회원 목록:', approvedMembers);
 
     if (approvedMembers.length === 0) {
       alert('승인된 회원이 없습니다.');
@@ -551,7 +547,6 @@ const createProject = async () => {
           'Content-Type': 'application/json',
         }
       });
-      console.log("프로젝트 회원 타입"+member.projectMemberDevelopType)
     }
 
     alert('해당 프로젝트에 승인된 회원이 추가되었습니다.');

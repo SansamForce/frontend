@@ -169,7 +169,6 @@ export default {
       this.showModal = false; // 모달 창 닫기
     },
     handleEventClick(info) {
-      console.log(info.event);
       this.selectedDateInfo = { // 선택한 이벤트 데이터를 저장
         id: info.event.id, // 각 이벤트에 고유한 ID가 있어야 합니다
         title: info.event.title || 'Untitled Event', // 이벤트의 제목
@@ -178,7 +177,7 @@ export default {
         start: info.event.start.toLocaleDateString('en-CA'), // "YYYY-MM-DD" 형식으로 변환
         end: info.event.end ? info.event.end.toLocaleDateString('en-CA') : null
       };
-      console.log(this.selectedDateInfo);
+
       this.showModal = true; // 모달 창 열기
       this.isEditMode = true;
     },

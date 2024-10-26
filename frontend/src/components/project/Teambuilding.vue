@@ -87,8 +87,6 @@ export default {
 
         // API 응답을 받아서 팀 빌딩 결과를 화면에 표시
         this.teamBuildingResult = response.data;
-
-        console.log('팀 빌딩 결과: ', this.teamBuildingResult);
       } catch (error) {
         console.error('팀 빌딩 중 에러 발생:', error);
       }

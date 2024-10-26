@@ -46,7 +46,6 @@ const handleImageChange = (event) => {
 
 const updateProject = async() => {
   try {
-    console.log(projectSeq.value);
     const jsonData = new FormData();
 
     const formattedProjectStartDate = new Date(projectStartDate.value).toISOString();

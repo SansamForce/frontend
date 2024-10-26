@@ -23,7 +23,6 @@ const props = defineProps({
 
 // teamSeq가 변경될 때 로직 추가 (필요한 경우)
 watch(() => props.teamSeq, (newSeq) => {
-  console.log(newSeq);
   fetchTeamDetail();
   fetchTeamMemberSchedule();
   // 필요에 따라 추가 로직

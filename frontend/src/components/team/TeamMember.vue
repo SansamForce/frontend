@@ -29,7 +29,6 @@ const fetchTeamMember = async () => {
     );
 
     teamMember.value = response.data.data;
-    console.log(teamMember.value.teamMemberSeq)
   } catch (error) {
     console.error("평가 정보를 불러오는 중 오류 발생:", error);
   }
@@ -59,7 +58,7 @@ const saveEvaluation = async () => {
     reviewStar: rating.value,
     reviewContent: comment.value,
   };
-  console.log(payload)
+
   try {
     const response = await axios.post(`http://localhost:8086/api/v1/team/${props.teamSeq}/review`, payload, {
           headers: {
@@ -96,15 +95,12 @@ const openEvaluationModal = async (member) => {
         }
     );
     reviewObject.value =  response.data.data;
-    console.log(response.data.data);
 
     if (response.data.data) {
       reviewObject.value = response.data.data;
       reviewSeq.value = reviewObject.value.userReviewSeq;
       rating.value = reviewObject.value.teamMemberReviewStar || 0;
       comment.value = reviewObject.value.teamMemberReviewContent || "";
-      console.log(rating.value)
-      console.log(comment.value)
     } else {
       reviewObject.value = null;
       rating.value = 0;

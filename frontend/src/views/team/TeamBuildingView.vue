@@ -231,7 +231,6 @@ export default {
         });
 
         if (response.data.success) {
-          console.log("팀 생성 성공:", response.data);
           alert("팀 생성이 완료되었습니다.");
           const createdTeams = response.data.data;
           await this.createTeamChats(createdTeams);
@@ -260,8 +259,6 @@ export default {
               'Content-Type': 'application/json',
             }
           });
-
-          console.log(`팀 ${team.teamName}의 채팅방 생성 완료 (teamSeq: ${team.teamSeq})`);
         }
         alert("팀 채팅방이 성공적으로 생성되었습니다.");
       } catch (error) {

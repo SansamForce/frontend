@@ -39,8 +39,6 @@ const fetchProjectTeamDetail = async () => {
     projectTeamList.value = projectTeamResponse.data.data;
     firstTeamSeq.value = projectTeamList.value.length > 0 ? projectTeamList.value[0].teamSeq : 0;
 
-    // 첫 번째 팀 시퀀스 안전하게 가져오는 계산된 속성
-    console.log(projectTeamList.value);
   } catch (error) {
     console.error('팀 정보를 불러오는 중 에러가 발생했습니다.', error);
   }

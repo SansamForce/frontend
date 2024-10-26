@@ -7,8 +7,6 @@ const props = defineProps({
     required: true
   }
 });
-
-console.log("test :: ",props.projectList);
 </script>
 
 <template>

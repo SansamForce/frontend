@@ -34,7 +34,6 @@ const editedMember = ref({});  // 수정할 행의 데이터를 임시 저장
 const editMember = (index, member) => {
   editIndex.value = index;
   editedMember.value = { ...member }; // 수정할 데이터를 임시 저장
-  console.log(editedMember)
 };
 
 // 수정 저장

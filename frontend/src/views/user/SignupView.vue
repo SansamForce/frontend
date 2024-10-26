@@ -109,8 +109,6 @@ const handleSignup = async () => {
       gender: gender.value
     });
 
-    // 성공 시 처리
-    console.log('회원가입 성공:', response.data);
     alert('회원가입이 완료되었습니다.');
 
     // 회원가입 성공 후 로그인 페이지로 이동

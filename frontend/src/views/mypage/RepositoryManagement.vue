@@ -105,7 +105,7 @@ export default {
       try {
         if (userSeq) {
           const response = await axios.get(`http://localhost:8086/api/v1/user/${userSeq}/GithubRepository`, { headers });
-          console.log(response.data.data); // 데이터 확인
+
           repositories.value = response.data.data.map(repo => ({
             userGithubRepositorySeq: repo.userGithubRepositorySeq,
             userRepositoryName: repo.userRepositoryName,
@@ -133,7 +133,7 @@ export default {
     };
 
     const editRepo = (repo) => {
-      console.log('수정할 레포지토리:', repo);  // 레포지토리 정보 확인
+
       form.value = { ...repo };
       currentRepo.value = repo;
       editMode.value = true;
@@ -149,9 +149,9 @@ export default {
         };
 
         if (editMode.value) {
-          console.log("Repo to edit: ", currentRepo.value);
+
           if (currentRepo.value && currentRepo.value.userGithubRepositorySeq) {
-            console.log(`${userSeq} ,${currentRepo.value.userGithubRepositorySeq}`)
+
             await axios.put(`http://localhost:8086/api/v1/user/${userSeq}/githubRepository/${currentRepo.value.userGithubRepositorySeq}`, requestData, { headers });
             successMessage.value = '레포지토리가 수정되었습니다.';
           } else {
