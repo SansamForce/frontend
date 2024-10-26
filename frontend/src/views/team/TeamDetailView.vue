@@ -40,7 +40,9 @@ const fetchTeamDetail = async () => {
   }
 }
 
-onMounted(fetchTeamDetail);
+onMounted(() => {
+  fetchTeamDetail();
+})
 
 </script>
 
