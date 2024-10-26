@@ -59,11 +59,12 @@ const teamSeqToParent = (seq) => {
       <p class="mt-3">
         진행 중인 팀이 존재하지 않습니다.
       </p>
+      <br>
+      
       <p>
-        T-Building에서 제공하는 자동 팀 빌딩모드로<br />
-        지금 바로 팀을 빌딩해 보세요!
+        강사를 지정해 팀을 빌딩한 이후 팀의 정보를 확인하실 수 있습니다.<br>
+        강사를 지정한 뒤 팀을 빌딩을 요청하세요.<br />
       </p>
-      <b-button variant="dark" style="float: right; height: 35px;">팀 빌딩하기</b-button>
     </div>
   </template>
 </template>
@@ -111,7 +112,7 @@ p {
 .team-image-container {
   width: 80px; /* 이미지 크기 줄임 */
   height: 80px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .team-image {

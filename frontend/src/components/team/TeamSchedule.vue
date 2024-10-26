@@ -27,7 +27,7 @@ const props = defineProps({
 
 <script>
 import axios from "axios";
-import Modal from "@/components/team/teamScheduleModal.vue";
+import Modal from "@/components/team/TeamScheduleModal.vue";
 import FullCalendar from '@fullcalendar/vue3'; // FullCalendar Vue3 컴포넌트
 import dayGridPlugin from '@fullcalendar/daygrid'; // 기본적인 그리드 형식의 달력 플러그인
 import timeGridPlugin from '@fullcalendar/timegrid'; // 시간 단위 그리드 플러그인
