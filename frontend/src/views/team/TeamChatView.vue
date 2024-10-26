@@ -1,6 +1,6 @@
 <script setup>
 
-import {onMounted, ref, reactive, watch} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
 import TeamChatComponent from "@/components/team/TeamChatComponent.vue";
 

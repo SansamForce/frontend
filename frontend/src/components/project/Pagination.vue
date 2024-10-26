@@ -1,10 +1,23 @@
+<script setup>
+
+const props = defineProps({
+  totalPage: {
+    type: Number,
+    required: true
+  },
+  currentPage: {
+    type: Number,
+    required: true,
+  }
+});
+</script>
 <template>
   <div class="pagination">
     <button :disabled="currentPage === 1" @click="$emit('changePage', currentPage - 1)">
       이전
     </button>
 
-    <span v-for="page in totalPages" :key="page" class="page-number">
+    <span v-for="page in totalPage" :key="page" class="page-number">
       <button
           :class="{ active: currentPage === page }"
           @click="$emit('changePage', page)"
@@ -13,26 +26,11 @@
       </button>
     </span>
 
-    <button :disabled="currentPage === totalPages" @click="$emit('changePage', currentPage + 1)">
+    <button :disabled="currentPage === totalPage" @click="$emit('changePage', currentPage + 1)">
       다음
     </button>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    totalPages: {
-      type: Number,
-      required: true,
-    },
-    currentPage: {
-      type: Number,
-      required: true,
-    },
-  },
-};
-</script>
 
 <style scoped>
 .pagination {

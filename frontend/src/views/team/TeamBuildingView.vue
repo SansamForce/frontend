@@ -30,7 +30,8 @@
     <!-- 로딩 중 화면 -->
     <div v-if="isBuilding" class="loading-spinner">
       <div class="spinner"></div>
-      <p>팀 빌딩 중입니다. 잠시만 기다려 주세요... 오래걸리는게 정상입니다 새로고침하지 마세요....</p>
+      <p>팀 빌딩 중입니다. 잠시만 기다려 주세요...
+        오래걸리는게 정상입니다 새로고침하지 마세요....</p>
     </div>
 
     <!-- 팀 빌딩 결과 화면 -->
@@ -42,23 +43,24 @@
       <div class="team-list">
         <div class="team" v-for="team in teamBuildingResult" :key="team.teamName">
           <h4>{{ team.teamName }}</h4>
-          <ul>
-            <li v-for="member in team.teamMembers" :key="member.userSeq" @mousemove="showTooltip(member, $event)" @mouseleave="hideTooltip">
-              <span class="member-name">{{ member.userName }}</span>
-              <!-- 점수 툴팁 -->
-              <div class="tooltip" v-if="tooltipVisible && currentMember === member" :class="{ 'tooltip-active': tooltipVisible }" :style="{ top: tooltipPosition.top + 'px', left: tooltipPosition.left + 'px' }">
-                <p><b>총점 = {{ calculateTotalScore(member) }}</b></p>
-                <p>분야: {{ member.developType }}</p>
-                <p>깃허브 점수: {{ member.githubScore }}</p>
-                <p>전공 점수: {{ member.majorScore }}</p>
-                <p>경력 점수: {{ member.careerScore }}</p>
-                <p>강사평가점수: {{ member.mentorEvaluationScore }}</p>
-                <p>회원평가점수: {{ member.teamEvaluationScore }}</p>
-                <p>→ {{ getScoreDetails(member) }}</p>
-              </div>
-            </li>
-          </ul>
+          <div class="member-list">
+            <div class="member-name" v-for="member in team.teamMembers" :key="member.userSeq" @mousemove="showTooltip(member, $event)" @mouseleave="hideTooltip">
+              {{ member.userName }}
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div v-if="tooltipVisible" class="tooltip tooltip-active" :style="{ top: `${tooltipPosition.top}px`, left: `${tooltipPosition.left}px` }">
+        <p>{{ currentMember?.userName }}</p>
+        <p><b>총점 = {{ calculateTotalScore(currentMember) }}</b></p>
+        <p>분야: {{ currentMember?.developType }}</p>
+        <p>깃허브 점수: {{ currentMember?.githubScore }}</p>
+        <p>전공 점수: {{ currentMember?.majorScore }}</p>
+        <p>경력 점수: {{ currentMember?.careerScore }}</p>
+        <p>강사평가점수: {{ currentMember?.mentorEvaluationScore }}</p>
+        <p>회원평가점수: {{ currentMember?.teamEvaluationScore }}</p>
+        <p>Score Details: {{ getScoreDetails(currentMember) }}</p>
       </div>
 
       <!-- 수정 / 완료 버튼 -->
@@ -96,7 +98,7 @@ export default {
         { id: 'ruleTeamReviewWeight', label: '팀원 평가 이력', value: 0, min: 0, max: 5 },
         { id: 'ruleMentorReviewWeight', label: '강사 평가 이력', value: 0, min: 0, max: 5 },
       ],
-      tooltipTimeout: null, // debounce용 변수 추가
+      tooltipTimeout: null,
     };
   },
   setup() {
@@ -211,7 +213,6 @@ export default {
 
     async completeTeamBuilding() {
       try {
-        // 팀 생성 데이터 준비
         const teams = this.teamBuildingResult.map(team => ({
           teamName: team.teamName,
           userSeqs: team.teamMembers.map(member => member.userSeq)
@@ -222,7 +223,6 @@ export default {
           teams: teams
         };
 
-        // 팀 생성 API 호출
         const response = await axios.post(`http://localhost:8086/api/v1/team`, payload, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
@@ -231,14 +231,12 @@ export default {
         });
 
         if (response.data.success) {
-          console.log("팀 생성 성공:", response.data);  // 팀 생성 성공 시 로그 추가
+          console.log("팀 생성 성공:", response.data);
           alert("팀 생성이 완료되었습니다.");
+          const createdTeams = response.data.data;
+          await this.createTeamChats(createdTeams);
 
-          const createdTeams = response.data.data; // response에서 teamSeq 목록을 받음
-          await this.createTeamChats(createdTeams); // 팀 채팅방 생성 로직 추가
-
-          // 프로젝트 상세 페이지로 이동
-          this.$router.push(`/projects/${this.projectSeq}`);
+          this.router.push(`/projects/${this.projectSeq}`);
         } else {
           alert("팀 생성 중 오류가 발생했습니다.");
         }
@@ -247,10 +245,8 @@ export default {
       }
     },
 
-// 팀 채팅방 생성 메서드
     async createTeamChats(createdTeams) {
       try {
-        // 생성된 팀 목록을 순회하며 팀 채팅방 생성 API 호출
         for (const team of createdTeams) {
           const chatPayload = {
             teamChatName: `${team.teamName} 채팅방`,
@@ -272,51 +268,26 @@ export default {
         console.error("팀 채팅방 생성 중 오류가 발생했습니다:", error);
       }
     }
-
   }
 };
 </script>
 
 <style scoped>
-.tooltip {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  font-size: 12px;
-  z-index: 1000;
-  pointer-events: none;
-  transition: opacity 0.1s ease-in-out;
-  opacity: 0;
-}
-
-.tooltip-active {
-  opacity: 1;
-}
-
-
-.team-building-buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.team-building-buttons b-button {
-  margin: 0 10px;
-}
-
 .team-building-container {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
 }
 
 .sliders {
-  margin-bottom: 20px;
+  padding: 10px;
 }
 
 .slider-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 input[type="range"] {
@@ -325,10 +296,9 @@ input[type="range"] {
 
 .team-building-button {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
-/* 로딩 중 화면 스타일 */
 .loading-spinner {
   display: flex;
   flex-direction: column;
@@ -353,26 +323,33 @@ input[type="range"] {
   }
 }
 
-/* 팀 빌딩 결과 스타일 */
 .team-building-result {
-  margin-top: 30px;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .team-list {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .team {
-  background-color: #f0f0f0;
-  padding: 10px;
+  background-color: #f5f5f5;
+  padding: 20px;
   border-radius: 10px;
-  width: 18%;
+  width: 150px;
 }
 
 .team h4 {
-  text-align: center;
   margin-bottom: 10px;
+}
+
+.member-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .member-name {
@@ -385,4 +362,28 @@ input[type="range"] {
   margin-bottom: 5px;
 }
 
+.tooltip {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.tooltip-active {
+  opacity: 1;
+}
+
+.team-building-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
 </style>

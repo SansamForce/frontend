@@ -26,14 +26,13 @@ const routes = [
   },
   {
     path: "/projects/:id",
-    component: () => import("@/views/project/ProjectDetailView.vue"),
+    component: () => import("@/views/project/MemberProjectDetailView.vue"),
     meta: { requiresAuth: true } // 로그인 필요
   },
   {
-    path: "/projects/:id/team-building",
-    name: "TeamBuilding",
-    component: () => import("@/views/team/TeamBuildingView.vue"),
-    meta: { requiresAuth: true } // 로그인 필요
+    path: "/mentor/projects/:id",
+    component: () => import("@/views/project/MentorProjectDetailView.vue"),
+    meta: { requiresAuth: true, isManagerOnly: true } // 로그인 필요
   },
   {
     path: '/admin/projects',
@@ -44,6 +43,12 @@ const routes = [
     path: "/admin/projects/:id",
     component: () => import("@/views/project/AdminProjectDetailView.vue"),
     meta: { requiresAuth: true, isManagerOnly: true } // 로그인 필요
+  },
+  {
+    path: "/projects/:id/team-building",
+    name: "TeamBuilding",
+    component: () => import("@/views/team/TeamBuildingView.vue"),
+    meta: { requiresAuth: true } // 로그인 필요
   },
   {
     path: "/projectBoards",

@@ -9,7 +9,6 @@ import ProjectMemberListView from "@/views/project/ProjectMemberListView.vue";
 import ProjectUpdateModal from "@/components/project/ProjectUpdateModal.vue";
 
 const route = useRoute(); // 라우터 호출 시 ${seq} 값을 가져오기 위함
-const isAdmin = ref(true);
 // 프로젝트 ID 가져오기
 const projectSeq = route.params.id; // ${seq} 값 저장
 
@@ -81,8 +80,8 @@ onMounted(() => {
                              @selectTeam="receiveTeamSeqFromChild"/>
       </b-card>
     </div>
-    <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq" :is-admin="true"/>
-    <TeamDetail v-else :team-seq="teamSeq" :is-admin="isAdmin" class="card" />
+    <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq" :isAdmin="true"/>
+    <TeamDetail v-else :team-seq="teamSeq" :isAdmin="true" class="card" />
   </div>
   <div v-else>
     <p>Loading...</p>
