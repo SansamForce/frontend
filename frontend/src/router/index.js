@@ -114,6 +114,11 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: "/team/:id/memberSchedule",
+    component: () => import("@/views/team/TeamDetailView.vue"),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/mypage/repository',
     name: 'RepositoryManagement',
     component: () => import('@/views/mypage/RepositoryManagement.vue'),
