@@ -96,13 +96,13 @@ const navigateToTeamBuilding = () => {
         </b-card>
       </div>
       <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq"/>
-      <TeamDetail v-if="teamSeq !== 0" :is-admin="project.projectMentorYn=== 'Y'" :team-seq="teamSeq" class="card" />
+      <TeamDetail v-if="teamSeq !== 0" :isAdmin="project.projectMentorYn=== 'Y'" :team-seq="teamSeq" class="card" />
     </div>
     <div class="row card-container" v-else>
       <MemberProjectDetail :project="project" class="card" />
       <div class="col-md-6">
         <b-card class="h-100">
-          <TeamDetail v-if="firstTeamSeq !== 0" :is-admin="project.projectMentorYn=== 'Y'" :team-seq="firstTeamSeq" class="card" />
+          <TeamDetail v-if="firstTeamSeq !== 0" :isAdmin="project.projectMentorYn=== 'Y'" :team-seq="firstTeamSeq" class="card" />
           <div class="no-team-container2 text-center" v-else>
             <!-- 경고 아이콘 -->
             <div class="warning-icon">

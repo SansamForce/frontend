@@ -2,16 +2,18 @@
 import ProjectItem from "@/components/project/ProjectItem.vue";
 
 const props = defineProps({
-  projects: {
+  projectList: {
     type: Array,
     required: true
   }
 });
+
+console.log("test :: ",props.projectList);
 </script>
 
 <template>
   <b-row>
-    <ProjectItem class="project-card" v-for="project in projects" :key="project.projectSeq" :project="project" />
+    <ProjectItem v-if="projectList" class="project-card" v-for="project in projectList" :key="project.projectSeq" :project="project" />
   </b-row>
 </template>
 
