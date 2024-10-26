@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useRoute } from 'vue-router';
 import TeamDetail from "@/views/team/TeamDetailView.vue";
 import MentorProjectDetail from "@/components/project/MentorProjectDetail.vue";
-import ProjectTeamListView from "@/views/project/ProjectTeamListView.vue";
+import AdminProjectTeamListView from "@/views/project/AdminProjectTeamListView.vue";
 import ProjectMemberListView from "@/views/project/ProjectMemberListView.vue";
 
 const route = useRoute(); // 라우터 호출 시 ${seq} 값을 가져오기 위함
@@ -49,9 +49,7 @@ const fetchProjectTeamList = async () => {
 // teamSeq 값이 0이 아니면 해당 팀의 팀 정보 조회
 const teamSeq = ref(0);
 const receiveTeamSeqFromChild = (value) => {
-  console.log(teamSeq.value);
   teamSeq.value = value; // 자식으로부터 받은 값을 저장
-  console.log(teamSeq.value);
 };
 
 // 페이지가 로드될 때 API 호출
@@ -66,11 +64,11 @@ onMounted(() => {
     <div class="col-md-6">
       <b-card class="h-100">
         <MentorProjectDetail :project="project" class="card"/>
-        <ProjectTeamListView :project-team-list="projectTeamList"
+        <AdminProjectTeamListView :project-team-list="projectTeamList"
                              @selectTeam="receiveTeamSeqFromChild"/>
       </b-card>
     </div>
-    <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq"/>
+    <ProjectMemberListView v-if="teamSeq === 0" :project-seq="projectSeq" :is-admin="true"/>
     <TeamDetail v-else :team-seq="teamSeq" :is-admin="isAdmin" class="card" />
   </div>
   <div v-else>

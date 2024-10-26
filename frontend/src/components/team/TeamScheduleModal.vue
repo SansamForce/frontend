@@ -72,7 +72,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* 충분히 높은 값으로 설정 */
+  z-index: 999; /* 충분히 높은 값으로 설정 */
 }
 
 .modal-text {
@@ -85,6 +85,6 @@ export default {
   border-radius: 8px;
   max-width: 400px;
   width: 100%;
-  z-index: 10000; /* 백드롭보다 위에 표시 */
+  z-index: 1000; /* 백드롭보다 위에 표시 */
 }
 </style>
