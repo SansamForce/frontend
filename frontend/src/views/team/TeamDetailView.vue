@@ -14,6 +14,10 @@ const props = defineProps({
   isAdmin: {
     type: Boolean,
     required: true
+  },
+  projectStatus: {
+    type: String,
+    required: true
   }
 })
 
@@ -73,7 +77,7 @@ onMounted(() => {
       <b-card-body>
         <div class="project-card">
         <h4 class="team-name">{{team.teamName}}</h4>
-        <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList"/> <br />
+        <TeamMember v-if="team.teamMemberList" :team-member-list="team.teamMemberList" :projectStatus="projectStatus" :teamSeq="team.teamSeq"/> <br />
         <TeamSchedule v-if="team.teamScheduleList" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq" />
         <TeamMemberSchedule v-if="teamMemberSchedule" :team-member-schedule-list="teamMemberSchedule" :team-schedule-list="team.teamScheduleList" :team-seq="team.teamSeq"/>
         <TeamChat v-if="team.teamChatResponse && !isAdmin" :team-chat-response="team.teamChatResponse"/>
