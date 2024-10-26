@@ -62,21 +62,26 @@ export const useUserStore = defineStore('user', {
     // 새로고침 시 상태 복원
     initialize() {
       const token = localStorage.getItem('authToken');
+      console.log("Loaded Token from localStorage:", token); // 토큰 로드 확인
       if (token) {
         try {
           const decodedToken = parseJwt(token);
-
-          // 토큰에서 사용자 정보 복원
+          console.log("Decoded Token:", decodedToken); // 디코딩된 토큰 확인
           this.auth = decodedToken.auth;
+    
+          // sub 필드를 userSeq로 설정
           this.user = {
-            id: decodedToken.sub,
-            userSeq: decodedToken.userSeq
+            userId: decodedToken.sub,   // id로 사용
+            userSeq: decodedToken.sub, // userSeq로 사용
           };
           this.isAuthenticated = true;
+          console.log("User after initialization:", this.user); // 초기화 후 user 확인
         } catch (error) {
           console.error('Token parsing error:', error);
-          this.logout(); // 토큰이 유효하지 않으면 로그아웃 처리
+          this.logout();
         }
+      } else {
+        console.warn("Token not found in localStorage.");
       }
     },
   },
