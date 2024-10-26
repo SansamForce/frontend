@@ -34,7 +34,7 @@
 
         <template v-if="userStore.auth === 'MANAGER' || userStore.auth === 'SUB_MANAGER'">
           <router-link to="/projectBoards" class="hover-text">BOARD</router-link>
-          <router-link to="/projects" class="hover-text">PROJECT</router-link>
+          <router-link to="/admin/projects" class="hover-text">PROJECT</router-link>
           <router-link to="/member" class="hover-text">MEMBER</router-link>
           <router-link to="/logout" @click.prevent="logout" class="hover-text auth-link">LOGOUT</router-link>
         </template>

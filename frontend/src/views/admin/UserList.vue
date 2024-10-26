@@ -37,8 +37,10 @@
         </td>
         <td>{{ user.userId }}</td>
         <td>{{ user.userNickname }}</td>
-        <td :class="user.userAuth === '관리자' ? 'role-admin' : ''">{{ user.userAuth }}</td>
-        <td :class="user.userStatus === '정지' ? 'status-red' : user.userStatus === '탈퇴' ? 'status-gray' : 'status-blue'">
+        <td :class="user.userAuth.toUpperCase() === 'MANAGER' ? 'role-manager' : ''">
+          {{ user.userAuth }}
+        </td>
+        <td :class="user.userStatus.toUpperCase() === 'DELETE' ? 'status-red' : user.userStatus.toUpperCase() === 'ACTIVE' ? 'status-blue' : 'status-gray'">
           {{ user.userStatus }}
         </td>
         <td>{{ user.regDate }}</td>
@@ -127,7 +129,8 @@ onMounted(() => {
   border-collapse: collapse;
 }
 
-.table th, .table td {
+.table th,
+.table td {
   padding: 8px;
   border: 1px solid #ddd;
   text-align: center;
@@ -155,6 +158,11 @@ onMounted(() => {
 }
 
 .role-admin {
+  color: red;
+  font-weight: bold;
+}
+
+.role-manager {
   color: red;
   font-weight: bold;
 }
