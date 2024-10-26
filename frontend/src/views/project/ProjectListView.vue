@@ -1,7 +1,7 @@
 <script setup>
 import ProjectList from "@/components/project/ProjectList.vue";
 import Pagination from "@/components/project/Pagination.vue";
-import {reactive, onMounted, computed, ref} from "vue";
+import {onMounted, computed, ref} from "vue";
 import axios from "axios";
 // 상태 관리를 위한 반응형 객체 생성
 
@@ -23,7 +23,6 @@ const fetchProjectList = async () => {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
-    console.log(projectList)
 
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
