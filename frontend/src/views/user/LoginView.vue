@@ -65,7 +65,6 @@ const handleLogin = async () => {
     // 로그인 성공 시 메인 페이지로 이동
     router.push('/');
   } else {
-    console.log('Login failed!');
   }
 };
 </script>

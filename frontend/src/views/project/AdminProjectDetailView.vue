@@ -58,7 +58,7 @@ const receiveModalOpenFromChild = (value) => {
 }
 
 const receiveModalCloseFromChild = (value) => {
-  console.log(value);
+
   isEditModalOpen.value = value
 }
 

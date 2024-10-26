@@ -25,7 +25,6 @@ const fetchProjectDetail = async () => {
       }
     });
     project.value = projectResponse.data.data;
-    console.log("project : ", project.value)
 
   } catch (error) {
     console.error('프로젝트 정보를 불러오는 중 에러가 발생했습니다:', error);
@@ -41,8 +40,6 @@ const fetchProjectTeamList = async () => {
     })
     projectTeamList.value = projectTeamResponse.data.data;
 
-    // 첫 번째 팀 시퀀스 안전하게 가져오는 계산된 속성
-    console.log(projectTeamList.value);
   } catch (error) {
     console.error('팀 정보를 불러오는 중 에러가 발생했습니다.', error);
   }

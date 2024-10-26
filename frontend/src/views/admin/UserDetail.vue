@@ -110,8 +110,6 @@ const saveUser = async () => {
     successMessage.value = '';
     errorMessage.value = '';
 
-    console.log('보내는 데이터:', JSON.stringify(user.value));
-
     await axios.put(`http://localhost:8086/api/v1/admin/user/${userSeq}`, user.value, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('authToken')}`,
