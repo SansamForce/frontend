@@ -22,7 +22,7 @@ const teamSeqToParent = (seq) => {
 
 <template>
   <!-- 팀 목록 경고 -->
-  <template v-if="projectTeamList">
+  <template v-if="projectTeamList.length > 0">
     <h5 class="team-schedule-text">프로젝트 팀 목록 조회</h5>
     <div class="team-list-container">
       <b-button @click="teamSeqToParent(0)" v-if="teamSeq !== 0" variant="dark" style="float: right; height: 35px;">프로젝트 팀 목록 조회하기</b-button>
@@ -69,6 +69,10 @@ const teamSeqToParent = (seq) => {
 </template>
 
 <style scoped>
+.warning-icon {
+  font-size: 50px;
+  color: #f0ad4e; /* 경고 색상 */
+}
 
 p {
   font-size: 1em;
