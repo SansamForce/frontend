@@ -1,9 +1,22 @@
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
+import axios from "axios";
+import { useUserStore } from "@/stores/userStore";
+import { computed } from "vue";
+
+
 
 const props = defineProps({
   projectMemberList: {
     type: Array,
+    required: true
+  },
+  projectStatus: {
+    type: String,
+    required: true
+  },
+  projectSeq: {
+    type: Number,
     required: true
   }
 });
@@ -14,6 +27,105 @@ const toggleTooltip = () => {
   showTooltip.value = !showTooltip.value;
 
 }
+const userStore = useUserStore();
+const projectMentorSeq = userStore.user?.userSeq;
+console.log(projectMentorSeq);
+
+const showEvaluationModal = ref(false);
+const selectedMember = ref(null);
+const rating = ref(0);
+const comment = ref("");
+const mentorReviewSeq = ref(null); // 평가가 있을 경우 mentorReviewSeq를 저장
+const openEvaluationModal = async (member) => {
+  selectedMember.value = member;
+
+  try {
+    console.log("선택된 멤버:", member);
+    console.log("Mentor Seq:", projectMentorSeq.value); // .value를 사용하여 실제 값 참조
+
+    // POST 요청으로 평가 조회
+    const response = await axios.post("http://localhost:8086/api/v1/mentor/review/member", {
+      projectMentorSeq: projectMentorSeq.value, // .value를 사용
+      projectMemberSeq: member.userSeq
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // 응답 구조 확인을 위한 로그
+    console.log("API 전체 응답:", response);
+    console.log("API 응답 데이터:", response.data);
+    console.log("API 응답 내부 데이터:", response.data.data);
+
+    if (response.data.data) {
+      // 기존 평가가 있을 경우 평가 정보 설정
+      mentorReviewSeq.value = response.data.data.mentorReviewSeq;
+      rating.value = response.data.data.mentorReviewStar || 0;
+      comment.value = response.data.data.mentorReviewContent || "";
+      console.log("기존 평가 있음. 평가 정보:", {
+        mentorReviewSeq: mentorReviewSeq.value,
+        rating: rating.value,
+        comment: comment.value
+      });
+    } else {
+      // 평가가 없는 경우 초기화
+      mentorReviewSeq.value = null;
+      rating.value = 0;
+      comment.value = "";
+      console.log("기존 평가 없음. 초기화됨.");
+    }
+  } catch (error) {
+    console.error("평가 정보를 불러오는 중 오류 발생:", error);
+    console.log("Error Response Data:", error.response?.data); // 추가 오류 응답 로그
+    mentorReviewSeq.value = null;
+    rating.value = 0;
+    comment.value = "";
+  }
+
+  showEvaluationModal.value = true;
+};
+
+
+
+
+// 평가 저장 함수 (추가 및 수정)
+const saveEvaluation = async () => {
+  try {
+    const apiUrl = mentorReviewSeq.value
+        ? `http://localhost:8086/api/v1/project/${props.projectSeq}/mentor/review/${mentorReviewSeq.value}`
+        : `http://localhost:8086/api/v1/project/${props.projectSeq}/mentor/review`;
+
+    const payload = {
+      mentorReviewStar: rating.value,
+      mentorReviewContent: comment.value,
+      ...(mentorReviewSeq.value ? {} : { projectMemberSeq: selectedMember.value.userSeq })
+    };
+
+    if (mentorReviewSeq.value) {
+      // PUT 요청으로 평가 수정
+      await axios.put(apiUrl, payload, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+    } else {
+      // POST 요청으로 새로운 평가 추가
+      await axios.post(apiUrl, payload, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+    }
+
+    alert("평가가 저장되었습니다.");
+    showEvaluationModal.value = false; // 모달 닫기
+  } catch (error) {
+    console.error("평가 저장 중 오류 발생:", error);
+    alert("평가 저장에 실패했습니다.");
+  }
+};
 </script>
 
 <template>
@@ -36,6 +148,7 @@ const toggleTooltip = () => {
             <button @click="toggleTooltip" class="close-button">✖️</button>
           </div>
       </th>
+      <th v-if="projectStatus === 'END'">평가</th>
     </tr>
     </thead>
     <tbody>
@@ -52,7 +165,6 @@ const toggleTooltip = () => {
           {{ member.projectMentorYn === 'Y' ? '멘토' : '회원' }}
         </b-badge>
       </td>
-
       <td>{{ member.userMajorYn === 'Y' ? "전공자" : "비전공자"}}</td>
       <td>
         <b-badge :variant="member.projectMemberDevelopType === 'FRONTEND' ? 'primary' : 'danger'">
@@ -60,9 +172,32 @@ const toggleTooltip = () => {
         </b-badge>
       </td>
       <td>{{ member.projectMemberCommitScore }}</td>
+      <td v-if="projectStatus === 'END' && member.projectMentorYn === 'N'">
+        <button class="btn btn-evaluation" @click="openEvaluationModal(member)">평가</button>
+      </td>
     </tr>
     </tbody>
   </table>
+
+  <!-- 평가 모달 -->
+  <b-modal v-model="showEvaluationModal" :title="selectedMember ? `평가 - ${selectedMember.userName}` : '평가'">
+    <div class="mb-3">
+      <label for="rating">평가 점수:</label>
+      <div id="rating">
+      <span v-for="star in 5" :key="star" @click="rating.value = star" style="cursor: pointer;">
+        <i :class="star <= rating ? 'fas fa-star' : 'far fa-star'"></i>
+      </span>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="comment">평가 내용</label>
+      <textarea v-model="comment" class="form-control" rows="3"></textarea>
+    </div>
+    <template #footer>
+      <button class="btn btn-secondary" @click="showEvaluationModal = false">취소</button>
+      <button class="btn btn-primary" @click="saveEvaluation">저장</button>
+    </template>
+  </b-modal>
 </template>
 
 <style scoped>
@@ -119,7 +254,19 @@ b-badge.black {
   background-color: #222222;
 }
 
-b-icon-question-circle {
+.btn-evaluation {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-color: #262627;
+  background-color: #262627;
+  color: #ffffff;
+  font-weight: bold;
   cursor: pointer;
+}
+.fas.fa-star {
+  color: gold;
+}
+.far.fa-star {
+  color: lightgray;
 }
 </style>
