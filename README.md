@@ -122,12 +122,12 @@
 
 <details>
   <summary> 회원 가입 </summary>
-  <img src="frontend/src/images/guest/02_게스트_프로젝트게시물_조회.gif" alt="회원가입" />
+  <img src="frontend/src/images/guest/03_회원가입.gif" alt="회원가입" />
 </details>
 
 <details>
   <summary> 프로젝트 모집글 보기 </summary>
-  <img src="frontend/src/images/guest/03_회원가입.gif" alt="프로젝트 모집글" />
+  <img src="frontend/src/images/guest/02_게스트_프로젝트게시물_조회.gif" alt="프로젝트 모집글" />
 </details>
 
 
