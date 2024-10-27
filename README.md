@@ -1,10 +1,8 @@
 
 ![header](https://capsule-render.vercel.app/api?type=venom&color=auto&height=300&section=header&text=SANSAM%20FORCE&fontSize=90)
 
-
 # TEAM-BUILDING
 한화시스템 BEYOND SW부트캠프 Spring 프로젝트
-
 
 <table>
  <tr>
@@ -40,7 +38,7 @@
 
 결과적으로 팀 빌딩 프로젝트는 팀워크 강화, 소통 개선, 리더십 발달, 문제 해결 능력 향상 등 여러 측면에서 조직의 성과를 높이는 데 필수적입니다. 성공적인 팀 빌딩은 조직이 목표를 달성하는 것은 물론, 장기적인 성장 기반을 마련하는 데도 중요한 역할을 합니다.
 
-<img src="src/images/img.png" alt="메인화면" />
+<img src="frontend/src/images/img.png" alt="메인화면" />
 
 <br/> <br>
 
@@ -119,30 +117,30 @@
 <details>
 
   <summary> 메인 화면 </summary>
-  <img src="src/images/guest/01_메인화면.gif" alt="메인화면" />
+  <img src="frontend/src/images/guest/01_메인화면.gif" alt="메인화면" />
 </details>
 
 <details>
   <summary> 회원 가입 </summary>
-  <img src="src/images/guest/02_게스트_프로젝트게시물_조회.gif" alt="회원가입" />
+  <img src="frontend/src/images/guest/02_게스트_프로젝트게시물_조회.gif" alt="회원가입" />
 </details>
 
 <details>
   <summary> 프로젝트 모집글 보기 </summary>
-  <img src="src/images/guest/03_회원가입.gif" alt="프로젝트 모집글" />
+  <img src="frontend/src/images/guest/03_회원가입.gif" alt="프로젝트 모집글" />
 </details>
 
 
 <details>
   <summary> 로그인 </summary>
-  <img src="src/images/guest/04_로그인.gif" alt="로그인" />
+  <img src="frontend/src/images/guest/04_로그인.gif" alt="로그인" />
 </details>
 
 ### 회원
 
 <details>
   <summary> 마이페이지 </summary>
-  <img src="src/images/member/MYPAGE/05_회원_마이페이지조회_수정_깃허브레포관리.gif" alt="마이페이지 수정" /> <br>
+  <img src="frontend/src/images/member/MYPAGE/05_회원_마이페이지조회_수정_깃허브레포관리.gif" alt="마이페이지 수정" /> <br>
   <img src="" alt="마이페이지 수정" />
 </details>
 
@@ -154,27 +152,27 @@
 
 <details>
   <summary> 프로젝트 모집글 신청 </summary>
-  <img src="src/images/member/BOARD/07_회원_프로젝트%20모집글_신청.gif" alt="프로젝트 신청" /> <br>
+  <img src="frontend/src/images/member/BOARD/07_회원_프로젝트%20모집글_신청.gif" alt="프로젝트 신청" /> <br>
 </details>
 
 <details>
   <summary> 팀 조회 </summary>
-  <img src="src/images/member/PROJECT/12_회원_팀조회.gif" alt="팀 조회" /> <br>
+  <img src="frontend/src/images/member/PROJECT/12_회원_팀조회.gif" alt="팀 조회" /> <br>
 </details>
 
 <details>
   <summary> 팀 일정 조회, 수정, 삭제 </summary>
-  <img src="src/images/member/PROJECT/13_회원_팀일정조회_수정_삭제.gif" alt="팀 조회" /> <br>
+  <img src="frontend/src/images/member/PROJECT/13_회원_팀일정조회_수정_삭제.gif" alt="팀 조회" /> <br>
 </details>
 
 <details>
   <summary> 팀 채팅 </summary>
-  <img src="src/images/member/PROJECT/14_팀채팅.mp4" alt="팀 채팅" /> <br>
+  <img src="frontend/src/images/member/PROJECT/14_팀채팅.mp4" alt="팀 채팅" /> <br>
 </details>
 
 <details>
   <summary> 팀원 평가 </summary>
-  <img src="src/images/member/PROJECT/17_회원_팀원평가.mp4" alt="팀원 평가" /> <br>
+  <img src="frontend/src/images/member/PROJECT/17_회원_팀원평가.mp4" alt="팀원 평가" /> <br>
 </details>
 
 
@@ -182,17 +180,17 @@
 
 <details>
   <summary> 팀 빌딩 </summary>
-  <img src="src/images/mentor/PROJECT/10_강사_팀빌딩.mp4" alt="팀 빌딩" /> <br>
+  <img src="frontend/src/images/mentor/PROJECT/10_강사_팀빌딩.mp4" alt="팀 빌딩" /> <br>
 </details>
 
 <details>
   <summary> 프로젝트 세부 조회 </summary>
-  <img src="src/images/mentor/PROJECT/11_강사_프로젝트세부조회.gif" alt="프로젝트 세부 조회" /> <br>
+  <img src="frontend/src/images/mentor/PROJECT/11_강사_프로젝트세부조회.gif" alt="프로젝트 세부 조회" /> <br>
 </details>
 
 <details>
   <summary> 멘토 평가 </summary>
-  <img src="src/images/mentor/PROJECT/16_강사_멘토평가.gif" alt="멘토평가" /> <br>
+  <img src="frontend/src/images/mentor/PROJECT/16_강사_멘토평가.gif" alt="멘토평가" /> <br>
 </details>
 
 
@@ -200,32 +198,32 @@
 
 <details>
   <summary> 프로젝트 모집글 생성 </summary>
-  <img src="src/images/manager/BOARD/06_관리자_모집글생성.gif" alt="프로젝트 모집글 생성" /> <br>
+  <img src="frontend/src/images/manager/BOARD/06_관리자_모집글생성.gif" alt="프로젝트 모집글 생성" /> <br>
 </details>
 
 <details>
   <summary> 프로젝트 신청 회원 상태 변경 및 프로젝트 생성 </summary>
-  <img src="src/images/manager/BOARD/08_관리자_신청회원상태변경_및_프로젝트생성.gif" alt="프로젝트 신청 회원 상태 변경 및 프로젝트 생성" /> <br>
+  <img src="frontend/src/images/manager/BOARD/08_관리자_신청회원상태변경_및_프로젝트생성.gif" alt="프로젝트 신청 회원 상태 변경 및 프로젝트 생성" /> <br>
 </details>
 
 <details>
   <summary> 프로젝트 회원 변경 (프로젝트 멘토 지정) </summary>
-  <img src="src/images/manager/PROJECT/09_관리자_프로젝트_멘토지정.gif" alt="프로젝트 회원 변경 (프로젝트 멘토 지정)" /> <br>
+  <img src="frontend/src/images/manager/PROJECT/09_관리자_프로젝트_멘토지정.gif" alt="프로젝트 회원 변경 (프로젝트 멘토 지정)" /> <br>
 </details>
 
 <details>
   <summary> 프로젝트 수정 ( 프로젝트 상태 종료시킴) </summary>
-  <img src="src/images/manager/PROJECT/15_관리자_프로젝트수정.gif" alt="프로젝트 수정 ( 프로젝트 상태 종료시킴)" /> <br>
+  <img src="frontend/src/images/manager/PROJECT/15_관리자_프로젝트수정.gif" alt="프로젝트 수정 ( 프로젝트 상태 종료시킴)" /> <br>
 </details>
 
 <details>
   <summary> 회원 목록 조회 </summary>
-  <img src="src/images/manager/MEMBER/18_관리자_회원목록조회.gif" alt="회원목록조회" /> <br>
+  <img src="frontend/src/images/manager/MEMBER/18_관리자_회원목록조회.gif" alt="회원목록조회" /> <br>
 </details>
 
 <details>
   <summary> 회원 상세 조회 및 변경, 조회, 수정, 검색 </summary>
-  <img src="src/images/manager/MEMBER/19_관리자_회원상세조회수정검색.gif" alt="회원 상세조회및 변경, 조회,수정,검" /> <br>
+  <img src="frontend/src/images/manager/MEMBER/19_관리자_회원상세조회수정검색.gif" alt="회원 상세조회및 변경, 조회,수정,검" /> <br>
 </details>
 
 <br />
