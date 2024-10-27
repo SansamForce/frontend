@@ -1,42 +1,6 @@
-<template>
-  <div class="review">
-    <h1>리뷰 내역 보기</h1>
-
-    <div class="tab-menu">
-      <button :class="{ active: activeTab === 'team' }" @click="activeTab = 'team'">팀원 리뷰</button>
-      <button :class="{ active: activeTab === 'mentor' }" @click="activeTab = 'mentor'">멘토 리뷰</button>
-    </div>
-
-    <table>
-      <thead>
-      <tr>
-        <th>No.</th>
-        <th>참여한 프로젝트 명</th>
-        <th v-if="activeTab === 'mentor'">평가자</th>
-        <th>점수</th>
-        <th>등록일</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-if="filteredReviews.length === 0">
-        <td colspan="5" style="text-align: center;">리뷰가 없습니다.</td>
-      </tr>
-      <tr v-for="(review, index) in filteredReviews" :key="review.userReviewSeq" @click="showReviewDetail(review)">
-        <td>{{ index + 1 }}</td>
-        <td>{{ review.projectTitle }}</td>
-        <td v-if="activeTab === 'mentor'">{{ review.evaluator }}</td>
-        <td>{{ review.reviewStar }}</td>
-        <td>{{ review.regDate }}</td>
-      </tr>
-      </tbody>
-    </table>
-
-    <ReviewDetail v-if="isModalVisible" :isVisible="isModalVisible" :review="selectedReview" @update:isVisible="isModalVisible = $event" />
-  </div>
-</template>
 
 <script>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import ReviewDetail from './ReviewDetail.vue';
@@ -47,15 +11,11 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const teamSeq = ref(route.params.teamSeq || 1); //
-    const userSeq = ref(1);
-    const accessToken = 'your_actual_token_here';
+    const userSeq = route.params.userSeq;
 
     const activeTab = ref('team');
-    const reviews = ref({
-      teamReviews: [],
-      mentorReviews: []
-    });
+    const teamReviews = ref(null);
+    const mentorReviews = ref(null);
 
     // 모달 상태 및 선택된 리뷰 데이터
     const isModalVisible = ref(false);
@@ -64,33 +24,31 @@ export default {
     // 응답 디버깅을 위한 fetchReviews 함수
     const fetchReviews = async () => {
       try {
-        // 팀원 리뷰 데이터 호출
-        const teamResponse = await axios.get(`/api/v1/team/${teamSeq.value}/review`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        });
-        console.log('팀원 리뷰 응답 상태 코드:', teamResponse.status);
-        console.log('팀원 리뷰 응답 데이터:', teamResponse.data);
 
+        // 팀원 리뷰 데이터 호출
+        const teamResponse = await axios.get(`http://localhost:8086/api/v1/user/2/review/teamMember`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
 
         if (teamResponse.data && teamResponse.data.data) {
-          reviews.value.teamReviews = teamResponse.data.data;
+          teamReviews.value = teamResponse.data.data;
+          console.log('팀원 리뷰 데이터:', teamReviews.value);
         } else {
-          console.warn('팀원 리뷰 데이터가 올바르지 않습니다:', teamResponse.data);
+          console.warn('팀원 리뷰 데이터가 올바르지 않습니다:', teamResponse.value);
         }
 
 
-        const mentorResponse = await axios.get(`/api/v1/user/${userSeq.value}/mentor/review/${userSeq.value}`, {
+        const mentorResponse = await axios.get(`http://localhost:8086/api/v1/user/2/review/teamMentor`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         });
-        console.log('멘토 리뷰 응답 상태 코드:', mentorResponse.status);
-        console.log('멘토 리뷰 응답 데이터:', mentorResponse.data);
 
         if (mentorResponse.data && mentorResponse.data.data) {
-          reviews.value.mentorReviews = mentorResponse.data.data;
+          mentorReviews.value = mentorResponse.data.data;
+          console.log('멘토 리뷰 응답 데이터:', mentorResponse.data.data);
         } else {
           console.warn('멘토 리뷰 데이터가 올바르지 않습니다:', mentorResponse.data);
         }
@@ -108,11 +66,6 @@ export default {
       fetchReviews();
     });
 
-    const filteredReviews = computed(() => {
-      const data = activeTab.value === 'team' ? reviews.value.teamReviews : reviews.value.mentorReviews;
-      return data.filter(review => review.teamSeq === teamSeq.value);
-    });
-
     const showReviewDetail = (review) => {
       selectedReview.value = review;
       isModalVisible.value = true;
@@ -120,7 +73,6 @@ export default {
 
     return {
       activeTab,
-      filteredReviews,
       isModalVisible,
       selectedReview,
       showReviewDetail
@@ -128,6 +80,60 @@ export default {
   }
 };
 </script>
+
+<template>
+  <div class="review">
+    <h1>리뷰 내역 보기</h1>
+
+    <div class="tab-menu">
+      <button :class="{ active: activeTab === 'team' }" @click="activeTab = 'team'">팀원 리뷰</button>
+      <button :class="{ active: activeTab === 'mentor' }" @click="activeTab = 'mentor'">멘토 리뷰</button>
+    </div>
+
+    <table>
+      <thead>
+      <tr>
+        <th style="text-align: center">번호</th>
+        <th style="text-align: center">참여한 프로젝트 명</th>
+        <th style="text-align: center" v-if="activeTab === 'mentor'">평가자</th>
+        <th style="text-align: center">점수</th>
+        <th style="text-align: center">등록일</th>
+        <th style="text-align: center">수정일</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-if="activeTab === 'team' && teamReviews == null">
+        <td colspan="6" style="text-align: center;">팀원 리뷰가 없습니다.</td>
+      </tr>
+      <tr v-if="activeTab === 'mentor' && mentorReviews == null">
+        <td colspan="6" style="text-align: center;">멘토 리뷰가 없습니다.</td>
+      </tr>
+
+      <!-- 팀원 리뷰 리스트 -->
+      <tr v-if="activeTab === 'team'" v-for="(review, index) in teamReviews" :key="review.userReviewSeq" @click="showReviewDetail(review)">
+        <td style="text-align: center">{{ index + 1 }}</td>
+        <td style="text-align: center">{{ review.projectTitle }}</td>
+        <td style="text-align: center">{{ review.reviewStar }}</td>
+        <td style="text-align: center">{{ review.regDate }}</td>
+        <td style="text-align: center">{{ review.modDate == null ? '-' : review.modDate }}</td>
+      </tr>
+
+      <!-- 멘토 리뷰 리스트 -->
+      <tr v-if="activeTab === 'mentor'" v-for="(review, index) in mentorReviews" :key="review.userReviewSeq" @click="showReviewDetail(review)">
+        <td style="text-align: center">{{ index + 1 }}</td>
+        <td style="text-align: center">{{ review.projectTitle }}</td>
+        <td style="text-align: center">{{ review.mentorNickName }}</td>
+        <td style="text-align: center">{{ review.reviewStar }}</td>
+        <td style="text-align: center">{{ review.regDate }}</td>
+        <td style="text-align: center">{{ review.modDate == null ? '-' : review.modDate }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ReviewDetail v-if="isModalVisible" :isVisible="isModalVisible" :review="selectedReview" @update:isVisible="isModalVisible = $event" />
+  </div>
+</template>
+
 
 <style scoped>
 .review {

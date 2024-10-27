@@ -3,12 +3,13 @@
     <div class="modal-content">
       <h2 class="modal-title">{{ reviewTypeTitle }}</h2> <!-- 리뷰 타입에 따라 동적 제목 -->
       <div class="modal-body">
-        <p><strong>참여한 프로젝트 명:</strong> {{ review.projectName }}</p>
-        <p><strong>점수:</strong> {{ review.score }}</p>
+        <p><strong>참여한 프로젝트 명:</strong> {{ review.projectTitle }}</p>
+        <p><strong>내 팀 이름:</strong> {{ review.teamName }}</p>
+        <p><strong>점수:</strong> {{ review.reviewStar }}</p>
         <p><strong>리뷰 내용:</strong></p>
-        <p class="review-content">{{ review.content }}</p>
-        <p><strong>등록일:</strong> {{ review.date }}</p>
-        <p><strong>수정일:</strong> {{ review.modifiedDate }}</p>
+        <p class="review-content">{{ review.reviewContent }}</p>
+        <p><strong>등록일:</strong> {{ review.regDate }}</p>
+        <p><strong>수정일:</strong> {{ review.modDate }}</p>
       </div>
       <div class="modal-footer">
         <button @click="closeModal">확인 완료</button>
