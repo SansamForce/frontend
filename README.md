@@ -46,18 +46,18 @@
 
 <table>
 <tr>
-    <td>백엔드</td>
+    <td>BACKEND</td>
     <td><img src="https://img.shields.io/badge/Java-007396.svg?&style=for-the-badge&logo=Java&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://camo.githubusercontent.com/edd1d8db59bfd0bac603332ff7d629b19906dc009c757a785c519751902ac144/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e6773656375726974792d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d737072696e677365637572697479266c6f676f436f6c6f723d7768697465">
 <img src="https://camo.githubusercontent.com/cfa9048f4767ac76f934cf32d6e52cec1fa4d3f8cf28af5902803d9a61b892c4/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e672044617461204a5041202d3133433130303f7374796c653d666f722d7468652d6261646765266c6f676f3d537072696e6720426f6f74266c6f676f436f6c6f723d7768697465">
+     <img src="https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white">
     </td>
   </tr>
 <tr>
-    <td>프론트</td>
+    <td>FRONTEND</td>
     <td><img src="https://camo.githubusercontent.com/389ad243380799c828f94752bc4c06cf81d8259d7d181edacd76c8ee07176752/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f7675652e6a732d3446433038443f7374796c653d666f722d7468652d6261646765266c6f676f3d7675652e6a73266c6f676f436f6c6f723d7768697465">
 <img src="https://camo.githubusercontent.com/89f91c3b41619ac2618b70f9ef9aa99915cd1456e04ccc00fce25c8ed1ec3b41/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6a6176617363726970742d4637444631453f7374796c653d666f722d7468652d6261646765266c6f676f3d6a617661736372697074266c6f676f436f6c6f723d626c61636b">
-<img src="https://camo.githubusercontent.com/438953295e8813cccece2bec0927148755b34d7c5c029033dc574d05edbf4c84/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f435353332d4533344632363f7374796c653d666f722d7468652d6261646765266c6f676f3d68746d6c35266c6f676f436f6c6f723d7768697465">
     </td>
 </tr>
 <tr>
@@ -68,10 +68,9 @@
     </td>
   </tr>
 <tr>
-    <td>기타</td>
-    <td><img src="https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=Amazon%20S3&logoColor=white">
+    <td>ETC</td>
+    <td>
         <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white">
-        <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring Security&logoColor=white">
         <img src="https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=JUnit5&logoColor=white">
         <img src="https://camo.githubusercontent.com/802bc984fdfdf76cfbc9ec3f63d26f158593c92341b5f718ee15cb7ff05ca0fe/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6669676d612d3246354546353f7374796c653d666f722d7468652d6261646765">
 
@@ -102,12 +101,13 @@
 
 ## 📄 명세서
 
-|     이름      |                                                문제 링크                                                 |
-|:-----------:|:----------------------------------------------------------------------------------------------------:|
-| DDD 이벤트 스토밍 | https://miro.com/app/board/uXjVKj5617c=/     |
-| API 단위 테스트  |   https://www.notion.so/Swagger-114e5998dfd780ea9030dcd704e33f40?pvs=4     |
-|    기능 명세서    |  https://docs.google.com/spreadsheets/d/1Kob6x7Rv2ZG7byc1e_eQpFn5DlWBgOLOvefKpXc0SUU/edit?gid=0#gid=0    |
-|   화면 설계서    | https://www.figma.com/design/VbCMpjXJ4PIlVQZ0bjfJDZ/%EC%98%A4%EB%AF%BC%EC%84%B1's-team-library?node-id=0-1&node-type=canvas&t=rrK5LnjR2OAG0Wdd-0    |
+| 이름            | 링크                                                                                                                                                                                                                                 |
+|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| DDD 이벤트 스토밍 | [:notebook: 문서 보기](https://miro.com/app/board/uXjVKj5617c=/)                                                                                                                         |
+| API 단위 테스트   | [:gear: Swagger 문서](https://www.notion.so/Swagger-114e5998dfd780ea9030dcd704e33f40?pvs=4)                                                                                             |
+| 기능 명세서       | [:page_facing_up: Google Sheet](https://docs.google.com/spreadsheets/d/1Kob6x7Rv2ZG7byc1e_eQpFn5DlWBgOLOvefKpXc0SUU/edit?gid=0#gid=0)                                                  |
+| 화면 설계서       | [:art: Figma 설계서](https://www.figma.com/design/VbCMpjXJ4PIlVQZ0bjfJDZ/%EC%98%A4%EB%AF%BC%EC%84%B1's-team-library?node-id=0-1&node-type=canvas&t=rrK5LnjR2OAG0Wdd-0) |
+
 
 <br/>
 
