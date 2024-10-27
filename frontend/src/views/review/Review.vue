@@ -31,7 +31,6 @@
       </tbody>
     </table>
 
-    <!-- 모달 창 컴포넌트 -->
     <ReviewDetail v-if="isModalVisible" :isVisible="isModalVisible" :review="selectedReview" @update:isVisible="isModalVisible = $event" />
   </div>
 </template>
@@ -48,9 +47,9 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const teamSeq = ref(route.params.teamSeq || 1); // teamSeq를 URL에서 받아옴
+    const teamSeq = ref(route.params.teamSeq || 1); //
     const userSeq = ref(1);
-    const accessToken = 'your_actual_token_here'; // 실제 액세스 토큰으로 교체
+    const accessToken = 'your_actual_token_here';
 
     const activeTab = ref('team');
     const reviews = ref({
@@ -74,14 +73,14 @@ export default {
         console.log('팀원 리뷰 응답 상태 코드:', teamResponse.status);
         console.log('팀원 리뷰 응답 데이터:', teamResponse.data);
 
-        // 응답 검증
+
         if (teamResponse.data && teamResponse.data.data) {
           reviews.value.teamReviews = teamResponse.data.data;
         } else {
           console.warn('팀원 리뷰 데이터가 올바르지 않습니다:', teamResponse.data);
         }
 
-        // 멘토 리뷰 데이터 호출
+
         const mentorResponse = await axios.get(`/api/v1/user/${userSeq.value}/mentor/review/${userSeq.value}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`
