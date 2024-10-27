@@ -61,6 +61,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/review',
+    name: 'Review',
+    component: () => import('@/views/review/Review.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: "/projectBoards/:id",
     name: "ProjectBoardDetail",
     beforeEnter: (to, from, next) => {
@@ -74,6 +80,7 @@ const routes = [
         // 일반 사용자는 일반 프로젝트 상세 페이지로
         next();
       }
+
     },
     component: () => import("@/views/projectBoard/ProjectBoardDetail.vue"), // 일반 회원 상세 페이지
   },
