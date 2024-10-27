@@ -1,10 +1,8 @@
 
 ![header](https://capsule-render.vercel.app/api?type=venom&color=auto&height=300&section=header&text=SANSAM%20FORCE&fontSize=90)
 
-
 # TEAM-BUILDING
 한화시스템 BEYOND SW부트캠프 Spring 프로젝트
-
 
 <table>
  <tr>
