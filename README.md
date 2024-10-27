@@ -1,8 +1,10 @@
 
 ![header](https://capsule-render.vercel.app/api?type=venom&color=auto&height=300&section=header&text=SANSAM%20FORCE&fontSize=90)
 
+
 # TEAM-BUILDING
 한화시스템 BEYOND SW부트캠프 Spring 프로젝트
+
 
 <table>
  <tr>
@@ -38,7 +40,7 @@
 
 결과적으로 팀 빌딩 프로젝트는 팀워크 강화, 소통 개선, 리더십 발달, 문제 해결 능력 향상 등 여러 측면에서 조직의 성과를 높이는 데 필수적입니다. 성공적인 팀 빌딩은 조직이 목표를 달성하는 것은 물론, 장기적인 성장 기반을 마련하는 데도 중요한 역할을 합니다.
 
-<img src="https://mblogthumb-phinf.pstatic.net/MjAyMDA3MjFfNzIg/MDAxNTk1MzI3MTczMTA0.dqrUnvnTCQnQR94nH7Vieo9mk3aYZo7aELHKKZycl7cg.R5Zu8bhWMSyRhuNK-lEv_-lJdDK32sOeewbEo2kUP-og.PNG.catchyoulater/SE-354ca162-82e4-48fd-a603-0bffa8cf4441.png?type=w800">
+<img src="frontend/src/images/img.png" alt="메인화면" />
 
 <br/> <br>
 
@@ -117,44 +119,126 @@
 <details>
 
   <summary> 메인 화면 </summary>
-  <img src="" alt="메인화면" />
+  <img src="frontend/src/images/guest/01_메인화면.gif" alt="메인화면" />
 </details>
 
 <details>
   <summary> 회원 가입 </summary>
-  <img src="" alt="회원가입" />
+  <img src="frontend/src/images/guest/02_게스트_프로젝트게시물_조회.gif" alt="회원가입" />
 </details>
 
 <details>
   <summary> 프로젝트 모집글 보기 </summary>
-  <img src="" alt="프로젝트 모집글" />
+  <img src="frontend/src/images/guest/03_회원가입.gif" alt="프로젝트 모집글" />
+</details>
+
+
+<details>
+  <summary> 로그인 </summary>
+  <img src="frontend/src/images/guest/04_로그인.gif" alt="로그인" />
 </details>
 
 ### 회원
 
 <details>
-  <summary> 로그인 </summary>
-  <img src="" alt="로그인" />
-</details>
-
-<details>
   <summary> 마이페이지 </summary>
-  <img src="" alt="마이페이지 조회" /> <br>
+  <img src="frontend/src/images/member/MYPAGE/05_회원_마이페이지조회_수정_깃허브레포관리.gif" alt="마이페이지 수정" /> <br>
   <img src="" alt="마이페이지 수정" />
 </details>
 
+<!-- <details>
+  <summary> 리뷰 조회 </summary>
+  <img src="" alt="팀원 리뷰 조회" /> <br>
+  <img src="" alt="멘토 리뷰 조회" />
+</details> -->
+
 <details>
-  <summary> 깃허브 레포지토리 </summary>
-  <img src="" alt="깃허브 추가" /> <br>
-  <img src="" alt="깃허브 수정" /> <br>
-  <img src="" alt="깃허브 삭제" /> <br>
+  <summary> 프로젝트 모집글 신청 </summary>
+  <img src="frontend/src/images/member/BOARD/07_회원_프로젝트%20모집글_신청.gif" alt="프로젝트 신청" /> <br>
+</details>
+
+<details>
+  <summary> 팀 조회 </summary>
+  <img src="frontend/src/images/member/PROJECT/12_회원_팀조회.gif" alt="팀 조회" /> <br>
+</details>
+
+<details>
+  <summary> 팀 일정 조회, 수정, 삭제 </summary>
+  <img src="frontend/src/images/member/PROJECT/13_회원_팀일정조회_수정_삭제.gif" alt="팀 조회" /> <br>
+</details>
+
+<details>
+  <summary> 팀 채팅 </summary>
+  <img src="frontend/src/images/member/PROJECT/14_팀채팅.mp4" alt="팀 채팅" /> <br>
+</details>
+
+<details>
+  <summary> 팀원 평가 </summary>
+  <img src="frontend/src/images/member/PROJECT/17_회원_팀원평가.mp4" alt="팀원 평가" /> <br>
 </details>
 
 
 ### 강사
 
+<details>
+  <summary> 팀 빌딩 </summary>
+  <img src="frontend/src/images/mentor/PROJECT/10_강사_팀빌딩.mp4" alt="팀 빌딩" /> <br>
+</details>
+
+<details>
+  <summary> 프로젝트 세부 조회 </summary>
+  <img src="frontend/src/images/mentor/PROJECT/11_강사_프로젝트세부조회.gif" alt="프로젝트 세부 조회" /> <br>
+</details>
+
+<details>
+  <summary> 멘토 평가 </summary>
+  <img src="frontend/src/images/mentor/PROJECT/16_강사_멘토평가.gif" alt="멘토평가" /> <br>
+</details>
+
 
 ### 관리자
+
+<details>
+  <summary> 프로젝트 모집글 생성 </summary>
+  <img src="frontend/src/images/manager/BOARD/06_관리자_모집글생성.gif" alt="프로젝트 모집글 생성" /> <br>
+</details>
+
+<details>
+  <summary> 프로젝트 신청 회원 상태 변경 및 프로젝트 생성 </summary>
+  <img src="frontend/src/images/manager/BOARD/08_관리자_신청회원상태변경_및_프로젝트생성.gif" alt="프로젝트 신청 회원 상태 변경 및 프로젝트 생성" /> <br>
+</details>
+
+<details>
+  <summary> 프로젝트 회원 변경 (프로젝트 멘토 지정) </summary>
+  <img src="frontend/src/images/manager/PROJECT/09_관리자_프로젝트_멘토지정.gif" alt="프로젝트 회원 변경 (프로젝트 멘토 지정)" /> <br>
+</details>
+
+<details>
+  <summary> 프로젝트 수정 ( 프로젝트 상태 종료시킴) </summary>
+  <img src="frontend/src/images/manager/PROJECT/15_관리자_프로젝트수정.gif" alt="프로젝트 수정 ( 프로젝트 상태 종료시킴)" /> <br>
+</details>
+
+<details>
+  <summary> 회원 목록 조회 </summary>
+  <img src="frontend/src/images/manager/MEMBER/18_관리자_회원목록조회.gif" alt="회원목록조회" /> <br>
+</details>
+
+<details>
+  <summary> 회원 상세 조회 및 변경, 조회, 수정, 검색 </summary>
+  <img src="frontend/src/images/manager/MEMBER/19_관리자_회원상세조회수정검색.gif" alt="회원 상세조회및 변경, 조회,수정,검" /> <br>
+</details>
+
+<br />
+
+## 📄 프로젝트 회고
+
+|  이름  |                                                                                                                                                                         회고                                                                                                                                                                          |
+|:----:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| 구대윤  |                                                                                                                                                                                                                                                                                                                                                     |
+| 박상현  |                                                                                                                                                                                                                                                                                                                                                     |
+| 오민성  |                                                                                                                                                                                                                                                                                                                                                     |
+| 임서연  | 이번 프론트엔드 프로젝트는 길면서도 짧았던 시간이었습니다. Pigma로 화면을 설계하고 6일 동안 화면을 구현했을 때, 피드백을 통해 많은 부족함을 느끼며 막막함이 밀려왔습니다. 하지만 팀원들이 합심해 단 이틀 만에 디자인과 구조적으로 훨씬 깔끔한 화면 설계를 완성해냈고, 정말 뿌듯했습니다.<br>프론트엔드 코드를 작성했던 일주일은 촉박한 일정 속에서 매일 4시간 이상 잠을 자지 못할 만큼 치열한 시간이었습니다. 매일이 고단하게 느껴졌지만, 프로젝트가 마무리된 지금 돌이켜보니 이 시간이 정말 값진 경험이 되었음을 느낍니다. 책임감있게 끝까지 최선을 다해 준 우리 산삼조 팀원들에게 진심으로 고맙습니다. |
+|  전아영 |                                                                                                |
 
 
 
