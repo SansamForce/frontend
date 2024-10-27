@@ -1,4 +1,3 @@
-
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
@@ -75,7 +74,9 @@ export default {
       activeTab,
       isModalVisible,
       selectedReview,
-      showReviewDetail
+      showReviewDetail,
+      teamReviews,
+      mentorReviews
     };
   }
 };
@@ -102,10 +103,10 @@ export default {
       </tr>
       </thead>
       <tbody>
-      <tr v-if="activeTab === 'team' && teamReviews == null">
+      <tr v-if="activeTab === 'team' && teamReviews.length === 0">
         <td colspan="6" style="text-align: center;">팀원 리뷰가 없습니다.</td>
       </tr>
-      <tr v-if="activeTab === 'mentor' && mentorReviews == null">
+      <tr v-if="activeTab === 'mentor' && mentorReviews.length === 0">
         <td colspan="6" style="text-align: center;">멘토 리뷰가 없습니다.</td>
       </tr>
 
