@@ -1,8 +1,10 @@
 
 ![header](https://capsule-render.vercel.app/api?type=venom&color=auto&height=300&section=header&text=SANSAM%20FORCE&fontSize=90)
 
+
 # TEAM-BUILDING
 한화시스템 BEYOND SW부트캠프 Spring 프로젝트
+
 
 <table>
  <tr>
@@ -38,7 +40,7 @@
 
 결과적으로 팀 빌딩 프로젝트는 팀워크 강화, 소통 개선, 리더십 발달, 문제 해결 능력 향상 등 여러 측면에서 조직의 성과를 높이는 데 필수적입니다. 성공적인 팀 빌딩은 조직이 목표를 달성하는 것은 물론, 장기적인 성장 기반을 마련하는 데도 중요한 역할을 합니다.
 
-<img src="https://mblogthumb-phinf.pstatic.net/MjAyMDA3MjFfNzIg/MDAxNTk1MzI3MTczMTA0.dqrUnvnTCQnQR94nH7Vieo9mk3aYZo7aELHKKZycl7cg.R5Zu8bhWMSyRhuNK-lEv_-lJdDK32sOeewbEo2kUP-og.PNG.catchyoulater/SE-354ca162-82e4-48fd-a603-0bffa8cf4441.png?type=w800">
+<img src="src/images/img.png" alt="메인화면" />
 
 <br/> <br>
 
